@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>0 | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/publication_types/0/</link>
+      <atom:link href="https://arcaravaggi.github.io/publication_types/0/index.xml" rel="self" type="application/rss+xml" />
+    <description>0</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Jan 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>0</title>
+      <link>https://arcaravaggi.github.io/publication_types/0/</link>
+    </image>
+    
+    <item>
+      <title>Rewilding needs to clarify the role of management of invasive species</title>
+      <link>https://arcaravaggi.github.io/publication/hayward-rewilding-2020/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/hayward-rewilding-2020/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>The search for novelty continues for rewilding</title>
+      <link>https://arcaravaggi.github.io/publication/hayward-search-2019/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/hayward-search-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>By trying to be everything, rewilding risks meaning nothing</title>
+      <link>https://arcaravaggi.github.io/publication/jachowski-by-2019/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/jachowski-by-2019/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

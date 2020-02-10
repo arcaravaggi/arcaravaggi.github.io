@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Lepus | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/tags/lepus/</link>
+      <atom:link href="https://arcaravaggi.github.io/tags/lepus/index.xml" rel="self" type="application/rss+xml" />
+    <description>Lepus</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Feb 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Lepus</title>
+      <link>https://arcaravaggi.github.io/tags/lepus/</link>
+    </image>
+    
+    <item>
+      <title>Niche overlap of mountain hare subspecies and the vulnerability of their ranges to invasion by the European hare; the (bad) luck of the Irish</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-niche-2017/</link>
+      <pubDate>Wed, 01 Feb 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-niche-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>An invasive-native mammalian species replacement process captured by camera trap survey random encounter models</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-invasive-native-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-invasive-native-2016/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

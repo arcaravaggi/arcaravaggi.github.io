@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Ian Montgomery | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/ian-montgomery/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/ian-montgomery/index.xml" rel="self" type="application/rss+xml" />
+    <description>Ian Montgomery</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Ian Montgomery</title>
+      <link>https://arcaravaggi.github.io/authors/ian-montgomery/</link>
+    </image>
+    
+    <item>
+      <title>Management and control of invasive brown hares (Lepus europaeus): contrasting attitudes of selected environmental stakeholders and the wider rural community</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-management-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-management-2017/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

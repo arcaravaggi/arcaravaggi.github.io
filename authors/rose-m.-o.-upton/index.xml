@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Rose M. O. Upton | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/rose-m.-o.-upton/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/rose-m.-o.-upton/index.xml" rel="self" type="application/rss+xml" />
+    <description>Rose M. O. Upton</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Rose M. O. Upton</title>
+      <link>https://arcaravaggi.github.io/authors/rose-m.-o.-upton/</link>
+    </image>
+    
+    <item>
+      <title>The search for novelty continues for rewilding</title>
+      <link>https://arcaravaggi.github.io/publication/hayward-search-2019/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/hayward-search-2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reintroducing rewilding to restoration – Rejecting the search for novelty</title>
+      <link>https://arcaravaggi.github.io/publication/hayward-reintroducing-2019/</link>
+      <pubDate>Wed, 01 May 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/hayward-reintroducing-2019/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

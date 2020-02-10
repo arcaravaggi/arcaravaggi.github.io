@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Neil Reid | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/neil-reid/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/neil-reid/index.xml" rel="self" type="application/rss+xml" />
+    <description>Neil Reid</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 01 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Neil Reid</title>
+      <link>https://arcaravaggi.github.io/authors/neil-reid/</link>
+    </image>
+    
+    <item>
+      <title>Seasonal and predator-prey effects on circadian activity of free-ranging mammals revealed by camera traps</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-seasonal-2018/</link>
+      <pubDate>Thu, 01 Nov 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-seasonal-2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Niche overlap of mountain hare subspecies and the vulnerability of their ranges to invasion by the European hare; the (bad) luck of the Irish</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-niche-2017/</link>
+      <pubDate>Wed, 01 Feb 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-niche-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Management and control of invasive brown hares (Lepus europaeus): contrasting attitudes of selected environmental stakeholders and the wider rural community</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-management-2017/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-management-2017/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>An invasive-native mammalian species replacement process captured by camera trap survey random encounter models</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-invasive-native-2016/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-invasive-native-2016/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-range-2015/</link>
+      <pubDate>Sun, 01 Feb 2015 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-range-2015/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

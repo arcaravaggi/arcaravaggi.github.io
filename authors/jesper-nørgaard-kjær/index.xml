@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jesper Nørgaard Kjær | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/jesper-n%C3%B8rgaard-kj%C3%A6r/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/jesper-n%C3%B8rgaard-kj%C3%A6r/index.xml" rel="self" type="application/rss+xml" />
+    <description>Jesper Nørgaard Kjær</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 01 Nov 2017 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Jesper Nørgaard Kjær</title>
+      <link>https://arcaravaggi.github.io/authors/jesper-n%C3%B8rgaard-kj%C3%A6r/</link>
+    </image>
+    
+    <item>
+      <title>A multi-disciplinary perspective on emergent and future innovations in peer review</title>
+      <link>https://arcaravaggi.github.io/publication/tennant-multi-disciplinary-2017/</link>
+      <pubDate>Wed, 01 Nov 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/tennant-multi-disciplinary-2017/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

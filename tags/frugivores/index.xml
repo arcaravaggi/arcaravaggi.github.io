@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>frugivores | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/tags/frugivores/</link>
+      <atom:link href="https://arcaravaggi.github.io/tags/frugivores/index.xml" rel="self" type="application/rss+xml" />
+    <description>frugivores</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Apr 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>frugivores</title>
+      <link>https://arcaravaggi.github.io/tags/frugivores/</link>
+    </image>
+    
+    <item>
+      <title>The composition of captive ruffed lemur (Varecia spp.) diets in UK zoological collections, with reference to the problems of obesity and iron storage disease</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-composition-2018/</link>
+      <pubDate>Sun, 01 Apr 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-composition-2018/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

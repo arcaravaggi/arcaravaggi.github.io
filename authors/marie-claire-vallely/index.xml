@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Marie-Claire Vallely | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/marie-claire-vallely/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/marie-claire-vallely/index.xml" rel="self" type="application/rss+xml" />
+    <description>Marie-Claire Vallely</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 01 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Marie-Claire Vallely</title>
+      <link>https://arcaravaggi.github.io/authors/marie-claire-vallely/</link>
+    </image>
+    
+    <item>
+      <title>Seasonal and predator-prey effects on circadian activity of free-ranging mammals revealed by camera traps</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-seasonal-2018/</link>
+      <pubDate>Thu, 01 Nov 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-seasonal-2018/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

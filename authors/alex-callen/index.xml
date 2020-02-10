@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Alex Callen | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/alex-callen/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/alex-callen/index.xml" rel="self" type="application/rss+xml" />
+    <description>Alex Callen</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Alex Callen</title>
+      <link>https://arcaravaggi.github.io/authors/alex-callen/</link>
+    </image>
+    
+    <item>
+      <title>The search for novelty continues for rewilding</title>
+      <link>https://arcaravaggi.github.io/publication/hayward-search-2019/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/hayward-search-2019/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
