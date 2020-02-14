@@ -5,12 +5,68 @@
     <link>https://arcaravaggi.github.io/authors/</link>
       <atom:link href="https://arcaravaggi.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sun, 01 Dec 2019 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 01 Feb 2020 00:00:00 +0000</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Authors</title>
       <link>https://arcaravaggi.github.io/authors/</link>
     </image>
+    
+    <item>
+      <title>Alan D. Radford</title>
+      <link>https://arcaravaggi.github.io/authors/alan-d.-radford/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/alan-d.-radford/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Anthony Caravaggi</title>
+      <link>https://arcaravaggi.github.io/authors/anthony-caravaggi/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/anthony-caravaggi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Beth Brant</title>
+      <link>https://arcaravaggi.github.io/authors/beth-brant/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/beth-brant/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>David A. Singleton</title>
+      <link>https://arcaravaggi.github.io/authors/david-a.-singleton/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/david-a.-singleton/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Gina L. PinchbecK</title>
+      <link>https://arcaravaggi.github.io/authors/gina-l.-pinchbeck/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/gina-l.-pinchbeck/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>PJ-M. Noble</title>
+      <link>https://arcaravaggi.github.io/authors/pj-m.-noble/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/pj-m.-noble/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sean Farrell</title>
+      <link>https://arcaravaggi.github.io/authors/sean-farrell/</link>
+      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/sean-farrell/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Alan McCarthy</title>
@@ -25,14 +81,6 @@
       <link>https://arcaravaggi.github.io/authors/allan-mee/</link>
       <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/authors/allan-mee/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Anthony Caravaggi</title>
-      <link>https://arcaravaggi.github.io/authors/anthony-caravaggi/</link>
-      <pubDate>Sun, 01 Dec 2019 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/anthony-caravaggi/</guid>
       <description></description>
     </item>
     
