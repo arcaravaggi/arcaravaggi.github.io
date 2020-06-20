@@ -5,7 +5,7 @@
     <link>https://arcaravaggi.github.io/authors/</link>
       <atom:link href="https://arcaravaggi.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 20 Jun 2020 11:08:39 +0100</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Authors</title>
@@ -13,18 +13,98 @@
     </image>
     
     <item>
-      <title>Allan Mee</title>
-      <link>https://arcaravaggi.github.io/authors/allan-mee/</link>
-      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/allan-mee/</guid>
+      <title>A. Cole Burton</title>
+      <link>https://arcaravaggi.github.io/authors/a.-cole-burton/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/a.-cole-burton/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Amelia Grass</title>
+      <link>https://arcaravaggi.github.io/authors/amelia-grass/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/amelia-grass/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Ammie K. Kalan</title>
+      <link>https://arcaravaggi.github.io/authors/ammie-k.-kalan/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/ammie-k.-kalan/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Anthony Caravaggi</title>
       <link>https://arcaravaggi.github.io/authors/anthony-caravaggi/</link>
-      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
       <guid>https://arcaravaggi.github.io/authors/anthony-caravaggi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Catherine Hobaiter</title>
+      <link>https://arcaravaggi.github.io/authors/catherine-hobaiter/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/catherine-hobaiter/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Daniella Rabaiotti</title>
+      <link>https://arcaravaggi.github.io/authors/daniella-rabaiotti/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/daniella-rabaiotti/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Danielle Rivet</title>
+      <link>https://arcaravaggi.github.io/authors/danielle-rivet/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/danielle-rivet/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Douglas A. Clark</title>
+      <link>https://arcaravaggi.github.io/authors/douglas-a.-clark/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/douglas-a.-clark/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jason T. Fisher</title>
+      <link>https://arcaravaggi.github.io/authors/jason-t.-fisher/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/jason-t.-fisher/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sian Green</title>
+      <link>https://arcaravaggi.github.io/authors/sian-green/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/sian-green/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tim R. Hofmeester</title>
+      <link>https://arcaravaggi.github.io/authors/tim-r.-hofmeester/</link>
+      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/tim-r.-hofmeester/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Allan Mee</title>
+      <link>https://arcaravaggi.github.io/authors/allan-mee/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/allan-mee/</guid>
       <description></description>
     </item>
     
@@ -1009,14 +1089,6 @@
       <link>https://arcaravaggi.github.io/authors/a-caravaggi/</link>
       <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/authors/a-caravaggi/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>A. Cole Burton</title>
-      <link>https://arcaravaggi.github.io/authors/a.-cole-burton/</link>
-      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/a.-cole-burton/</guid>
       <description></description>
     </item>
     
