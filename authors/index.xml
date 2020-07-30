@@ -5,12 +5,76 @@
     <link>https://arcaravaggi.github.io/authors/</link>
       <atom:link href="https://arcaravaggi.github.io/authors/index.xml" rel="self" type="application/rss+xml" />
     <description>Authors</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 20 Jun 2020 11:08:39 +0100</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 30 Jul 2020 08:44:00 +0100</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Authors</title>
       <link>https://arcaravaggi.github.io/authors/</link>
     </image>
+    
+    <item>
+      <title>Alan McCarthy</title>
+      <link>https://arcaravaggi.github.io/authors/alan-mccarthy/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/alan-mccarthy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Anthony Caravaggi</title>
+      <link>https://arcaravaggi.github.io/authors/anthony-caravaggi/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/anthony-caravaggi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Darío Fernández-Bellon</title>
+      <link>https://arcaravaggi.github.io/authors/dario-fernandez-bellon/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/dario-fernandez-bellon/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>John Lusby</title>
+      <link>https://arcaravaggi.github.io/authors/john-lusby/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/john-lusby/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>John O&#39;Halloran</title>
+      <link>https://arcaravaggi.github.io/authors/john-ohalloran/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/john-ohalloran/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Jules Bos</title>
+      <link>https://arcaravaggi.github.io/authors/jules-bos/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/jules-bos/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Sandra Irwin</title>
+      <link>https://arcaravaggi.github.io/authors/sandra-irwin/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/sandra-irwin/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tonio Schaub</title>
+      <link>https://arcaravaggi.github.io/authors/tonio-schaub/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/authors/tonio-schaub/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>A. Cole Burton</title>
@@ -33,14 +97,6 @@
       <link>https://arcaravaggi.github.io/authors/ammie-k.-kalan/</link>
       <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
       <guid>https://arcaravaggi.github.io/authors/ammie-k.-kalan/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Anthony Caravaggi</title>
-      <link>https://arcaravaggi.github.io/authors/anthony-caravaggi/</link>
-      <pubDate>Sat, 20 Jun 2020 11:08:39 +0100</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/anthony-caravaggi/</guid>
       <description></description>
     </item>
     
@@ -109,22 +165,6 @@
     </item>
     
     <item>
-      <title>John Lusby</title>
-      <link>https://arcaravaggi.github.io/authors/john-lusby/</link>
-      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/john-lusby/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>John O&#39;Halloran</title>
-      <link>https://arcaravaggi.github.io/authors/john-ohalloran/</link>
-      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/john-ohalloran/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Lorcan O&#39;Toole</title>
       <link>https://arcaravaggi.github.io/authors/lorcan-otoole/</link>
       <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
@@ -141,14 +181,6 @@
     </item>
     
     <item>
-      <title>Sandra Irwin</title>
-      <link>https://arcaravaggi.github.io/authors/sandra-irwin/</link>
-      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/sandra-irwin/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Shane O&#39;Neill</title>
       <link>https://arcaravaggi.github.io/authors/shane-oneill/</link>
       <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
@@ -161,14 +193,6 @@
       <link>https://arcaravaggi.github.io/authors/tony-nagle/</link>
       <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/authors/tony-nagle/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Alan McCarthy</title>
-      <link>https://arcaravaggi.github.io/authors/alan-mccarthy/</link>
-      <pubDate>Thu, 20 Feb 2020 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/authors/alan-mccarthy/</guid>
       <description></description>
     </item>
     

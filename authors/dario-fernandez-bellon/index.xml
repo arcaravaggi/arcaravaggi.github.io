@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Darío Fernández-Bellon | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/dario-fernandez-bellon/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/dario-fernandez-bellon/index.xml" rel="self" type="application/rss+xml" />
+    <description>Darío Fernández-Bellon</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 30 Jul 2020 08:44:00 +0100</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Darío Fernández-Bellon</title>
+      <link>https://arcaravaggi.github.io/authors/dario-fernandez-bellon/</link>
+    </image>
+    
+    <item>
+      <title>Expert knowledge assessment of threats and conservation strategies for breeding Hen Harrier and Short-eared Owl across Europe</title>
+      <link>https://arcaravaggi.github.io/publication/fernandez-bellon-hhseo-2020/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/fernandez-bellon-hhseo-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

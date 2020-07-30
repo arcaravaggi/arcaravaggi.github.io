@@ -5,12 +5,20 @@
     <link>https://arcaravaggi.github.io/</link>
       <atom:link href="https://arcaravaggi.github.io/index.xml" rel="self" type="application/rss+xml" />
     <description>Anthony Caravaggi</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Sat, 20 Jun 2020 11:08:39 +0100</lastBuildDate>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Thu, 30 Jul 2020 08:44:00 +0100</lastBuildDate>
     <image>
       <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
       <title>Anthony Caravaggi</title>
       <link>https://arcaravaggi.github.io/</link>
     </image>
+    
+    <item>
+      <title>Expert knowledge assessment of threats and conservation strategies for breeding Hen Harrier and Short-eared Owl across Europe</title>
+      <link>https://arcaravaggi.github.io/publication/fernandez-bellon-hhseo-2020/</link>
+      <pubDate>Thu, 30 Jul 2020 08:44:00 +0100</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/fernandez-bellon-hhseo-2020/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>A review of factors to consider when using camera traps to study animal behavior to inform wildlife ecology and conservation</title>
