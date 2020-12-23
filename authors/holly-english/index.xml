@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Holly English | Anthony Caravaggi</title>
+    <link>https://arcaravaggi.github.io/authors/holly-english/</link>
+      <atom:link href="https://arcaravaggi.github.io/authors/holly-english/index.xml" rel="self" type="application/rss+xml" />
+    <description>Holly English</description>
+    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 23 Dec 2020 11:28:08 +0000</lastBuildDate>
+    <image>
+      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <title>Holly English</title>
+      <link>https://arcaravaggi.github.io/authors/holly-english/</link>
+    </image>
+    
+    <item>
+      <title>Where&#39;s wallaby? Using public records and media reports to describe the status of red-necked wallabies in Britain</title>
+      <link>https://arcaravaggi.github.io/publication/english-wallabies-2020/</link>
+      <pubDate>Wed, 23 Dec 2020 11:28:08 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/english-wallabies-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
