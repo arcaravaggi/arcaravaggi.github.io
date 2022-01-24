@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Invasive alien species | Anthony Caravaggi | Conservation Biology</title>
+    <link>https://arcaravaggi.github.io/tag/invasive-alien-species/</link>
+      <atom:link href="https://arcaravaggi.github.io/tag/invasive-alien-species/index.xml" rel="self" type="application/rss+xml" />
+    <description>Invasive alien species</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Anthony Caravaggi</copyright><lastBuildDate>Sun, 01 Feb 2015 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://arcaravaggi.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
+      <title>Invasive alien species</title>
+      <link>https://arcaravaggi.github.io/tag/invasive-alien-species/</link>
+    </image>
+    
+    <item>
+      <title>Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-range-2015/</link>
+      <pubDate>Sun, 01 Feb 2015 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-range-2015/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,16 +1,88 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Publications | Anthony Caravaggi</title>
+    <title>Publications | Anthony Caravaggi | Conservation Biology</title>
     <link>https://arcaravaggi.github.io/publication/</link>
       <atom:link href="https://arcaravaggi.github.io/publication/index.xml" rel="self" type="application/rss+xml" />
     <description>Publications</description>
-    <generator>Source Themes Academic (https://sourcethemes.com/academic/)</generator><language>en-us</language><lastBuildDate>Wed, 23 Dec 2020 11:28:08 +0000</lastBuildDate>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Anthony Caravaggi</copyright><lastBuildDate>Fri, 21 Jan 2022 13:28:51 +0000</lastBuildDate>
     <image>
-      <url>img/map[gravatar:%!s(bool=false) shape:circle]</url>
+      <url>https://arcaravaggi.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
       <title>Publications</title>
       <link>https://arcaravaggi.github.io/publication/</link>
     </image>
+    
+    <item>
+      <title>Melanism in the Pantanal cat and range extension of the southernmost limit into the Atlantic Forest, Brazil</title>
+      <link>https://arcaravaggi.github.io/publication/aximoff-pantanal-cat-2022/</link>
+      <pubDate>Fri, 21 Jan 2022 13:28:51 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/aximoff-pantanal-cat-2022/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On the need for rigorous and robust standards for studies that involve the live-capture of large mammals: a response to de Araujo et al</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-live-capture-2021/</link>
+      <pubDate>Thu, 21 Oct 2021 13:27:54 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-live-capture-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Nonvolant mammals in a fragment of arboreal caatinga in northeastern Brazil</title>
+      <link>https://arcaravaggi.github.io/publication/aximoff-nonvolant-mammals-2021/</link>
+      <pubDate>Tue, 21 Sep 2021 13:25:48 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/aximoff-nonvolant-mammals-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Natural history notes on interactions and abnormal coloration in carnivores in the araucaria forest, southern Brazil</title>
+      <link>https://arcaravaggi.github.io/publication/aximoff-abnormal-coloration-2021/</link>
+      <pubDate>Sat, 21 Aug 2021 13:26:08 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/aximoff-abnormal-coloration-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hares in the long grass: increased aircraft related mortality of the Irish hare (Lepus timidus hibernicus) over a thirty-year period at Ireland’s largest civil airport</title>
+      <link>https://arcaravaggi.github.io/publication/ball-hares-2021/</link>
+      <pubDate>Tue, 10 Aug 2021 13:26:57 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/ball-hares-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Avocet Recuvirostra avocetta responses to predator activity at Newport Wetland Nature Reserve</title>
+      <link>https://arcaravaggi.github.io/publication/bishop-avocets-2021/</link>
+      <pubDate>Wed, 21 Jul 2021 13:25:29 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/bishop-avocets-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Twitter conferences as a low-carbon, far-reaching and inclusive way of communicating research in ornithology and ecology</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-twitter-conferences-2021/</link>
+      <pubDate>Wed, 19 May 2021 13:26:32 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-twitter-conferences-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Bird and small mammal community composition and abundance in upland open habitats and early conifer forests</title>
+      <link>https://arcaravaggi.github.io/publication/mccarthy-prey-2021/</link>
+      <pubDate>Fri, 19 Feb 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/mccarthy-prey-2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Runway roadkill: a global review of mammal strikes with aircraft</title>
+      <link>https://arcaravaggi.github.io/publication/ball-runway-roadkill-2021/</link>
+      <pubDate>Mon, 04 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/ball-runway-roadkill-2021/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Where&#39;s wallaby? Using public records and media reports to describe the status of red-necked wallabies in Britain</title>
@@ -53,9 +125,9 @@
     </item>
     
     <item>
-      <title>Seasonality and risk factors for myxomatosis in pet rabbits in Great Britain</title>
+      <title>Farrell Myxomatosis 2020</title>
       <link>https://arcaravaggi.github.io/publication/farrell-myxomatosis-2020/</link>
-      <pubDate>Sat, 01 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 11 Feb 2020 08:40:34 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/publication/farrell-myxomatosis-2020/</guid>
       <description></description>
     </item>

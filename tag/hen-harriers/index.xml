@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hen harriers | Anthony Caravaggi | Conservation Biology</title>
+    <link>https://arcaravaggi.github.io/tag/hen-harriers/</link>
+      <atom:link href="https://arcaravaggi.github.io/tag/hen-harriers/index.xml" rel="self" type="application/rss+xml" />
+    <description>hen harriers</description>
+    <generator>Wowchemy (https://wowchemy.com)</generator><language>en-us</language><copyright>© 2021 Anthony Caravaggi</copyright><lastBuildDate>Fri, 27 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <image>
+      <url>https://arcaravaggi.github.io/media/icon_hu0b7a4cb9992c9ac0e91bd28ffd38dd00_9727_512x512_fill_lanczos_center_3.png</url>
+      <title>hen harriers</title>
+      <link>https://arcaravaggi.github.io/tag/hen-harriers/</link>
+    </image>
+    
+    <item>
+      <title>Anthropogenic pressures within the breeding range of the Hen Harrier Circus cyaneus in Ireland</title>
+      <link>https://arcaravaggi.github.io/publication/caravaggi-anthropogenic-2020/</link>
+      <pubDate>Fri, 27 Mar 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publication/caravaggi-anthropogenic-2020/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
