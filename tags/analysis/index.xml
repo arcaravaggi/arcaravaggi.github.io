@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Analysis on</title><link>https://arcaravaggi.github.io/tags/analysis/</link><description>Recent content in Analysis on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://arcaravaggi.github.io/tags/analysis/index.xml" rel="self" type="application/rss+xml"/><item><title>Generate Random Sampling Points by Minimum Distance</title><link>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</link><pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</guid><description>&lt;div id="overview" class="section level2"&gt;
+&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;This document demonstrates how to generate random sampling points within a polygon while enforcing a minimum distance between points using a Simple Sequential Inhibition (SSI) process.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id="libraries" class="section level2"&gt;
+&lt;h2&gt;Libraries&lt;/h2&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library(sf)
+library(spatstat.geom)
+library(spatstat.random)
+library(dplyr)
+library(ggplot2)
+library(maptiles)
+library(ggspatial)
+library(units)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We load:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sf&lt;/code&gt; for modern spatial data handling&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spatstat&lt;/code&gt; modules for generating spatial point patterns&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ggplot2&lt;/code&gt; for plotting&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maptiles&lt;/code&gt; and &lt;code&gt;ggspatial&lt;/code&gt; for modern basemaps and map annotations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;units&lt;/code&gt; to safely handle distance units (e.g. metres)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;First, create a bounding polygon using longitude and latitude coordinates in the WGS84 coordinate system. While this format is convenient for defining locations, it is not suitable for measuring distances because the units are in degrees rather than metres. To address this, the polygon is reprojected into the British National Grid coordinate system (EPSG:27700), which uses metres as its unit. This transformation is essential for ensuring that the minimum distance constraint applied later is accurate and interpretable. You can of course use our own shapefile if you don’t want to manually create a bounding polygon.&lt;/p&gt;</description></item></channel></rss>
