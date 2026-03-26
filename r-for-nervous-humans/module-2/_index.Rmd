@@ -1,0 +1,190 @@
+---
+title: "Module 2 — Data & Penguins"
+draft: false
+type: "page"
+layout: "single"
+
+---
+
+
+<!-- Dropdown for modules -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/">Welcome</option>
+  <option value="/r_for_nervous_humans/module-1/">1. Getting Started</option>
+  <option value="/r_for_nervous_humans/module-3/">3. Visualisation</option>
+  <option value="/r_for_nervous_humans/module-4/">4. Descriptive Statistics</option>
+  <option value="/r_for_nervous_humans/module-5/">5. Are These Groups Different?</option>
+  <option value="/r_for_nervous_humans/module-6/">6. Working with Categories</option>
+  <option value="/r_for_nervous_humans/module-7/">7. When Data Gets Weird</option>
+  <option value="/r_for_nervous_humans/module-8/">8. Relationships Between Variables</option>
+  <option value="/r_for_nervous_humans/module-9/">9. Linear Regression</option>
+</select>
+
+
+
+
+### Welcome to Module 2
+
+Now that you know how to run R and store values in variables, it’s time to look at **real data**. We’ll use the **Palmer Penguins dataset**, a simple but rich dataset of penguin measurements.
+
+By the end of this module, you will be able to:
+
+* Load a dataset into R  
+* Examine its structure  
+* Look at basic summaries of the data  
+* Make a simple plot  
+
+---
+
+### Loading the data
+
+The dataset comes from the `palmerpenguins` package. First, install the package and then load it. You only need to install a package on a particular machine once so don't feel the need to run the installation line every time you want to use a package:
+
+```{r setup, include=FALSE}
+library(palmerpenguins)
+data("penguins")
+
+```
+
+```{r eval = FALSE, messages = FALSE, warnings = FALSE}
+# Install if you haven't already
+install.packages("palmerpenguins")
+
+# Load the package
+library(palmerpenguins)
+
+# Load the dataset
+data("penguins")
+```
+
+You'll notice that some lines have a hashtag at their start. Hashtags mean 'don't run this line'. They're an essential tool in keeping track of what you're doing and why you're doing it. Future you will thank you - trust me. Annotating your code in this way also supports reproducibility if you share it with someone else. There's nothing worse (for a given value of 'nothing') than being sent unformatted, non-annotated code. I once stepped on a slug, bare foot, and unformatted, non-annotated code is worse.
+
+Note: Running *library(palmerpenguins)* makes the dataset available in your environment. We use the same argument to load any package. 
+
+---
+
+### Exploring the dataset
+
+It is important to check any opened data before you use it so that you can understand its structure and, potentially, identify any issues. Start by taking a look at the first few rows:
+
+```{r}
+head(penguins)
+```
+
+Does this look right? Now look at the structure:
+
+```{r}
+str(penguins)
+```
+
+A word followed by parentheses (curved brackets) is a function. It means 'take the thing inside the brackets and do something to it'. The 'something' in question will differ depending on the, well, function of the function. Here, `str()` tells you the type of each column (numeric, factor, etc.). This is crucial for understanding what kind of analysis you can do. Above, `head()` allows us to look at the top five rows of our data.
+
+We should also summarise our data:
+
+```{r}
+summary(penguins)
+```
+
+The `summary()` function gives you min, max, mean and other values for numeric columns. It shows counts for categorical columns like species and sex. This provides a quick way to get to know your dataset.
+
+---
+
+### Data classes
+
+Every column in a dataset has a **class** hat describes the kind of data it holds. Understanding the class helps R know what operations you can do with those data.
+
+Common classes:
+
+* `numeric` – numbers you can calculate with  
+* `integer` – whole numbers  
+* `factor` – categorical variables like species or sex  
+* `character` – text  
+* `logical` – TRUE/FALSE
+
+Check the class of each column in `penguins`:
+
+```{r}
+# Check classes of all columns
+sapply(penguins, class)
+```
+
+Notice that `species` and `sex` are factors (categories), while `bill_length_mm` and `body_mass_g` are numeric.This determines what kinds of calculations or plots you can do later.
+
+---
+
+### Visualising variables
+
+Let’s plot bill length to look at the distribution:
+
+```{r eval = FALSE}
+hist(penguins$bill_length_mm, 
+     main = "Histogram of Bill Length", 
+     xlab = "Bill Length (mm)", 
+     col = "skyblue", 
+     border = "white")
+```
+
+If you run this code you'll find that it doesn't work. Why might this be? Take a look at your data (double-click *penguins* in your Environment, look at the structure and summary) and see if you can spot any potential issues.
+
+The keen-eyed among you will notice that the `bill_length_mm` variable has cells that contain NA values. NA is not the same as 0. A value of 0 means that the would have been a bill length of 0 mm (hopefully no penguins were sans bill) whereas as an NA value indicates the complete absence of data. 
+
+We can count the number of NAs in our data:
+
+```{r}
+sum(is.na(penguins$bill_length_mm))
+```
+
+Many R functions do not know how to handle an absence of data without our instruction. We can do this a number of ways but for now we'll use `na.omit` and save the new, NA-free variable, for plotting.
+
+```{r}
+bill_length <- na.omit(penguins$bill_length_mm)
+
+hist(bill_length, 
+     main = "Histogram of Bill Length", 
+     xlab = "Bill Length (mm)", 
+     col = "skyblue", 
+     border = "white")
+```
+
+Note: Putting `?` or `??` before a function name will search your installed packages for any help documentation on that particular function. You can use `?hist` to see more options for histograms, for example. Help files include descriptions of all arguments used in the function, as well as examples of the function in use. 
+
+We can also see how bill length varies by species:
+
+```{r}
+boxplot(penguins$bill_length_mm ~ penguins$species, 
+        main = "Bill Length by Species", 
+        ylab = "Bill Length (mm)", 
+        col = c("lightpink","lightgreen","lightblue"))
+```
+
+Each box represents the distribution of bill length data for one species. Look for differences in median, spread, and outliers. Remember that this is a simple visualisation; it is *not* a test for significant differences. Those will come, later. 
+
+---
+
+### Lessons learned
+
+* The Palmer Penguins dataset is small but has numeric and categorical data
+* head(), str(), and summary() are your first tools for exploration
+* Visualisations help you see patterns before analysing
+
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/module-1/" 
+     style="padding: 0.6rem 1.2rem; 
+            background-color: var(--theme-accent); 
+            color: var(--theme-fg); 
+            text-decoration: none; 
+            border-radius: 6px;">
+    ← Previous
+  </a>
+
+  <a href="/r_for_nervous_humans/module-3/" 
+     style="padding: 0.6rem 1.2rem; 
+            background-color: var(--theme-accent); 
+            color: var(--theme-fg); 
+            text-decoration: none; 
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>
