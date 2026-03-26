@@ -127,9 +127,19 @@ hist(penguins$bill_length_mm,
 
 If you run this code you'll find that it doesn't work. Why might this be? Take a look at your data (double-click *penguins* in your Environment, look at the structure and summary) and see if you can spot any potential issues.
 
-The keen-eyed among you will notice that the `bill_length_mm` variable has cells that contain NA values. NA is not the same as 0. A value of 0 means that the would have been a bill length of 0 mm (hopefully no penguins were sans bill) whereas as an NA value indicates the complete absence of data. 
+The keen-eyed among you will notice that the `bill_length_mm` variable has cells that contain NA values. NA is not the same as 0. A value of 0 means that the would have been a bill length of 0 mm (hopefully no penguins were sans bill) whereas as an NA value indicates the complete absence of data.
 
-We can count the number of NAs in our data:
+It might be tempting to just remove all rows with missing values straight away. But that can quietly throw away a lot of useful data, especially if only one variable is missing.
+
+Instead, we’ll take a more careful approach and deal with missing values *only when we need to*.
+
+A useful way to think about it:
+* If you're working with **one variable** → remove `NA`s from that variable only  
+* If you're comparing **two or more variables** → remove rows where those specific variables are missing  
+
+This way, we keep as much data as possible while still making sure our plots and calculations work properly.
+
+You can also check for missing values using:
 
 ```{r}
 sum(is.na(penguins$bill_length_mm))
