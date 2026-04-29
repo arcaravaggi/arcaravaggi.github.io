@@ -1,10 +1,32 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Dr Anthony Caravaggi on</title><link>https://arcaravaggi.github.io/</link><description>Recent content in Dr Anthony Caravaggi on</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://arcaravaggi.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>teaching</title><link>https://arcaravaggi.github.io/teaching/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/teaching/</guid><description/></item><item><title>Generate Random Sampling Points by Minimum Distance</title><link>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</link><pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</guid><description>&lt;div id="overview" class="section level2"&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Dr Anthony Caravaggi on </title>
+    <link>https://arcaravaggi.github.io/</link>
+    <description>Recent content in Dr Anthony Caravaggi on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://arcaravaggi.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>teaching</title>
+      <link>https://arcaravaggi.github.io/teaching/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/teaching/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Generate Random Sampling Points by Minimum Distance</title>
+      <link>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</guid>
+      <description>&lt;div id=&#34;overview&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Overview&lt;/h2&gt;
 &lt;p&gt;This document demonstrates how to generate random sampling points within a polygon while enforcing a minimum distance between points using a Simple Sequential Inhibition (SSI) process.&lt;/p&gt;
 &lt;/div&gt;
-&lt;div id="libraries" class="section level2"&gt;
+&lt;div id=&#34;libraries&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Libraries&lt;/h2&gt;
-&lt;pre class="r"&gt;&lt;code&gt;library(sf)
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(sf)
 library(spatstat.geom)
 library(spatstat.random)
 library(dplyr)
@@ -20,4 +42,407 @@ library(units)&lt;/code&gt;&lt;/pre&gt;
 &lt;li&gt;&lt;code&gt;maptiles&lt;/code&gt; and &lt;code&gt;ggspatial&lt;/code&gt; for modern basemaps and map annotations&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;units&lt;/code&gt; to safely handle distance units (e.g. metres)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;First, create a bounding polygon using longitude and latitude coordinates in the WGS84 coordinate system. While this format is convenient for defining locations, it is not suitable for measuring distances because the units are in degrees rather than metres. To address this, the polygon is reprojected into the British National Grid coordinate system (EPSG:27700), which uses metres as its unit. This transformation is essential for ensuring that the minimum distance constraint applied later is accurate and interpretable. You can of course use our own shapefile if you don’t want to manually create a bounding polygon.&lt;/p&gt;</description></item><item><title>Red-necked Wallabies in Great Britain</title><link>https://arcaravaggi.github.io/projects/wallabies/</link><pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/projects/wallabies/</guid><description>Tracking the distribution and ecology of red-necked wallabies in Great Britain.</description></item><item><title>Global Roadkill Data: a dataset on terrestrial vertebrate mortality caused by collision with vehicles</title><link>https://arcaravaggi.github.io/publications/2025-global-roadkill-data/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2025-global-roadkill-data/</guid><description>Roadkill is a major threat to wildlife and can also cause accidents with social and economic costs. This research compiles 208,570 records of terrestrial vertebrates from 54 countries between 1971 and 2024, combining surveys and other observations. This dataset helps identify high-risk roads, vulnerable species, and populations at risk, while reducing duplicate data collection. By providing a comprehensive resource for researchers and planners, it supports wildlife conservation and safer infrastructure, helping protect animals and reduce the societal and economic impacts of road collisions.</description></item><item><title>Same data, different analysts: variation in effect sizes due to analytical decisions in ecology and evolutionary biology</title><link>https://arcaravaggi.github.io/publications/2025-same-data-different-analysts-variation-in-effect-sizes-due-t/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2025-same-data-different-analysts-variation-in-effect-sizes-due-t/</guid><description>Even when using the same data, researchers can reach very different conclusions because of the choices they make in analyzing it. In a study with 174 teams, analyses of Blue Tits and Eucalyptus trees showed wide variation in results. Some effects were strong, some weak, and some opposite to the average trend. These differences weren’t explained by the methods or peer reviews used. The study highlights that analytical decisions can strongly shape outcomes, so ecologists and evolutionary biologists need to interpret results carefully and make analyses more transparent.</description></item><item><title>The wildlife strikes back: determining the secondary strike risk associated with a mammal--aircraft collision</title><link>https://arcaravaggi.github.io/publications/2025-the-wildlife-strikes-back-determining-the-secondary-strike-r/</link><pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2025-the-wildlife-strikes-back-determining-the-secondary-strike-r/</guid><description>Wildlife collisions with aircraft are a growing safety concern, but most research focuses only on the first strike, not the risk of scavengers or predators causing a secondary strike. At Dublin Airport in Ireland, which sees nearly 24 hare strikes per year, researchers used motion-activated cameras and rat carcasses to mimic hare strikes. Over 82 trials, Hooded Crows were the main species attracted, finding carcasses in about five hours and staying briefly. Mammals arrived later and spent even less time. The results suggest that the airport’s current practice of quickly removing carcasses and temporarily closing runways is effective at preventing secondary strikes, keeping both wildlife and flights safer.</description></item><item><title>Dublin Hareport: The movement ecology and airfield interactions of resident, airside hares, at an international airport</title><link>https://arcaravaggi.github.io/publications/2024-dublin-hareport-the-movement-ecology-and-airfield-interactio/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2024-dublin-hareport-the-movement-ecology-and-airfield-interactio/</guid><description/></item><item><title>Upscaling camera trap Distance Sampling to National population estimates using hares in Ireland</title><link>https://arcaravaggi.github.io/publications/2024-upscaling-camera-trap-distance-sampling-to-national-populati/</link><pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2024-upscaling-camera-trap-distance-sampling-to-national-populati/</guid><description/></item><item><title>Hareport hazard: Identifying hare activity patterns and increased mammal--aircraft strike risk at an International Airport</title><link>https://arcaravaggi.github.io/publications/2023-hareport-hazard-identifying-hare-activity-patterns-and-incre/</link><pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2023-hareport-hazard-identifying-hare-activity-patterns-and-incre/</guid><description>Wildlife collisions with aircraft are an increasing safety concern worldwide. At Dublin Airport, researchers studied Irish hares (Lepus timidus hibernicus) using motion-activated cameras to understand how their activity relates to aircraft strikes. The hares showed a clear bimodal pattern, being most active at sunrise and sunset. Strike records matched these peak activity times closely, showing a high overlap between hare movement and strike incidents. Interestingly, most strikes occurred when overall aircraft activity was relatively low, highlighting times when hares are most at risk. The study emphasizes that knowing the daily and seasonal activity patterns of wildlife is essential for designing effective mitigation strategies. By aligning management efforts with when animals are most active, airports can reduce collision risks and improve safety for both wildlife and flights.</description></item><item><title>Mammal management: Strike mitigation measures and practices at European airports</title><link>https://arcaravaggi.github.io/publications/2023-mammal-management-strike-mitigation-measures-and-practices-a/</link><pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2023-mammal-management-strike-mitigation-measures-and-practices-a/</guid><description>Airfields attract many types of wildlife, and collisions with aircraft are increasing worldwide. A survey of 22 European airfields found mammals present at all sites, with foxes and rabbits most common. Habitats like heathland or peatland increased mammal diversity. Fencing and grass management were widely used to reduce strikes, while controlling water sources was seen as most effective. The study emphasizes that Wildlife Hazard Management Plans should combine multiple strategies and be adaptable to the species most likely to cause strikes, helping make airfields safer for both wildlife and aircraft.</description></item><item><title>Lagomorpha life history</title><link>https://arcaravaggi.github.io/publications/2022-lagomorpha-life-history/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2022-lagomorpha-life-history/</guid><description/></item><item><title>Lagomorpha Navigation</title><link>https://arcaravaggi.github.io/publications/2022-lagomorpha-navigation/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2022-lagomorpha-navigation/</guid><description/></item><item><title>Medium and large-sized mammals in a fragment of Cerrado in Serra dos Pireneus, Central Brazil</title><link>https://arcaravaggi.github.io/publications/2022-medium-and-large-sized-mammals-in-a-fragment-of-cerrado-in-s/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2022-medium-and-large-sized-mammals-in-a-fragment-of-cerrado-in-s/</guid><description/></item><item><title>Spatial and temporal trends in western polecat road mortality in Wales</title><link>https://arcaravaggi.github.io/publications/2022-spatial-and-temporal-trends-in-western-polecat-road-mortalit/</link><pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2022-spatial-and-temporal-trends-in-western-polecat-road-mortalit/</guid><description/></item><item><title>Avocet Recurvirostra avocetta responses to predator activity at Newport Wetland Nature Reserve</title><link>https://arcaravaggi.github.io/publications/2021-avocet-recurvirostra-avocetta-responses-to-predator-activity/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-avocet-recurvirostra-avocetta-responses-to-predator-activity/</guid><description/></item><item><title>Bird and small mammal community composition and abundance in upland open habitats and early conifer forests</title><link>https://arcaravaggi.github.io/publications/2021-bird-and-small-mammal-community-composition-and-abundance-in/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-bird-and-small-mammal-community-composition-and-abundance-in/</guid><description/></item><item><title>Expert knowledge assessment of threats and conservation strategies for breeding Hen Harrier and Short-eared Owl across Europe</title><link>https://arcaravaggi.github.io/publications/2021-expert-knowledge-assessment-of-threats-and-conservation-stra/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-expert-knowledge-assessment-of-threats-and-conservation-stra/</guid><description/></item><item><title>Hares in the long grass: increased aircraft related mortality of the Irish hare (Lepus timidus hibernicus) over a 30-year period at Ireland’s largest civil airport</title><link>https://arcaravaggi.github.io/publications/2021-hares-in-the-long-grass-increased-aircraft-related-mortality/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-hares-in-the-long-grass-increased-aircraft-related-mortality/</guid><description/></item><item><title>Landscape and temporal influences on the winter diet of a threatened diurnal raptor, the Hen Harrier Circus cyaneus</title><link>https://arcaravaggi.github.io/publications/2021-landscape-and-temporal-influences-on-the-winter-diet-of-a-th/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-landscape-and-temporal-influences-on-the-winter-diet-of-a-th/</guid><description/></item><item><title>Melanism in the Brazilian pampas cat and range extension in the Atlantic Forest, Brazil</title><link>https://arcaravaggi.github.io/publications/2021-melanism-in-the-brazilian-pampas-cat-and-range-extension-in-/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-melanism-in-the-brazilian-pampas-cat-and-range-extension-in-/</guid><description/></item><item><title>Natural History Notes On Interactions And Abnormal Coloration In Carnivores In The Araucaria Forest, Southern Brazil</title><link>https://arcaravaggi.github.io/publications/2021-natural-history-notes-on-interactions-and-abnormal-coloratio/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-natural-history-notes-on-interactions-and-abnormal-coloratio/</guid><description/></item><item><title>Nonvolant mammals in a fragment of arboreal Caatinga in northeastern Brazil</title><link>https://arcaravaggi.github.io/publications/2021-nonvolant-mammals-in-a-fragment-of-arboreal-caatinga-in-nort/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-nonvolant-mammals-in-a-fragment-of-arboreal-caatinga-in-nort/</guid><description/></item><item><title>On the need for rigorous welfare and methodological reporting for the live capture of large carnivores: A response to de Araujo et al.(2021)</title><link>https://arcaravaggi.github.io/publications/2021-on-the-need-for-rigorous-welfare-and-methodological-reportin/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-on-the-need-for-rigorous-welfare-and-methodological-reportin/</guid><description/></item><item><title>The long and short of it: converting between maximum and minimum tarsus measurements in passerine birds</title><link>https://arcaravaggi.github.io/publications/2021-the-long-and-short-of-it-converting-between-maximum-and-mini/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-the-long-and-short-of-it-converting-between-maximum-and-mini/</guid><description/></item><item><title>Twitter conferences as a low-carbon, far-reaching and inclusive way of communicating research in ornithology and ecology</title><link>https://arcaravaggi.github.io/publications/2021-twitter-conferences-as-a-low-carbon-far-reaching-and-inclusi/</link><pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2021-twitter-conferences-as-a-low-carbon-far-reaching-and-inclusi/</guid><description/></item><item><title>A review of factors to consider when using camera traps to study animal behavior to inform wildlife ecology and conservation</title><link>https://arcaravaggi.github.io/publications/2020-a-review-of-factors-to-consider-when-using-camera-traps-to-s/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-a-review-of-factors-to-consider-when-using-camera-traps-to-s/</guid><description/></item><item><title>Forest management and Hen Harrier Circus cyaneus conservation in Ireland</title><link>https://arcaravaggi.github.io/publications/2020-forest-management-and-hen-harrier-circus-cyaneus-conservatio/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-forest-management-and-hen-harrier-circus-cyaneus-conservatio/</guid><description/></item><item><title>Pistenunf"alle: eine globale Review von S"augetierunf"allen mit Flugzeugen Runway roadkill: a global review of mammal strikes with aircraft</title><link>https://arcaravaggi.github.io/publications/2020-pistenunf-alle-eine-globale-review-von-s-augetierunf-allen-m/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-pistenunf-alle-eine-globale-review-von-s-augetierunf-allen-m/</guid><description/></item><item><title>Runway roadkill: a global review of mammal strikes with aircraft</title><link>https://arcaravaggi.github.io/publications/2020-runway-roadkill-a-global-review-of-mammal-strikes-with-aircr/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-runway-roadkill-a-global-review-of-mammal-strikes-with-aircr/</guid><description/></item><item><title>Seasonality and risk factors for myxomatosis in pet rabbits in Great Britain</title><link>https://arcaravaggi.github.io/publications/2020-seasonality-and-risk-factors-for-myxomatosis-in-pet-rabbits-/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-seasonality-and-risk-factors-for-myxomatosis-in-pet-rabbits-/</guid><description/></item><item><title>Where’s wallaby? Using public records and media reports to describe the status of red-necked wallabies in Britain</title><link>https://arcaravaggi.github.io/publications/2020-where-s-wallaby-using-public-records-and-media-reports-to-de/</link><pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2020-where-s-wallaby-using-public-records-and-media-reports-to-de/</guid><description/></item><item><title>Anthropogenic pressures within the breeding range of the Hen Harrier Circus cyaneus in Ireland</title><link>https://arcaravaggi.github.io/publications/2019-anthropogenic-pressures-within-the-breeding-range-of-the-hen/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-anthropogenic-pressures-within-the-breeding-range-of-the-hen/</guid><description/></item><item><title>By trying to be everything, rewilding risks meaning nothing</title><link>https://arcaravaggi.github.io/publications/2019-by-trying-to-be-everything-rewilding-risks-meaning-nothing/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-by-trying-to-be-everything-rewilding-risks-meaning-nothing/</guid><description/></item><item><title>Factors influencing Hen Harrier Circus cyaneus territory site selection and breeding success</title><link>https://arcaravaggi.github.io/publications/2019-factors-influencing-hen-harrier-circus-cyaneus-territory-sit/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-factors-influencing-hen-harrier-circus-cyaneus-territory-sit/</guid><description/></item><item><title>National hare survey &amp; population assessment 2017-2019</title><link>https://arcaravaggi.github.io/publications/2019-national-hare-survey-population-assessment-2017-2019/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-national-hare-survey-population-assessment-2017-2019/</guid><description/></item><item><title>Reintroducing rewilding to restoration--Rejecting the search for novelty</title><link>https://arcaravaggi.github.io/publications/2019-reintroducing-rewilding-to-restoration-rejecting-the-search-/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-reintroducing-rewilding-to-restoration-rejecting-the-search-/</guid><description/></item><item><title>Rewilding needs to clarify the role of management of invasive species</title><link>https://arcaravaggi.github.io/publications/2019-rewilding-needs-to-clarify-the-role-of-management-of-invasiv/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-rewilding-needs-to-clarify-the-role-of-management-of-invasiv/</guid><description/></item><item><title>The impacts of introduced House Mice on the breeding success of nesting seabirds on Gough Island</title><link>https://arcaravaggi.github.io/publications/2019-the-impacts-of-introduced-house-mice-on-the-breeding-success/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-the-impacts-of-introduced-house-mice-on-the-breeding-success/</guid><description/></item><item><title>The search for novelty continues for rewilding</title><link>https://arcaravaggi.github.io/publications/2019-the-search-for-novelty-continues-for-rewilding/</link><pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2019-the-search-for-novelty-continues-for-rewilding/</guid><description/></item><item><title>Seasonal and predator-prey effects on circadian activity of free-ranging mammals revealed by camera traps</title><link>https://arcaravaggi.github.io/publications/2018-seasonal-and-predator-prey-effects-on-circadian-activity-of-/</link><pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2018-seasonal-and-predator-prey-effects-on-circadian-activity-of-/</guid><description/></item><item><title>The composition of captive ruffed lemur (Varecia spp.) diets in UK</title><link>https://arcaravaggi.github.io/publications/2018-the-composition-of-captive-ruffed-lemur-varecia-spp-diets-in/</link><pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2018-the-composition-of-captive-ruffed-lemur-varecia-spp-diets-in/</guid><description/></item><item><title>The distribution and trophic ecology of an introduced, insular population of red-necked wallabies (Notamacropus rufogriseus)</title><link>https://arcaravaggi.github.io/publications/2018-the-distribution-and-trophic-ecology-of-an-introduced-insula/</link><pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2018-the-distribution-and-trophic-ecology-of-an-introduced-insula/</guid><description/></item><item><title>A multi-disciplinary perspective on emergent and future innovations in peer review</title><link>https://arcaravaggi.github.io/publications/2017-a-multi-disciplinary-perspective-on-emergent-and-future-inno/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-a-multi-disciplinary-perspective-on-emergent-and-future-inno/</guid><description/></item><item><title>A multidisciplinary perspective on emergent and future innovations in peer review. F1000Research</title><link>https://arcaravaggi.github.io/publications/2017-a-multidisciplinary-perspective-on-emergent-and-future-innov/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-a-multidisciplinary-perspective-on-emergent-and-future-innov/</guid><description/></item><item><title>A review of camera trapping for conservation behaviour research. Remote Sens Ecol Conserv 3: 109--122</title><link>https://arcaravaggi.github.io/publications/2017-a-review-of-camera-trapping-for-conservation-behaviour-resea/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-a-review-of-camera-trapping-for-conservation-behaviour-resea/</guid><description/></item><item><title>Banks, A Cole Burton, Caroline MV Finlay, Peter M Haswell, Matt W Hayward, Marcus J Rowcliffe, and Mike D Wood. A review of camera trapping for conservation behaviour research</title><link>https://arcaravaggi.github.io/publications/2017-banks-a-cole-burton-caroline-mv-finlay-peter-m-haswell-matt-/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-banks-a-cole-burton-caroline-mv-finlay-peter-m-haswell-matt-/</guid><description/></item><item><title>Conferencing in 140 characters</title><link>https://arcaravaggi.github.io/publications/2017-conferencing-in-140-characters/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-conferencing-in-140-characters/</guid><description/></item><item><title>Current ornithological research in Ireland: seventh Ornithological Research Conference, UCC, November 2017</title><link>https://arcaravaggi.github.io/publications/2017-current-ornithological-research-in-ireland-seventh-ornitholo/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-current-ornithological-research-in-ireland-seventh-ornitholo/</guid><description/></item><item><title>Management and control of invasive brown hares (Lepus europaeus): Contrasting attitudes of selected environmental stakeholders and the wider rural community</title><link>https://arcaravaggi.github.io/publications/2017-management-and-control-of-invasive-brown-hares-lepus-europae/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-management-and-control-of-invasive-brown-hares-lepus-europae/</guid><description/></item><item><title>Niche overlap of mountain hare subspecies and the vulnerability of their ranges to invasion by the European hare; the (bad) luck of the Irish</title><link>https://arcaravaggi.github.io/publications/2017-niche-overlap-of-mountain-hare-subspecies-and-the-vulnerabil/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-niche-overlap-of-mountain-hare-subspecies-and-the-vulnerabil/</guid><description/></item><item><title>remBoot: An R package for Random Encounter Modelling</title><link>https://arcaravaggi.github.io/publications/2017-remboot-an-r-package-for-random-encounter-modelling/</link><pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2017-remboot-an-r-package-for-random-encounter-modelling/</guid><description/></item><item><title>An invasive-native mammalian species replacement process captured by camera trap survey random encounter models</title><link>https://arcaravaggi.github.io/publications/2016-an-invasive-native-mammalian-species-replacement-process-cap/</link><pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2016-an-invasive-native-mammalian-species-replacement-process-cap/</guid><description/></item><item><title>Erratum to: Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title><link>https://arcaravaggi.github.io/publications/2016-erratum-to-range-expansion-and-comparative-habitat-use-of-in/</link><pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2016-erratum-to-range-expansion-and-comparative-habitat-use-of-in/</guid><description/></item><item><title>Invasion ecology of non-native European brown hares and their impact on the endemic Irish hare</title><link>https://arcaravaggi.github.io/publications/2016-invasion-ecology-of-non-native-european-brown-hares-and-thei/</link><pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2016-invasion-ecology-of-non-native-european-brown-hares-and-thei/</guid><description/></item><item><title>Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title><link>https://arcaravaggi.github.io/publications/2015-range-expansion-and-comparative-habitat-use-of-insular-conge/</link><pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate><guid>https://arcaravaggi.github.io/publications/2015-range-expansion-and-comparative-habitat-use-of-insular-conge/</guid><description/></item></channel></rss>
+&lt;p&gt;First, create a bounding polygon using longitude and latitude coordinates in the WGS84 coordinate system. While this format is convenient for defining locations, it is not suitable for measuring distances because the units are in degrees rather than metres. To address this, the polygon is reprojected into the British National Grid coordinate system (EPSG:27700), which uses metres as its unit. This transformation is essential for ensuring that the minimum distance constraint applied later is accurate and interpretable. You can of course use our own shapefile if you don’t want to manually create a bounding polygon.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Red-necked Wallabies in Great Britain</title>
+      <link>https://arcaravaggi.github.io/projects/wallabies/</link>
+      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/projects/wallabies/</guid>
+      <description>Tracking the distribution and ecology of red-necked wallabies in Great Britain.</description>
+    </item>
+    <item>
+      <title>Generate Random Sampling Points by Minimum Distance</title>
+      <link>https://arcaravaggi.github.io/posts/points_by_min_distance/</link>
+      <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/posts/points_by_min_distance/</guid>
+      <description>&lt;div id=&#34;overview&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Overview&lt;/h2&gt;
+&lt;p&gt;This document demonstrates how to generate random sampling points within a polygon while enforcing a minimum distance between points using a Simple Sequential Inhibition (SSI) process.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div id=&#34;libraries&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Libraries&lt;/h2&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(sf)
+library(spatstat.geom)
+library(spatstat.random)
+library(dplyr)
+library(ggplot2)
+library(maptiles)
+library(ggspatial)
+library(units)&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;We load:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sf&lt;/code&gt; for modern spatial data handling&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spatstat&lt;/code&gt; modules for generating spatial point patterns&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ggplot2&lt;/code&gt; for plotting&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maptiles&lt;/code&gt; and &lt;code&gt;ggspatial&lt;/code&gt; for modern basemaps and map annotations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;units&lt;/code&gt; to safely handle distance units (e.g. metres)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;First, create a bounding polygon using longitude and latitude coordinates in the WGS84 coordinate system. While this format is convenient for defining locations, it is not suitable for measuring distances because the units are in degrees rather than metres. To address this, the polygon is reprojected into the British National Grid coordinate system (EPSG:27700), which uses metres as its unit. This transformation is essential for ensuring that the minimum distance constraint applied later is accurate and interpretable. You can of course use our own shapefile if you don’t want to manually create a bounding polygon.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Global Roadkill Data: a dataset on terrestrial vertebrate mortality caused by collision with vehicles</title>
+      <link>https://arcaravaggi.github.io/publications/2025-global-roadkill-data/</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2025-global-roadkill-data/</guid>
+      <description>Roadkill is a major threat to wildlife and can also cause accidents with social and economic costs. This research compiles 208,570 records of terrestrial vertebrates from 54 countries between 1971 and 2024, combining surveys and other observations. This dataset helps identify high-risk roads, vulnerable species, and populations at risk, while reducing duplicate data collection. By providing a comprehensive resource for researchers and planners, it supports wildlife conservation and safer infrastructure, helping protect animals and reduce the societal and economic impacts of road collisions.</description>
+    </item>
+    <item>
+      <title>Same data, different analysts: variation in effect sizes due to analytical decisions in ecology and evolutionary biology</title>
+      <link>https://arcaravaggi.github.io/publications/2025-same-data-different-analysts-variation-in-effect-sizes-due-t/</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2025-same-data-different-analysts-variation-in-effect-sizes-due-t/</guid>
+      <description>Even when using the same data, researchers can reach very different conclusions because of the choices they make in analyzing it. In a study with 174 teams, analyses of Blue Tits and Eucalyptus trees showed wide variation in results. Some effects were strong, some weak, and some opposite to the average trend. These differences weren’t explained by the methods or peer reviews used. The study highlights that analytical decisions can strongly shape outcomes, so ecologists and evolutionary biologists need to interpret results carefully and make analyses more transparent.</description>
+    </item>
+    <item>
+      <title>The wildlife strikes back: determining the secondary strike risk associated with a mammal--aircraft collision</title>
+      <link>https://arcaravaggi.github.io/publications/2025-the-wildlife-strikes-back-determining-the-secondary-strike-r/</link>
+      <pubDate>Wed, 01 Jan 2025 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2025-the-wildlife-strikes-back-determining-the-secondary-strike-r/</guid>
+      <description>Wildlife collisions with aircraft are a growing safety concern, but most research focuses only on the first strike, not the risk of scavengers or predators causing a secondary strike. At Dublin Airport in Ireland, which sees nearly 24 hare strikes per year, researchers used motion-activated cameras and rat carcasses to mimic hare strikes. Over 82 trials, Hooded Crows were the main species attracted, finding carcasses in about five hours and staying briefly. Mammals arrived later and spent even less time. The results suggest that the airport’s current practice of quickly removing carcasses and temporarily closing runways is effective at preventing secondary strikes, keeping both wildlife and flights safer.</description>
+    </item>
+    <item>
+      <title>Dublin Hareport: The movement ecology and airfield interactions of resident, airside hares, at an international airport</title>
+      <link>https://arcaravaggi.github.io/publications/2024-dublin-hareport-the-movement-ecology-and-airfield-interactio/</link>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2024-dublin-hareport-the-movement-ecology-and-airfield-interactio/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Upscaling camera trap Distance Sampling to National population estimates using hares in Ireland</title>
+      <link>https://arcaravaggi.github.io/publications/2024-upscaling-camera-trap-distance-sampling-to-national-populati/</link>
+      <pubDate>Mon, 01 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2024-upscaling-camera-trap-distance-sampling-to-national-populati/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hareport hazard: Identifying hare activity patterns and increased mammal--aircraft strike risk at an International Airport</title>
+      <link>https://arcaravaggi.github.io/publications/2023-hareport-hazard-identifying-hare-activity-patterns-and-incre/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2023-hareport-hazard-identifying-hare-activity-patterns-and-incre/</guid>
+      <description>Wildlife collisions with aircraft are an increasing safety concern worldwide. At Dublin Airport, researchers studied Irish hares (Lepus timidus hibernicus) using motion-activated cameras to understand how their activity relates to aircraft strikes. The hares showed a clear bimodal pattern, being most active at sunrise and sunset. Strike records matched these peak activity times closely, showing a high overlap between hare movement and strike incidents. Interestingly, most strikes occurred when overall aircraft activity was relatively low, highlighting times when hares are most at risk. The study emphasizes that knowing the daily and seasonal activity patterns of wildlife is essential for designing effective mitigation strategies. By aligning management efforts with when animals are most active, airports can reduce collision risks and improve safety for both wildlife and flights.</description>
+    </item>
+    <item>
+      <title>Mammal management: Strike mitigation measures and practices at European airports</title>
+      <link>https://arcaravaggi.github.io/publications/2023-mammal-management-strike-mitigation-measures-and-practices-a/</link>
+      <pubDate>Sun, 01 Jan 2023 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2023-mammal-management-strike-mitigation-measures-and-practices-a/</guid>
+      <description>Airfields attract many types of wildlife, and collisions with aircraft are increasing worldwide. A survey of 22 European airfields found mammals present at all sites, with foxes and rabbits most common. Habitats like heathland or peatland increased mammal diversity. Fencing and grass management were widely used to reduce strikes, while controlling water sources was seen as most effective. The study emphasizes that Wildlife Hazard Management Plans should combine multiple strategies and be adaptable to the species most likely to cause strikes, helping make airfields safer for both wildlife and aircraft.</description>
+    </item>
+    <item>
+      <title>Lagomorpha life history</title>
+      <link>https://arcaravaggi.github.io/publications/2022-lagomorpha-life-history/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2022-lagomorpha-life-history/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Lagomorpha Navigation</title>
+      <link>https://arcaravaggi.github.io/publications/2022-lagomorpha-navigation/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2022-lagomorpha-navigation/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Medium and large-sized mammals in a fragment of Cerrado in Serra dos Pireneus, Central Brazil</title>
+      <link>https://arcaravaggi.github.io/publications/2022-medium-and-large-sized-mammals-in-a-fragment-of-cerrado-in-s/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2022-medium-and-large-sized-mammals-in-a-fragment-of-cerrado-in-s/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Spatial and temporal trends in western polecat road mortality in Wales</title>
+      <link>https://arcaravaggi.github.io/publications/2022-spatial-and-temporal-trends-in-western-polecat-road-mortalit/</link>
+      <pubDate>Sat, 01 Jan 2022 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2022-spatial-and-temporal-trends-in-western-polecat-road-mortalit/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Avocet Recurvirostra avocetta responses to predator activity at Newport Wetland Nature Reserve</title>
+      <link>https://arcaravaggi.github.io/publications/2021-avocet-recurvirostra-avocetta-responses-to-predator-activity/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-avocet-recurvirostra-avocetta-responses-to-predator-activity/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Bird and small mammal community composition and abundance in upland open habitats and early conifer forests</title>
+      <link>https://arcaravaggi.github.io/publications/2021-bird-and-small-mammal-community-composition-and-abundance-in/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-bird-and-small-mammal-community-composition-and-abundance-in/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Expert knowledge assessment of threats and conservation strategies for breeding Hen Harrier and Short-eared Owl across Europe</title>
+      <link>https://arcaravaggi.github.io/publications/2021-expert-knowledge-assessment-of-threats-and-conservation-stra/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-expert-knowledge-assessment-of-threats-and-conservation-stra/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Hares in the long grass: increased aircraft related mortality of the Irish hare (Lepus timidus hibernicus) over a 30-year period at Ireland’s largest civil airport</title>
+      <link>https://arcaravaggi.github.io/publications/2021-hares-in-the-long-grass-increased-aircraft-related-mortality/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-hares-in-the-long-grass-increased-aircraft-related-mortality/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Landscape and temporal influences on the winter diet of a threatened diurnal raptor, the Hen Harrier Circus cyaneus</title>
+      <link>https://arcaravaggi.github.io/publications/2021-landscape-and-temporal-influences-on-the-winter-diet-of-a-th/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-landscape-and-temporal-influences-on-the-winter-diet-of-a-th/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Melanism in the Brazilian pampas cat and range extension in the Atlantic Forest, Brazil</title>
+      <link>https://arcaravaggi.github.io/publications/2021-melanism-in-the-brazilian-pampas-cat-and-range-extension-in-/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-melanism-in-the-brazilian-pampas-cat-and-range-extension-in-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Natural History Notes On Interactions And Abnormal Coloration In Carnivores In The Araucaria Forest, Southern Brazil</title>
+      <link>https://arcaravaggi.github.io/publications/2021-natural-history-notes-on-interactions-and-abnormal-coloratio/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-natural-history-notes-on-interactions-and-abnormal-coloratio/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Nonvolant mammals in a fragment of arboreal Caatinga in northeastern Brazil</title>
+      <link>https://arcaravaggi.github.io/publications/2021-nonvolant-mammals-in-a-fragment-of-arboreal-caatinga-in-nort/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-nonvolant-mammals-in-a-fragment-of-arboreal-caatinga-in-nort/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>On the need for rigorous welfare and methodological reporting for the live capture of large carnivores: A response to de Araujo et al.(2021)</title>
+      <link>https://arcaravaggi.github.io/publications/2021-on-the-need-for-rigorous-welfare-and-methodological-reportin/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-on-the-need-for-rigorous-welfare-and-methodological-reportin/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The long and short of it: converting between maximum and minimum tarsus measurements in passerine birds</title>
+      <link>https://arcaravaggi.github.io/publications/2021-the-long-and-short-of-it-converting-between-maximum-and-mini/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-the-long-and-short-of-it-converting-between-maximum-and-mini/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Twitter conferences as a low-carbon, far-reaching and inclusive way of communicating research in ornithology and ecology</title>
+      <link>https://arcaravaggi.github.io/publications/2021-twitter-conferences-as-a-low-carbon-far-reaching-and-inclusi/</link>
+      <pubDate>Fri, 01 Jan 2021 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2021-twitter-conferences-as-a-low-carbon-far-reaching-and-inclusi/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>A review of factors to consider when using camera traps to study animal behavior to inform wildlife ecology and conservation</title>
+      <link>https://arcaravaggi.github.io/publications/2020-a-review-of-factors-to-consider-when-using-camera-traps-to-s/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-a-review-of-factors-to-consider-when-using-camera-traps-to-s/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Forest management and Hen Harrier Circus cyaneus conservation in Ireland</title>
+      <link>https://arcaravaggi.github.io/publications/2020-forest-management-and-hen-harrier-circus-cyaneus-conservatio/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-forest-management-and-hen-harrier-circus-cyaneus-conservatio/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Pistenunf&#34;alle: eine globale Review von S&#34;augetierunf&#34;allen mit Flugzeugen Runway roadkill: a global review of mammal strikes with aircraft</title>
+      <link>https://arcaravaggi.github.io/publications/2020-pistenunf-alle-eine-globale-review-von-s-augetierunf-allen-m/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-pistenunf-alle-eine-globale-review-von-s-augetierunf-allen-m/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Runway roadkill: a global review of mammal strikes with aircraft</title>
+      <link>https://arcaravaggi.github.io/publications/2020-runway-roadkill-a-global-review-of-mammal-strikes-with-aircr/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-runway-roadkill-a-global-review-of-mammal-strikes-with-aircr/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Seasonality and risk factors for myxomatosis in pet rabbits in Great Britain</title>
+      <link>https://arcaravaggi.github.io/publications/2020-seasonality-and-risk-factors-for-myxomatosis-in-pet-rabbits-/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-seasonality-and-risk-factors-for-myxomatosis-in-pet-rabbits-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Where’s wallaby? Using public records and media reports to describe the status of red-necked wallabies in Britain</title>
+      <link>https://arcaravaggi.github.io/publications/2020-where-s-wallaby-using-public-records-and-media-reports-to-de/</link>
+      <pubDate>Wed, 01 Jan 2020 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2020-where-s-wallaby-using-public-records-and-media-reports-to-de/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Anthropogenic pressures within the breeding range of the Hen Harrier Circus cyaneus in Ireland</title>
+      <link>https://arcaravaggi.github.io/publications/2019-anthropogenic-pressures-within-the-breeding-range-of-the-hen/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-anthropogenic-pressures-within-the-breeding-range-of-the-hen/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>By trying to be everything, rewilding risks meaning nothing</title>
+      <link>https://arcaravaggi.github.io/publications/2019-by-trying-to-be-everything-rewilding-risks-meaning-nothing/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-by-trying-to-be-everything-rewilding-risks-meaning-nothing/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Factors influencing Hen Harrier Circus cyaneus territory site selection and breeding success</title>
+      <link>https://arcaravaggi.github.io/publications/2019-factors-influencing-hen-harrier-circus-cyaneus-territory-sit/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-factors-influencing-hen-harrier-circus-cyaneus-territory-sit/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>National hare survey &amp; population assessment 2017-2019</title>
+      <link>https://arcaravaggi.github.io/publications/2019-national-hare-survey-population-assessment-2017-2019/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-national-hare-survey-population-assessment-2017-2019/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Reintroducing rewilding to restoration--Rejecting the search for novelty</title>
+      <link>https://arcaravaggi.github.io/publications/2019-reintroducing-rewilding-to-restoration-rejecting-the-search-/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-reintroducing-rewilding-to-restoration-rejecting-the-search-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Rewilding needs to clarify the role of management of invasive species</title>
+      <link>https://arcaravaggi.github.io/publications/2019-rewilding-needs-to-clarify-the-role-of-management-of-invasiv/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-rewilding-needs-to-clarify-the-role-of-management-of-invasiv/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The impacts of introduced House Mice on the breeding success of nesting seabirds on Gough Island</title>
+      <link>https://arcaravaggi.github.io/publications/2019-the-impacts-of-introduced-house-mice-on-the-breeding-success/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-the-impacts-of-introduced-house-mice-on-the-breeding-success/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The search for novelty continues for rewilding</title>
+      <link>https://arcaravaggi.github.io/publications/2019-the-search-for-novelty-continues-for-rewilding/</link>
+      <pubDate>Tue, 01 Jan 2019 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2019-the-search-for-novelty-continues-for-rewilding/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Seasonal and predator-prey effects on circadian activity of free-ranging mammals revealed by camera traps</title>
+      <link>https://arcaravaggi.github.io/publications/2018-seasonal-and-predator-prey-effects-on-circadian-activity-of-/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2018-seasonal-and-predator-prey-effects-on-circadian-activity-of-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The composition of captive ruffed lemur (Varecia spp.) diets in UK</title>
+      <link>https://arcaravaggi.github.io/publications/2018-the-composition-of-captive-ruffed-lemur-varecia-spp-diets-in/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2018-the-composition-of-captive-ruffed-lemur-varecia-spp-diets-in/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>The distribution and trophic ecology of an introduced, insular population of red-necked wallabies (Notamacropus rufogriseus)</title>
+      <link>https://arcaravaggi.github.io/publications/2018-the-distribution-and-trophic-ecology-of-an-introduced-insula/</link>
+      <pubDate>Mon, 01 Jan 2018 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2018-the-distribution-and-trophic-ecology-of-an-introduced-insula/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>A multi-disciplinary perspective on emergent and future innovations in peer review</title>
+      <link>https://arcaravaggi.github.io/publications/2017-a-multi-disciplinary-perspective-on-emergent-and-future-inno/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-a-multi-disciplinary-perspective-on-emergent-and-future-inno/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>A multidisciplinary perspective on emergent and future innovations in peer review. F1000Research</title>
+      <link>https://arcaravaggi.github.io/publications/2017-a-multidisciplinary-perspective-on-emergent-and-future-innov/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-a-multidisciplinary-perspective-on-emergent-and-future-innov/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>A review of camera trapping for conservation behaviour research. Remote Sens Ecol Conserv 3: 109--122</title>
+      <link>https://arcaravaggi.github.io/publications/2017-a-review-of-camera-trapping-for-conservation-behaviour-resea/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-a-review-of-camera-trapping-for-conservation-behaviour-resea/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Banks, A Cole Burton, Caroline MV Finlay, Peter M Haswell, Matt W Hayward, Marcus J Rowcliffe, and Mike D Wood. A review of camera trapping for conservation behaviour research</title>
+      <link>https://arcaravaggi.github.io/publications/2017-banks-a-cole-burton-caroline-mv-finlay-peter-m-haswell-matt-/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-banks-a-cole-burton-caroline-mv-finlay-peter-m-haswell-matt-/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Conferencing in 140 characters</title>
+      <link>https://arcaravaggi.github.io/publications/2017-conferencing-in-140-characters/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-conferencing-in-140-characters/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Current ornithological research in Ireland: seventh Ornithological Research Conference, UCC, November 2017</title>
+      <link>https://arcaravaggi.github.io/publications/2017-current-ornithological-research-in-ireland-seventh-ornitholo/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-current-ornithological-research-in-ireland-seventh-ornitholo/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Management and control of invasive brown hares (Lepus europaeus): Contrasting attitudes of selected environmental stakeholders and the wider rural community</title>
+      <link>https://arcaravaggi.github.io/publications/2017-management-and-control-of-invasive-brown-hares-lepus-europae/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-management-and-control-of-invasive-brown-hares-lepus-europae/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Niche overlap of mountain hare subspecies and the vulnerability of their ranges to invasion by the European hare; the (bad) luck of the Irish</title>
+      <link>https://arcaravaggi.github.io/publications/2017-niche-overlap-of-mountain-hare-subspecies-and-the-vulnerabil/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-niche-overlap-of-mountain-hare-subspecies-and-the-vulnerabil/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>remBoot: An R package for Random Encounter Modelling</title>
+      <link>https://arcaravaggi.github.io/publications/2017-remboot-an-r-package-for-random-encounter-modelling/</link>
+      <pubDate>Sun, 01 Jan 2017 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2017-remboot-an-r-package-for-random-encounter-modelling/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>An invasive-native mammalian species replacement process captured by camera trap survey random encounter models</title>
+      <link>https://arcaravaggi.github.io/publications/2016-an-invasive-native-mammalian-species-replacement-process-cap/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2016-an-invasive-native-mammalian-species-replacement-process-cap/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Erratum to: Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title>
+      <link>https://arcaravaggi.github.io/publications/2016-erratum-to-range-expansion-and-comparative-habitat-use-of-in/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2016-erratum-to-range-expansion-and-comparative-habitat-use-of-in/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Invasion ecology of non-native European brown hares and their impact on the endemic Irish hare</title>
+      <link>https://arcaravaggi.github.io/publications/2016-invasion-ecology-of-non-native-european-brown-hares-and-thei/</link>
+      <pubDate>Fri, 01 Jan 2016 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2016-invasion-ecology-of-non-native-european-brown-hares-and-thei/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Range expansion and comparative habitat use of insular, congeneric lagomorphs: invasive European hares Lepus europaeus and endemic Irish hares Lepus timidus hibernicus</title>
+      <link>https://arcaravaggi.github.io/publications/2015-range-expansion-and-comparative-habitat-use-of-insular-conge/</link>
+      <pubDate>Thu, 01 Jan 2015 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/publications/2015-range-expansion-and-comparative-habitat-use-of-insular-conge/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

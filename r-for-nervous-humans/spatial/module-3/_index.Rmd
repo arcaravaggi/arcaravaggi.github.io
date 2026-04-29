@@ -1,0 +1,94 @@
+---
+title: "Module 3: Coordinates and projections"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+For this module, you'll need the following packages:
+- `sf`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+
+At some point, you will plot spatial data and notice that it doesn't look quite right. Points might appear in the wrong place, layers don’t line up, or your map looks oddly stretched. Most of the time, the culprit is coordinate systems.
+
+It will come as no surprise to you that the Earth is round(ish). Your screen on the other hand, is flat. So whenever we map data, we’re doing two things:
+1. Describing locations on Earth
+2. Flattening those locations onto a map
+
+Those two steps are handled by Coordinate Reference Systems (CRS) that define locations, and projections that define how the globe is flattened. Our task is to recognise when something’s off with one or both of those facets.
+
+#### Latitude and longitude
+
+Most datasets (including GBIF) use latitude and longitude:
+- Longitude = east–west
+- Latitude = north–south
+
+The standard global system that is used in catrography, satellite navigation, and geodesy is the World Geodetic System 1984 (WGS84). In R, you’ll often see it as st_crs(4326). That number (4326) is just an EPSG code for this coordinate system. Each coordinate system has it's own code. These can be found at [https://epsg.io/](epsg.io).
+
+So, let's check your data’s CRS.
+
+```{r echo = FALSE,  message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+library(rnaturalearth)
+
+hedgehog <- occ_search(
+  scientificName = "Erinaceus europaeus",
+  limit = 500, # limit to 500 records for this example
+  hasCoordinate = TRUE # ensures we get usable locations
+)
+
+hedgehog_sf <- st_as_sf(
+  hedgehog$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326 # This is our coordinate system. We'll discuss this in the next module
+)
+```
+
+```{r}
+st_crs(hedgehog_sf)
+```
+
+You should see something mentioning WGS84. If you don’t then that’s a sign that something might go wrong later.
+
+#### Why projections exist
+
+If you’ve ever seen a world map where Greenland looks huge then that’s a projection issue. Flattening a sphere always distorts something, be it shape, area, or distance, and different projections prioritise different things.
+
+In ecology, this matters when you measure distances, calculate areas, generate spatially-explicit metrics, or combine datasets, for example. A common problem experienced by many people is that layers often don't line up. Let’s say we plot our WGS84 hedgehog data with a [UK polygon]("static/data/uk_bng.shp") that uses the British National Grid (EPGS:2770) coordinate system:
+
+```{r, echo=FALSE,  message = FALSE, warning = FALSE}
+uk <- rnaturalearth::ne_countries(country = "United Kingdom", returnclass = "sf")
+uk_proj <- st_transform(uk, 27700)  # British National Grid
+```
+
+```{r}
+plot(st_geometry(uk_proj))
+plot(st_geometry(hedgehog_sf), add = TRUE, col = "red")
+```
+
+They appear in completely different places. In this instance we know why - they’re using different coordinate systems. And for mismatches this is almost always the first thing to check.
+
+```{r}
+st_crs(hedgehog_sf)
+st_crs(uk_proj)
+```
+
+Fixing it is straightforward. You simply change the coordinate system of one layer to match the other (reprojection). If we're working with other data that use the British National Grid then we'll want our hedgehog data to match that.
+
+```{r}
+hedgehog_proj <- st_transform(hedgehog_sf, crs = 27700)
+
+plot(st_geometry(uk_proj))
+plot(st_geometry(hedgehog_proj), add = TRUE, col = "red")
+```
+
+Et voila. You might notice that the shape looks different. That’s the associated change in projection. We have the same data but a different representation.You'll also notice a large cloud of points floating over the ocean. Remember that we downloaded **global** data from GBIF and those points are in Europe.
+
+The key takeaway here is to always check your crs when you read in spatial data. If they’re different, transform one. This often prevents a lot of confusion.
+
+
+Next we'll actually start analysing our data. Nothing too heavy yet, though. Things like clustering, or simple distribution-environment relationships. 

@@ -1,0 +1,57 @@
+---
+title: "Module 1 — What is spatial data?"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+
+### Welcome to Spatial Ecological Analysis in R for Nervous Humans
+
+If you’ve ever asked something like:
+- Why are otters only found along certain rivers?
+- Where do seabirds cluster during breeding season?
+- How does tree cover change as you move up a mountain?
+
+…then you’re already thinking spatially.
+
+Ecology is full of questions about where things are, and why they’re there. Spatial data is simply the way we record and analyse those patterns.
+
+#### So, what is spatial data?
+
+At its simplest, spatial data is just information tied to a location. That location might be a precise GPS point, a grid cell on a map, or a defined area like a woodland or wetland.
+
+A spatial dataset usually has two parts:
+1. Where something is (its coordinates or position)
+2. What is there (a measurement or observation)
+
+This could be a GPS point where you recorded badger activity, a map showing vegetation type across a national park, or a grid of values showing soil moisture levels
+
+In short, spatial data tells you not just what is happening, but where it’s happening and that “where” often turns out to be the interesting part.
+
+#### Why does “where” matter?
+
+Because in ecology, location is rarely random. Nearby places often behave more similarly than distant ones. A forest patch next to a river might support very different species compared to one on dry ground. The idea that location carries meaningful information is central to spatial analysis.
+
+It is due to these similarities (or lack thereof) that we see birds nesting sites clustering along cliffs with the right wind exposure, or pollinator activity varying depending on proximity to flowering habitats. If you ignore space, you miss these patterns entirely.
+
+#### Types of spatial data
+
+Broadly:
+
+1. Point-based data
+-- Individual observations tied to specific locations.
+
+2. Area or surface data
+-- Continuous or grouped information across space.
+
+#### What do we actually do with it?
+
+Once you’ve got spatial data, the goal is usually to answer some version of 'what do we find, where, and why?'
+
+That might involve mapping observations to see patterns, comparing habitats or regions, looking for clustering or gaps, or linking species presence to environmental variables
+
+Spatial data can look intimidating at first but at its core, it’s just a structured way of answering ecological questions you already understand.
+
+In the next section, we’ll start getting hands-on, loading spatial data, looking at simple maps, and getting comfortable exploring it in R.

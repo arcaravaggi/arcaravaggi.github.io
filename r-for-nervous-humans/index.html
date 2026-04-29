@@ -1,4 +1,13 @@
-<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>R for Nervous Humans |</title><meta name=keywords content><meta name=description content="
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>R for Nervous Humans | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
 
   Jump to a module...
   1. Getting Started
@@ -21,14 +30,382 @@ Followed a tutorial and felt completely lost halfway through
 Been told “it’s not that hard” and quietly disagreed
 Enrolled in a class or course where this stuff is mandatory and are dreading what&rsquo;s to come
 
-That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway."><meta name=author content><link rel=canonical href=https://arcaravaggi.github.io/r-for-nervous-humans/><link crossorigin=anonymous href=https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css rel="preload stylesheet" as=style><link rel=icon href=https://arcaravaggi.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://arcaravaggi.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://arcaravaggi.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://arcaravaggi.github.io/apple-touch-icon.png><link rel=mask-icon href=https://arcaravaggi.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://arcaravaggi.github.io/r-for-nervous-humans/index.xml title=rss><link rel=alternate hreflang=en href=https://arcaravaggi.github.io/r-for-nervous-humans/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/"><meta property="og:title" content="R for Nervous Humans"><meta property="og:description" content="Jump to a module...1. Getting Started2. Data & Penguins3. Visualisation4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome This course is for people who feel a bit uneasy about learning R or statistics.
+That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway.">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/">
+  <meta property="og:title" content="R for Nervous Humans">
+  <meta property="og:description" content="Jump to a module...1. Getting Started2. Data &amp; Penguins3. Visualisation4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome This course is for people who feel a bit uneasy about learning R or statistics.
 Maybe you’ve:
-Opened R and had no idea what to do Followed a tutorial and felt completely lost halfway through Been told “it’s not that hard” and quietly disagreed Enrolled in a class or course where this stuff is mandatory and are dreading what’s to come That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="R for Nervous Humans"><meta name=twitter:description content="Jump to a module...1. Getting Started2. Data & Penguins3. Visualisation4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome This course is for people who feel a bit uneasy about learning R or statistics.
+Opened R and had no idea what to do Followed a tutorial and felt completely lost halfway through Been told “it’s not that hard” and quietly disagreed Enrolled in a class or course where this stuff is mandatory and are dreading what’s to come That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="R for Nervous Humans">
+  <meta name="twitter:description" content="Jump to a module...1. Getting Started2. Data &amp; Penguins3. Visualisation4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome This course is for people who feel a bit uneasy about learning R or statistics.
 Maybe you’ve:
-Opened R and had no idea what to do Followed a tutorial and felt completely lost halfway through Been told “it’s not that hard” and quietly disagreed Enrolled in a class or course where this stuff is mandatory and are dreading what’s to come That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"R for Nervous Humans","item":"https://arcaravaggi.github.io/r-for-nervous-humans/"}]}</script></head><body class=list id=top><header class=header><nav class=nav><div class=logo><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://arcaravaggi.github.io/ title=Home><span>Home</span></a></li><li><a href=https://arcaravaggi.github.io/r-for-nervous-humans/ title="R for Nervous Humans"><span class=active>R for Nervous Humans</span></a></li><li><a href=https://arcaravaggi.github.io/publications/ title=Publications><span>Publications</span></a></li><li><a href=https://arcaravaggi.github.io/projects/ title=Projects><span>Projects</span></a></li><li><a href=https://arcaravaggi.github.io/posts/ title=Blog><span>Blog</span></a></li><li><a href=https://arcaravaggi.github.io/contact/ title=Contact><span>Contact</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">R for Nervous Humans</h1><div class=post-meta></div></header><div class=post-content><select id=module-select class=course-dropdown onchange="this.value&&(window.location.href=this.value)"><option value>Jump to a module...</option><option value=/r-for-nervous-humans/module-1/>1. Getting Started</option><option value=/r-for-nervous-humans/module-2/>2. Data & Penguins</option><option value=/r-for-nervous-humans/module-3/>3. Visualisation</option><option value=/r-for-nervous-humans/module-4/>4. Descriptive Statistics</option><option value=/r-for-nervous-humans/module-5/>5. Are These Groups Different?</option><option value=/r-for-nervous-humans/module-6/>6. Working with Categories</option><option value=/r-for-nervous-humans/module-7/>7. When Data Gets Weird</option><option value=/r-for-nervous-humans/module-8/>8. Relationships Between Variables</option><option value=/r-for-nervous-humans/module-9/>9. Linear Regression</option></select><hr><h3 id=welcome>Welcome<a hidden class=anchor aria-hidden=true href=#welcome>#</a></h3><p>This course is for people who feel a bit uneasy about learning R or statistics.</p><p>Maybe you’ve:</p><ul><li>Opened R and had no idea what to do</li><li>Followed a tutorial and felt completely lost halfway through</li><li>Been told “it’s not that hard” and quietly disagreed</li><li>Enrolled in a class or course where this stuff is mandatory and are dreading what&rsquo;s to come</li></ul><p>That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway.</p><hr><h3 id=how-this-course-works>How this course works<a hidden class=anchor aria-hidden=true href=#how-this-course-works>#</a></h3><p>Most courses separate things that really shouldn’t be separate. You learn <strong>statistics</strong>, but not how to actually do or use them. Or you learn <strong>R code</strong>, but not what any of it means</p><p>Here, we do both, together.</p><p>Every lesson answers three questions:</p><ol><li>What does this mean?</li><li>Why am I doing it?</li><li>How do I do it in R?</li></ol><p>We’ll go slowly, building intuition first, and only introduce complexity bit-by-bit.</p><hr><h3 id=one-dataset-all-the-way-through>One dataset, all the way through<a hidden class=anchor aria-hidden=true href=#one-dataset-all-the-way-through>#</a></h3><p>We’ll use the <a href=https://allisonhorst.github.io/palmerpenguins/><strong>Palmer Penguins</strong></a> dataset throughout the course. This includes real measurements of penguins, including:</p><ul><li>Species</li><li>Body mass</li><li>Flipper length</li><li>Bill size</li></ul><p>We&rsquo;ll do it this was because constantly switching data makes learning harder. Sticking with one dataset lets you focus on understanding the underlying ideas and processes.</p><hr><h3 id=how-to-run-the-code>How to run the code<a hidden class=anchor aria-hidden=true href=#how-to-run-the-code>#</a></h3><p>You’ll need somewhere to run R code. You’ve got two options:</p><h4 id=option-1-in-your-browser-easiest>Option 1: In your browser (easiest)<a hidden class=anchor aria-hidden=true href=#option-1-in-your-browser-easiest>#</a></h4><p>Use <a href=https://posit.cloud/><strong>posit Cloud</strong></a></p><ul><li>No installation</li><li>Works immediately</li><li>Best if you just want to get started</li></ul><h4 id=option-2-on-your-own-computer>Option 2: On your own computer<a hidden class=anchor aria-hidden=true href=#option-2-on-your-own-computer>#</a></h4><p>Install:</p><ul><li><a href=https://cran.r-project.org/><strong>R</strong></a></li><li><a href=https://posit.co/downloads/><strong>RStudio</strong></a></li></ul><p>Then copy and run the code from each lesson.</p><p>If you plan on using R in the long term then a local installation is the way to go. If you&rsquo;re unsure, however, posti Cloud allows you to avoid installation friction.</p><hr><h3 id=what-youll-learn>What you’ll learn<a hidden class=anchor aria-hidden=true href=#what-youll-learn>#</a></h3><p>We’ll build knowledge and understanding step by step:</p><ol><li><p>Getting Started<br>What R is, how to run code, and how to not feel lost immediately.</p></li><li><p>Data & Penguins<br>Understanding what data actually looks like in R.</p></li><li><p>Visualisation<br>Seeing patterns before trying to analyse them.</p></li><li><p>Descriptive Statistics<br>Summarising data: averages, variation, and distributions</p></li><li><p>Are These Groups Different?<br>Comparing groups using intuition first, then tools like t-tests.</p></li><li><p>Working with Categories<br>Understanding counts, proportions, and chi-square tests.</p></li><li><p>When Data Gets Weird<br>What to do when assumptions break (non-parametric alternatives).</p></li><li><p>Relationships Between Variables<br>Correlation and how variables move together.</p></li><li><p>Linear Regression<br>Building simple models and understanding what they mean.</p></li></ol><hr><h3 id=how-to-use-this-course>How to use this course<a hidden class=anchor aria-hidden=true href=#how-to-use-this-course>#</a></h3><ul><li>Go in order (it’s designed that way)</li><li>Run the code yourself</li><li>Don’t worry if things don’t click immediately</li><li>Focus on understanding, not memorising</li></ul><p>Now, move on to Module 1!</p><hr><div style=margin-top:2rem;text-align:right><a href=https://arcaravaggi.github.io/r-for-nervous-humans/module-1/ style="padding:.6rem 1.2rem;background-color:var(--theme-accent);color:var(--theme-fg);text-decoration:none;border-radius:6px">Next → Getting Started</a></div></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://arcaravaggi.github.io/></a></span>·
-<span>Powered by
-<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
-</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>
+Opened R and had no idea what to do Followed a tutorial and felt completely lost halfway through Been told “it’s not that hard” and quietly disagreed Enrolled in a class or course where this stuff is mandatory and are dreading what’s to come That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span class="active">R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      R for Nervous Humans
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><!-- Dropdown for modules -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r-for-nervous-humans/module-1/">1. Getting Started</option>
+  <option value="/r-for-nervous-humans/module-2/">2. Data & Penguins</option>
+  <option value="/r-for-nervous-humans/module-3/">3. Visualisation</option>
+  <option value="/r-for-nervous-humans/module-4/">4. Descriptive Statistics</option>
+  <option value="/r-for-nervous-humans/module-5/">5. Are These Groups Different?</option>
+  <option value="/r-for-nervous-humans/module-6/">6. Working with Categories</option>
+  <option value="/r-for-nervous-humans/module-7/">7. When Data Gets Weird</option>
+  <option value="/r-for-nervous-humans/module-8/">8. Relationships Between Variables</option>
+  <option value="/r-for-nervous-humans/module-9/">9. Linear Regression</option>
+</select>
+<hr>
+<h3 id="welcome">Welcome<a hidden class="anchor" aria-hidden="true" href="#welcome">#</a></h3>
+<p>This course is for people who feel a bit uneasy about learning R or statistics.</p>
+<p>Maybe you’ve:</p>
+<ul>
+<li>Opened R and had no idea what to do</li>
+<li>Followed a tutorial and felt completely lost halfway through</li>
+<li>Been told “it’s not that hard” and quietly disagreed</li>
+<li>Enrolled in a class or course where this stuff is mandatory and are dreading what&rsquo;s to come</li>
+</ul>
+<p>That’s fine. You’re exactly who this is for. You don’t need to be “good at maths” or “a natural programmer” to learn this. You just need to be willing to try and to be a bit confused sometimes, but to keep going anyway.</p>
+<hr>
+<h3 id="how-this-course-works">How this course works<a hidden class="anchor" aria-hidden="true" href="#how-this-course-works">#</a></h3>
+<p>Most courses separate things that really shouldn’t be separate. You learn <strong>statistics</strong>, but not how to actually do or use them. Or you learn <strong>R code</strong>, but not what any of it means</p>
+<p>Here, we do both, together.</p>
+<p>Every lesson answers three questions:</p>
+<ol>
+<li>What does this mean?</li>
+<li>Why am I doing it?</li>
+<li>How do I do it in R?</li>
+</ol>
+<p>We’ll go slowly, building intuition first, and only introduce complexity bit-by-bit.</p>
+<hr>
+<h3 id="one-dataset-all-the-way-through">One dataset, all the way through<a hidden class="anchor" aria-hidden="true" href="#one-dataset-all-the-way-through">#</a></h3>
+<p>We’ll use the <a href="https://allisonhorst.github.io/palmerpenguins/"><strong>Palmer Penguins</strong></a> dataset throughout the course. This includes real measurements of penguins, including:</p>
+<ul>
+<li>Species</li>
+<li>Body mass</li>
+<li>Flipper length</li>
+<li>Bill size</li>
+</ul>
+<p>We&rsquo;ll do it this was because constantly switching data makes learning harder. Sticking with one dataset lets you focus on understanding the underlying ideas and processes.</p>
+<hr>
+<h3 id="how-to-run-the-code">How to run the code<a hidden class="anchor" aria-hidden="true" href="#how-to-run-the-code">#</a></h3>
+<p>You’ll need somewhere to run R code. You’ve got two options:</p>
+<h4 id="option-1-in-your-browser-easiest">Option 1: In your browser (easiest)<a hidden class="anchor" aria-hidden="true" href="#option-1-in-your-browser-easiest">#</a></h4>
+<p>Use <a href="https://posit.cloud/"><strong>posit Cloud</strong></a></p>
+<ul>
+<li>No installation</li>
+<li>Works immediately</li>
+<li>Best if you just want to get started</li>
+</ul>
+<h4 id="option-2-on-your-own-computer">Option 2: On your own computer<a hidden class="anchor" aria-hidden="true" href="#option-2-on-your-own-computer">#</a></h4>
+<p>Install:</p>
+<ul>
+<li><a href="https://cran.r-project.org/"><strong>R</strong></a></li>
+<li><a href="https://posit.co/downloads/"><strong>RStudio</strong></a></li>
+</ul>
+<p>Then copy and run the code from each lesson.</p>
+<p>If you plan on using R in the long term then a local installation is the way to go. If you&rsquo;re unsure, however, posti Cloud allows you to avoid installation friction.</p>
+<hr>
+<h3 id="what-youll-learn">What you’ll learn<a hidden class="anchor" aria-hidden="true" href="#what-youll-learn">#</a></h3>
+<p>We’ll build knowledge and understanding step by step:</p>
+<ol>
+<li>
+<p>Getting Started<br>
+What R is, how to run code, and how to not feel lost immediately.</p>
+</li>
+<li>
+<p>Data &amp; Penguins<br>
+Understanding what data actually looks like in R.</p>
+</li>
+<li>
+<p>Visualisation<br>
+Seeing patterns before trying to analyse them.</p>
+</li>
+<li>
+<p>Descriptive Statistics<br>
+Summarising data: averages, variation, and distributions</p>
+</li>
+<li>
+<p>Are These Groups Different?<br>
+Comparing groups using intuition first, then tools like t-tests.</p>
+</li>
+<li>
+<p>Working with Categories<br>
+Understanding counts, proportions, and chi-square tests.</p>
+</li>
+<li>
+<p>When Data Gets Weird<br>
+What to do when assumptions break (non-parametric alternatives).</p>
+</li>
+<li>
+<p>Relationships Between Variables<br>
+Correlation and how variables move together.</p>
+</li>
+<li>
+<p>Linear Regression<br>
+Building simple models and understanding what they mean.</p>
+</li>
+</ol>
+<hr>
+<h3 id="how-to-use-this-course">How to use this course<a hidden class="anchor" aria-hidden="true" href="#how-to-use-this-course">#</a></h3>
+<ul>
+<li>Go in order (it’s designed that way)</li>
+<li>Run the code yourself</li>
+<li>Don’t worry if things don’t click immediately</li>
+<li>Focus on understanding, not memorising</li>
+</ul>
+<p>Now, move on to Module 1!</p>
+<hr>
+<div style="margin-top: 2rem; text-align: right;">
+  <a href="https://arcaravaggi.github.io/r-for-nervous-humans/module-1/" 
+     style="padding: 0.6rem 1.2rem; 
+            background-color: var(--theme-accent); 
+            color: var(--theme-fg); 
+            text-decoration: none; 
+            border-radius: 6px;">
+    Next → Getting Started
+  </a>
+</div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

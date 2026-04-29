@@ -1,4 +1,13 @@
-<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Module 4 — Descriptive Statistics |</title><meta name=keywords content><meta name=description content="
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 4 — Descriptive Statistics | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
 
 	Jump to a module…
 	Welcome
@@ -19,26 +28,220 @@ How much do values vary (differ)?
 How confident are we about the average value of our sample? Does it
 accurately reflect the population?
 
-Think of this as learning the language of the data before asking bigger questions."><meta name=author content><link rel=canonical href=https://arcaravaggi.github.io/r-for-nervous-humans/module-4/><link crossorigin=anonymous href=https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css rel="preload stylesheet" as=style><link rel=icon href=https://arcaravaggi.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://arcaravaggi.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://arcaravaggi.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://arcaravaggi.github.io/apple-touch-icon.png><link rel=mask-icon href=https://arcaravaggi.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate type=application/rss+xml href=https://arcaravaggi.github.io/r-for-nervous-humans/module-4/index.xml title=rss><link rel=alternate hreflang=en href=https://arcaravaggi.github.io/r-for-nervous-humans/module-4/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}@media(prefers-color-scheme:light){.list::-webkit-scrollbar-thumb{border-color:var(--code-bg)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/module-4/"><meta property="og:title" content="Module 4 — Descriptive Statistics"><meta property="og:description" content="Jump to a module…Welcome1. Getting Started2. Data & Penguins3. Visualisation5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to module 4 Now that we can look at penguin data and visualise them, it’s time to summarise our data numerically. Descriptive statistics help us answer questions like:
-What’s a “typical” value? How much do values vary (differ)? How confident are we about the average value of our sample? Does it accurately reflect the population? Think of this as learning the language of the data before asking bigger questions."><meta property="og:locale" content="en_us"><meta property="og:type" content="website"><meta name=twitter:card content="summary"><meta name=twitter:title content="Module 4 — Descriptive Statistics"><meta name=twitter:description content="Jump to a module…Welcome1. Getting Started2. Data & Penguins3. Visualisation5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to module 4 Now that we can look at penguin data and visualise them, it’s time to summarise our data numerically. Descriptive statistics help us answer questions like:
-What’s a “typical” value? How much do values vary (differ)? How confident are we about the average value of our sample? Does it accurately reflect the population? Think of this as learning the language of the data before asking bigger questions."><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"R for Nervous Humans","item":"https://arcaravaggi.github.io/r-for-nervous-humans/"},{"@type":"ListItem","position":2,"name":"Module 4 — Descriptive Statistics","item":"https://arcaravaggi.github.io/r-for-nervous-humans/module-4/"}]}</script></head><body class=list id=top><header class=header><nav class=nav><div class=logo><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://arcaravaggi.github.io/ title=Home><span>Home</span></a></li><li><a href=https://arcaravaggi.github.io/r-for-nervous-humans/ title="R for Nervous Humans"><span>R for Nervous Humans</span></a></li><li><a href=https://arcaravaggi.github.io/publications/ title=Publications><span>Publications</span></a></li><li><a href=https://arcaravaggi.github.io/projects/ title=Projects><span>Projects</span></a></li><li><a href=https://arcaravaggi.github.io/posts/ title=Blog><span>Blog</span></a></li><li><a href=https://arcaravaggi.github.io/contact/ title=Contact><span>Contact</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><h1 class="post-title entry-hint-parent">Module 4 — Descriptive Statistics</h1><div class=post-meta></div></header><div class=post-content><select id=module-select class=course-dropdown onchange="this.value&&(window.location.href=this.value)"><option value>Jump to a module…</option><option value=/r-for-nervous-humans/>Welcome</option><option value=/r-for-nervous-humans/module-1/>1. Getting Started</option><option value=/r-for-nervous-humans/module-2/>2. Data & Penguins</option><option value=/r-for-nervous-humans/module-3/>3. Visualisation</option><option value=/r-for-nervous-humans/module-5/>5. Are These Groups Different?</option><option value=/r-for-nervous-humans/module-6/>6. Working with Categories</option><option value=/r-for-nervous-humans/module-7/>7. When Data Gets Weird</option><option value=/r-for-nervous-humans/module-8/>8. Relationships Between Variables</option><option value=/r-for-nervous-humans/module-9/>9. Linear Regression</option></select><h2 id=welcome-to-module-4>Welcome to module 4<a hidden class=anchor aria-hidden=true href=#welcome-to-module-4>#</a></h2><p>Now that we can look at penguin data and visualise them, it’s time to <em>summarise</em> our data numerically. Descriptive statistics help us answer questions like:</p><ul><li>What’s a “typical” value?</li><li>How much do values vary (differ)?</li><li>How confident are we about the average value of our sample? Does it
-accurately reflect the population?</li></ul><p>Think of this as learning the language of the data before asking bigger questions.</p><hr><h2 id=prepare-your-dataset>Prepare your dataset<a hidden class=anchor aria-hidden=true href=#prepare-your-dataset>#</a></h2><p>Notice that we’re now using an additional package, <code>ggplot2</code>. This supports more sophisticated plots and makes it easier to construct high-quality figures.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>library</span>(palmerpenguins)
-</span></span><span style=display:flex><span><span style=color:#a6e22e>library</span>(ggplot2)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>data</span>(<span style=color:#e6db74>&#34;penguins&#34;</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Remove only the missing values for columns we need</span>
-</span></span><span style=display:flex><span>penguins_clean <span style=color:#f92672>&lt;-</span> penguins[<span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>bill_length_mm) <span style=color:#f92672>&amp;</span> 
-</span></span><span style=display:flex><span>                            <span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>species) <span style=color:#f92672>&amp;</span>
-</span></span><span style=display:flex><span>                            <span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>body_mass_g), ]
-</span></span></code></pre></div><p>Here, the square brackets mean ‘look inside this thing’. Square brackets support indexing with rows separated from columns by a comma. So:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean[1,]
+Think of this as learning the language of the data before asking bigger questions.">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/module-4/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/module-4/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/module-4/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/module-4/">
+  <meta property="og:title" content="Module 4 — Descriptive Statistics">
+  <meta property="og:description" content="Jump to a module…Welcome1. Getting Started2. Data &amp; Penguins3. Visualisation5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to module 4 Now that we can look at penguin data and visualise them, it’s time to summarise our data numerically. Descriptive statistics help us answer questions like:
+What’s a “typical” value? How much do values vary (differ)? How confident are we about the average value of our sample? Does it accurately reflect the population? Think of this as learning the language of the data before asking bigger questions.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 4 — Descriptive Statistics">
+  <meta name="twitter:description" content="Jump to a module…Welcome1. Getting Started2. Data &amp; Penguins3. Visualisation5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to module 4 Now that we can look at penguin data and visualise them, it’s time to summarise our data numerically. Descriptive statistics help us answer questions like:
+What’s a “typical” value? How much do values vary (differ)? How confident are we about the average value of our sample? Does it accurately reflect the population? Think of this as learning the language of the data before asking bigger questions.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Module 4 — Descriptive Statistics",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/module-4/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 4 — Descriptive Statistics
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><!-- Dropdown for modules -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+	<option value="">Jump to a module…</option>
+	<option value="/r-for-nervous-humans/">Welcome</option>
+  <option value="/r-for-nervous-humans/module-1/">1. Getting Started</option>
+  <option value="/r-for-nervous-humans/module-2/">2. Data & Penguins</option>
+  <option value="/r-for-nervous-humans/module-3/">3. Visualisation</option>
+  <option value="/r-for-nervous-humans/module-5/">5. Are These Groups Different?</option>
+  <option value="/r-for-nervous-humans/module-6/">6. Working with Categories</option>
+  <option value="/r-for-nervous-humans/module-7/">7. When Data Gets Weird</option>
+  <option value="/r-for-nervous-humans/module-8/">8. Relationships Between Variables</option>
+  <option value="/r-for-nervous-humans/module-9/">9. Linear Regression</option>
+</select>
+<h2 id="welcome-to-module-4">Welcome to module 4<a hidden class="anchor" aria-hidden="true" href="#welcome-to-module-4">#</a></h2>
+<p>Now that we can look at penguin data and visualise them, it’s time to <em>summarise</em> our data numerically. Descriptive statistics help us answer questions like:</p>
+<ul>
+<li>What’s a “typical” value?</li>
+<li>How much do values vary (differ)?</li>
+<li>How confident are we about the average value of our sample? Does it
+accurately reflect the population?</li>
+</ul>
+<p>Think of this as learning the language of the data before asking bigger questions.</p>
+<hr>
+<h2 id="prepare-your-dataset">Prepare your dataset<a hidden class="anchor" aria-hidden="true" href="#prepare-your-dataset">#</a></h2>
+<p>Notice that we’re now using an additional package, <code>ggplot2</code>. This supports more sophisticated plots and makes it easier to construct high-quality figures.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(palmerpenguins)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(ggplot2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">data</span>(<span style="color:#e6db74">&#34;penguins&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Remove only the missing values for columns we need</span>
+</span></span><span style="display:flex;"><span>penguins_clean <span style="color:#f92672">&lt;-</span> penguins[<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>bill_length_mm) <span style="color:#f92672">&amp;</span> 
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>species) <span style="color:#f92672">&amp;</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>body_mass_g), ]
+</span></span></code></pre></div><p>Here, the square brackets mean ‘look inside this thing’. Square brackets support indexing with rows separated from columns by a comma. So:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean[1,]
 </span></span></code></pre></div><pre><code>## # A tibble: 1 × 8
 ##   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex    year
 ##   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; &lt;int&gt;
 ## 1 Adelie  Torgersen           39.1          18.7               181        3750 male   2007
-</code></pre><p>…gives you row 1. Similarly,</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean[,<span style=color:#ae81ff>1</span>]
+</code></pre>
+<p>…gives you row 1. Similarly,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean[,<span style="color:#ae81ff">1</span>]
 </span></span></code></pre></div><pre><code>## # A tibble: 342 × 1
 ##    species
 ##    &lt;fct&gt;  
@@ -53,12 +256,16 @@ accurately reflect the population?</li></ul><p>Think of this as learning the lan
 ##  9 Adelie 
 ## 10 Adelie 
 ## # ℹ 332 more rows
-</code></pre><p>…gives you column one. And,</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean[1,<span style=color:#ae81ff>1</span>]
+</code></pre>
+<p>…gives you column one. And,</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean[1,<span style="color:#ae81ff">1</span>]
 </span></span></code></pre></div><pre><code>## # A tibble: 1 × 1
 ##   species
 ##   &lt;fct&gt;  
 ## 1 Adelie
-</code></pre><p>…gives you the cell found at row 1, column 1. You can use more complicated arguments to extract multiple values using an array argument <code>:</code> for concurrent data or <code>c()</code> for non-concurrent data. If that sounds like complete gibberish:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean[,<span style=color:#ae81ff>2</span><span style=color:#f92672>:</span><span style=color:#ae81ff>5</span>]
+</code></pre>
+<p>…gives you the cell found at row 1, column 1. You can use more complicated arguments to extract multiple values using an array argument <code>:</code> for concurrent data or <code>c()</code> for non-concurrent data. If that sounds like complete gibberish:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean[,<span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">5</span>]
 </span></span></code></pre></div><pre><code>## # A tibble: 342 × 4
 ##    island    bill_length_mm bill_depth_mm flipper_length_mm
 ##    &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;
@@ -73,7 +280,8 @@ accurately reflect the population?</li></ul><p>Think of this as learning the lan
 ##  9 Torgersen           42            20.2               190
 ## 10 Torgersen           37.8          17.1               186
 ## # ℹ 332 more rows
-</code></pre><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean[,<span style=color:#a6e22e>c</span>(<span style=color:#ae81ff>2</span>,<span style=color:#ae81ff>5</span>)]
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean[,<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">2</span>,<span style="color:#ae81ff">5</span>)]
 </span></span></code></pre></div><pre><code>## # A tibble: 342 × 2
 ##    island    flipper_length_mm
 ##    &lt;fct&gt;                 &lt;int&gt;
@@ -88,69 +296,260 @@ accurately reflect the population?</li></ul><p>Think of this as learning the lan
 ##  9 Torgersen               190
 ## 10 Torgersen               186
 ## # ℹ 332 more rows
-</code></pre><p>The first argument returns all of columns 1 to 5. The second only returns columns 2 and 5.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>penguins_clean <span style=color:#f92672>&lt;-</span> penguins[<span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>bill_length_mm) <span style=color:#f92672>&amp;</span> 
-</span></span><span style=display:flex><span>                            <span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>species) <span style=color:#f92672>&amp;</span>
-</span></span><span style=display:flex><span>                            <span style=color:#f92672>!</span><span style=color:#a6e22e>is.na</span>(penguins<span style=color:#f92672>$</span>body_mass_g), ]
-</span></span></code></pre></div><p>So here we’re looking within <code>penguins</code> and excluding rows (using <code>!is.na()</code>) where there are NAs in the columns <code>bill_length_mm</code>, ‘species’, and ’body_mass_g`. We are <em>not</em> selecting so are including them all.</p><hr><h3 id=measures-of-central-tendency>Measures of central tendency<a hidden class=anchor aria-hidden=true href=#measures-of-central-tendency>#</a></h3><p><strong>Mean</strong> — the “typical” value</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>mean</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm)
+</code></pre>
+<p>The first argument returns all of columns 1 to 5. The second only returns columns 2 and 5.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>penguins_clean <span style="color:#f92672">&lt;-</span> penguins[<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>bill_length_mm) <span style="color:#f92672">&amp;</span> 
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>species) <span style="color:#f92672">&amp;</span>
+</span></span><span style="display:flex;"><span>                            <span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(penguins<span style="color:#f92672">$</span>body_mass_g), ]
+</span></span></code></pre></div><p>So here we’re looking within <code>penguins</code> and excluding rows (using <code>!is.na()</code>) where there are NAs in the columns <code>bill_length_mm</code>, ‘species’, and ’body_mass_g`. We are <em>not</em> selecting so are including them all.</p>
+<hr>
+<h3 id="measures-of-central-tendency">Measures of central tendency<a hidden class="anchor" aria-hidden="true" href="#measures-of-central-tendency">#</a></h3>
+<p><strong>Mean</strong> — the “typical” value</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">mean</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm)
 </span></span></code></pre></div><pre><code>## [1] 43.92193
-</code></pre><p>The mean is the foundation for most statistical tests like t-tests and regression. It has mathematical properties that make differences and variation easy to compute. Later, we’ll build everything from this anchor.</p><p><strong>Median</strong> — the middle value</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>median</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm)
+</code></pre>
+<p>The mean is the foundation for most statistical tests like t-tests and regression. It has mathematical properties that make differences and variation easy to compute. Later, we’ll build everything from this anchor.</p>
+<p><strong>Median</strong> — the middle value</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">median</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm)
 </span></span></code></pre></div><pre><code>## [1] 44.45
-</code></pre><p>The median is the value in the middle of the sorted data. Unlike the mean, it’s robust to extreme values.</p><hr><h3 id=spread--how-much-the-data-varies>Spread — how much the data varies<a hidden class=anchor aria-hidden=true href=#spread--how-much-the-data-varies>#</a></h3><p><strong>Standard deviation (SD)</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>sd</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm)
+</code></pre>
+<p>The median is the value in the middle of the sorted data. Unlike the mean, it’s robust to extreme values.</p>
+<hr>
+<h3 id="spread--how-much-the-data-varies">Spread — how much the data varies<a hidden class="anchor" aria-hidden="true" href="#spread--how-much-the-data-varies">#</a></h3>
+<p><strong>Standard deviation (SD)</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">sd</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm)
 </span></span></code></pre></div><pre><code>## [1] 5.459584
-</code></pre><p>The Standard Deviation:</p><ul><li>Shows the typical distance of a given data point from the mean (i.e., the spread of the data)</li><li>Small SD = tightly clustered; large SD = spread out.</li></ul><p><strong>Standard error (SE)</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>se <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>sd</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm) <span style=color:#f92672>/</span> <span style=color:#a6e22e>sqrt</span>(<span style=color:#a6e22e>length</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm))
-</span></span><span style=display:flex><span>se
+</code></pre>
+<p>The Standard Deviation:</p>
+<ul>
+<li>Shows the typical distance of a given data point from the mean (i.e., the spread of the data)</li>
+<li>Small SD = tightly clustered; large SD = spread out.</li>
+</ul>
+<p><strong>Standard error (SE)</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>se <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sd</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm) <span style="color:#f92672">/</span> <span style="color:#a6e22e">sqrt</span>(<span style="color:#a6e22e">length</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm))
+</span></span><span style="display:flex;"><span>se
 </span></span></code></pre></div><pre><code>## [1] 0.2952205
-</code></pre><p>The Standard Error is computed by dividing the SD by the square root of the number of measurements in the sample. It shows us how accurately we can estimate the true average of the whole population based on our sample.</p><ul><li>Smaller SE = more confidence in the mean (i.e., our sample mean is close(r) to the population mean)</li></ul><p><strong>95% confidence interval (CI)</strong></p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span>mean_val <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>mean</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm)
-</span></span><span style=display:flex><span>ci_lower <span style=color:#f92672>&lt;-</span> mean_val <span style=color:#f92672>-</span> <span style=color:#ae81ff>1.96</span> <span style=color:#f92672>*</span> se
-</span></span><span style=display:flex><span>ci_upper <span style=color:#f92672>&lt;-</span> mean_val <span style=color:#f92672>+</span> <span style=color:#ae81ff>1.96</span> <span style=color:#f92672>*</span> se
-</span></span><span style=display:flex><span><span style=color:#a6e22e>c</span>(ci_lower, ci_upper)
+</code></pre>
+<p>The Standard Error is computed by dividing the SD by the square root of the number of measurements in the sample. It shows us how accurately we can estimate the true average of the whole population based on our sample.</p>
+<ul>
+<li>Smaller SE = more confidence in the mean (i.e., our sample mean is close(r) to the population mean)</li>
+</ul>
+<p><strong>95% confidence interval (CI)</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>mean_val <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mean</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm)
+</span></span><span style="display:flex;"><span>ci_lower <span style="color:#f92672">&lt;-</span> mean_val <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.96</span> <span style="color:#f92672">*</span> se
+</span></span><span style="display:flex;"><span>ci_upper <span style="color:#f92672">&lt;-</span> mean_val <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.96</span> <span style="color:#f92672">*</span> se
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">c</span>(ci_lower, ci_upper)
 </span></span></code></pre></div><pre><code>## [1] 43.34330 44.50056
-</code></pre><p>The CI gives a plausible range for the true population mean. We typically use the 95% threshold as this corresponds with our statistical probability threshold of <em>p</em> = 0.05. It basically indicates that if we repeated the study many times, around 95% of all calculated intervals would contain the true mean.</p><hr><h3 id=when-to-use-sd-se-ci>When to use SD, SE, CI<a hidden class=anchor aria-hidden=true href=#when-to-use-sd-se-ci>#</a></h3><table><thead><tr><th>Measure</th><th>What it tells you</th><th>When to use</th></tr></thead><tbody><tr><td>SD</td><td>Spread of raw data</td><td>Understanding variability</td></tr><tr><td>SE</td><td>Precision of the mean</td><td>Comparing sample means</td></tr><tr><td>95% CI</td><td>Range of true mean</td><td>Reporting uncertainty</td></tr></tbody></table><h3 id=visual-comparison>Visual comparison<a hidden class=anchor aria-hidden=true href=#visual-comparison>#</a></h3><p>The code below may seem daunting but we’ll cover <code>ggplot</code> in more detail later. For now, just notice the way in which plots can be built in this system by adding elements and using consistent language.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>set.seed</span>(<span style=color:#ae81ff>123</span>)
-</span></span><span style=display:flex><span>x <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>rnorm</span>(<span style=color:#ae81ff>30</span>, mean <span style=color:#f92672>=</span> <span style=color:#ae81ff>40</span>, sd <span style=color:#f92672>=</span> <span style=color:#ae81ff>5</span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>mean_x <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>mean</span>(penguins_clean<span style=color:#f92672>$</span>body_mass_g)
-</span></span><span style=display:flex><span>sd_x <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>sd</span>(penguins_clean<span style=color:#f92672>$</span>body_mass_g)
-</span></span><span style=display:flex><span>se_x <span style=color:#f92672>&lt;-</span> sd_x <span style=color:#f92672>/</span> <span style=color:#a6e22e>sqrt</span>(<span style=color:#a6e22e>length</span>(penguins_clean<span style=color:#f92672>$</span>body_mass_g))
-</span></span><span style=display:flex><span>ci_x <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>c</span>(mean_x <span style=color:#f92672>-</span> <span style=color:#ae81ff>1.96</span><span style=color:#f92672>*</span>se_x, mean_x <span style=color:#f92672>+</span> <span style=color:#ae81ff>1.96</span><span style=color:#f92672>*</span>se_x)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Create a data frame for plotting whiskers</span>
-</span></span><span style=display:flex><span>plot_df <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>data.frame</span>(
-</span></span><span style=display:flex><span>  measure <span style=color:#f92672>=</span> <span style=color:#a6e22e>c</span>(<span style=color:#e6db74>&#34;SD&#34;</span>, <span style=color:#e6db74>&#34;SE&#34;</span>, <span style=color:#e6db74>&#34;95% CI&#34;</span>),
-</span></span><span style=display:flex><span>  lower <span style=color:#f92672>=</span> <span style=color:#a6e22e>c</span>(mean_x <span style=color:#f92672>-</span> sd_x, mean_x <span style=color:#f92672>-</span> se_x, ci_x[1]),
-</span></span><span style=display:flex><span>  upper <span style=color:#f92672>=</span> <span style=color:#a6e22e>c</span>(mean_x <span style=color:#f92672>+</span> sd_x, mean_x <span style=color:#f92672>+</span> se_x, ci_x[2])
-</span></span><span style=display:flex><span>)
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e># Plot</span>
-</span></span><span style=display:flex><span><span style=color:#a6e22e>ggplot</span>(plot_df, <span style=color:#a6e22e>aes</span>(x <span style=color:#f92672>=</span> measure)) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>geom_point</span>(<span style=color:#a6e22e>aes</span>(y <span style=color:#f92672>=</span> mean_x), size <span style=color:#f92672>=</span> <span style=color:#ae81ff>3</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;blue&#34;</span>) <span style=color:#f92672>+</span>          <span style=color:#75715e># Mean as point</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>geom_errorbar</span>(<span style=color:#a6e22e>aes</span>(ymin <span style=color:#f92672>=</span> lower, ymax <span style=color:#f92672>=</span> upper), width <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.2</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;red&#34;</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>labs</span>(title <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Mean with SD, SE, and 95% CI Whiskers&#34;</span>,
-</span></span><span style=display:flex><span>       y <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Body mass (g)&#34;</span>, x <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Measure&#34;</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>theme_minimal</span>() <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>geom_hline</span>(yintercept <span style=color:#f92672>=</span> mean_x, linetype <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;dashed&#34;</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;blue&#34;</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>    <span style=color:#75715e># Annotations</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>annotate</span>(<span style=color:#e6db74>&#34;text&#34;</span>, x <span style=color:#f92672>=</span> <span style=color:#ae81ff>2.3</span>, y <span style=color:#f92672>=</span> mean_x[1], 
-</span></span><span style=display:flex><span>           label <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SD = data spread \n around mean&#34;</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;black&#34;</span>, size <span style=color:#f92672>=</span> <span style=color:#ae81ff>3.5</span>, hjust <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>annotate</span>(<span style=color:#e6db74>&#34;text&#34;</span>, x <span style=color:#f92672>=</span> <span style=color:#ae81ff>3.4</span>, y <span style=color:#f92672>=</span> mean_x[1], 
-</span></span><span style=display:flex><span>           label <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;SE = accuracy \n of mean \n estimate&#34;</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;black&#34;</span>, size <span style=color:#f92672>=</span> <span style=color:#ae81ff>3.5</span>, hjust <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>annotate</span>(<span style=color:#e6db74>&#34;text&#34;</span>, x <span style=color:#f92672>=</span> <span style=color:#ae81ff>1.4</span>, y <span style=color:#f92672>=</span> mean_x[1], 
-</span></span><span style=display:flex><span>           label <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;95% CI = likely \n range for true mean&#34;</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;black&#34;</span>, size <span style=color:#f92672>=</span> <span style=color:#ae81ff>3.5</span>, hjust <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span>) <span style=color:#f92672>+</span>
-</span></span><span style=display:flex><span>  
-</span></span><span style=display:flex><span>  <span style=color:#a6e22e>annotate</span>(<span style=color:#e6db74>&#34;text&#34;</span>, x <span style=color:#f92672>=</span> <span style=color:#ae81ff>0.5</span>, y <span style=color:#f92672>=</span> mean_x <span style=color:#f92672>+</span> <span style=color:#ae81ff>50</span>, label <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;Mean&#34;</span>, color <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;blue&#34;</span>, hjust <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>)
-</span></span></code></pre></div><p><img alt="Comparing SD, SE, CI" loading=lazy src=https://arcaravaggi.github.io/img/rcourse/r_mod4_variance.png></p><p>You’ll notice that these estimates are for all penguins. This might be an issue…</p><h3 id=summarising-by-species>Summarising by species<a hidden class=anchor aria-hidden=true href=#summarising-by-species>#</a></h3><p>Before we start comparing penguins’ measurements statistically, it helps to look at each group separately. Why? Because treating all penguins as one giant lump ignores the fact that there may be important differences between species.</p><p>Summarising by group lets us see patterns and differences visually and numerically, which is exactly what statisticians do before running formal tests.</p><p>Let’s calculate the mean bill length for each species:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>tapply</span>(penguins_clean<span style=color:#f92672>$</span>bill_length_mm,
-</span></span><span style=display:flex><span>       penguins_clean<span style=color:#f92672>$</span>species,
-</span></span><span style=display:flex><span>       <span style=color:#66d9ef>function</span>(x) <span style=color:#a6e22e>mean</span>(x, na.rm <span style=color:#f92672>=</span> <span style=color:#66d9ef>TRUE</span>))
+</code></pre>
+<p>The CI gives a plausible range for the true population mean. We typically use the 95% threshold as this corresponds with our statistical probability threshold of <em>p</em> = 0.05. It basically indicates that if we repeated the study many times, around 95% of all calculated intervals would contain the true mean.</p>
+<hr>
+<h3 id="when-to-use-sd-se-ci">When to use SD, SE, CI<a hidden class="anchor" aria-hidden="true" href="#when-to-use-sd-se-ci">#</a></h3>
+<table>
+  <thead>
+      <tr>
+          <th>Measure</th>
+          <th>What it tells you</th>
+          <th>When to use</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>SD</td>
+          <td>Spread of raw data</td>
+          <td>Understanding variability</td>
+      </tr>
+      <tr>
+          <td>SE</td>
+          <td>Precision of the mean</td>
+          <td>Comparing sample means</td>
+      </tr>
+      <tr>
+          <td>95% CI</td>
+          <td>Range of true mean</td>
+          <td>Reporting uncertainty</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="visual-comparison">Visual comparison<a hidden class="anchor" aria-hidden="true" href="#visual-comparison">#</a></h3>
+<p>The code below may seem daunting but we’ll cover <code>ggplot</code> in more detail later. For now, just notice the way in which plots can be built in this system by adding elements and using consistent language.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">set.seed</span>(<span style="color:#ae81ff">123</span>)
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rnorm</span>(<span style="color:#ae81ff">30</span>, mean <span style="color:#f92672">=</span> <span style="color:#ae81ff">40</span>, sd <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mean_x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mean</span>(penguins_clean<span style="color:#f92672">$</span>body_mass_g)
+</span></span><span style="display:flex;"><span>sd_x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sd</span>(penguins_clean<span style="color:#f92672">$</span>body_mass_g)
+</span></span><span style="display:flex;"><span>se_x <span style="color:#f92672">&lt;-</span> sd_x <span style="color:#f92672">/</span> <span style="color:#a6e22e">sqrt</span>(<span style="color:#a6e22e">length</span>(penguins_clean<span style="color:#f92672">$</span>body_mass_g))
+</span></span><span style="display:flex;"><span>ci_x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(mean_x <span style="color:#f92672">-</span> <span style="color:#ae81ff">1.96</span><span style="color:#f92672">*</span>se_x, mean_x <span style="color:#f92672">+</span> <span style="color:#ae81ff">1.96</span><span style="color:#f92672">*</span>se_x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Create a data frame for plotting whiskers</span>
+</span></span><span style="display:flex;"><span>plot_df <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(
+</span></span><span style="display:flex;"><span>  measure <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;SD&#34;</span>, <span style="color:#e6db74">&#34;SE&#34;</span>, <span style="color:#e6db74">&#34;95% CI&#34;</span>),
+</span></span><span style="display:flex;"><span>  lower <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(mean_x <span style="color:#f92672">-</span> sd_x, mean_x <span style="color:#f92672">-</span> se_x, ci_x[1]),
+</span></span><span style="display:flex;"><span>  upper <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(mean_x <span style="color:#f92672">+</span> sd_x, mean_x <span style="color:#f92672">+</span> se_x, ci_x[2])
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Plot</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ggplot</span>(plot_df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> measure)) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_point</span>(<span style="color:#a6e22e">aes</span>(y <span style="color:#f92672">=</span> mean_x), size <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;blue&#34;</span>) <span style="color:#f92672">+</span>          <span style="color:#75715e"># Mean as point</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_errorbar</span>(<span style="color:#a6e22e">aes</span>(ymin <span style="color:#f92672">=</span> lower, ymax <span style="color:#f92672">=</span> upper), width <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.2</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;red&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Mean with SD, SE, and 95% CI Whiskers&#34;</span>,
+</span></span><span style="display:flex;"><span>       y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Body mass (g)&#34;</span>, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Measure&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">geom_hline</span>(yintercept <span style="color:#f92672">=</span> mean_x, linetype <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;dashed&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;blue&#34;</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># Annotations</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x <span style="color:#f92672">=</span> <span style="color:#ae81ff">2.3</span>, y <span style="color:#f92672">=</span> mean_x[1], 
+</span></span><span style="display:flex;"><span>           label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SD = data spread \n around mean&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;black&#34;</span>, size <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.5</span>, hjust <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.4</span>, y <span style="color:#f92672">=</span> mean_x[1], 
+</span></span><span style="display:flex;"><span>           label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;SE = accuracy \n of mean \n estimate&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;black&#34;</span>, size <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.5</span>, hjust <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.4</span>, y <span style="color:#f92672">=</span> mean_x[1], 
+</span></span><span style="display:flex;"><span>           label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;95% CI = likely \n range for true mean&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;black&#34;</span>, size <span style="color:#f92672">=</span> <span style="color:#ae81ff">3.5</span>, hjust <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>) <span style="color:#f92672">+</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">annotate</span>(<span style="color:#e6db74">&#34;text&#34;</span>, x <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>, y <span style="color:#f92672">=</span> mean_x <span style="color:#f92672">+</span> <span style="color:#ae81ff">50</span>, label <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Mean&#34;</span>, color <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;blue&#34;</span>, hjust <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><p><img alt="Comparing SD, SE, CI" loading="lazy" src="https://arcaravaggi.github.io/img/rcourse/r_mod4_variance.png"><!-- --></p>
+<p>You’ll notice that these estimates are for all penguins. This might be an issue…</p>
+<h3 id="summarising-by-species">Summarising by species<a hidden class="anchor" aria-hidden="true" href="#summarising-by-species">#</a></h3>
+<p>Before we start comparing penguins’ measurements statistically, it helps to look at each group separately. Why? Because treating all penguins as one giant lump ignores the fact that there may be important differences between species.</p>
+<p>Summarising by group lets us see patterns and differences visually and numerically, which is exactly what statisticians do before running formal tests.</p>
+<p>Let’s calculate the mean bill length for each species:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">tapply</span>(penguins_clean<span style="color:#f92672">$</span>bill_length_mm,
+</span></span><span style="display:flex;"><span>       penguins_clean<span style="color:#f92672">$</span>species,
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">function</span>(x) <span style="color:#a6e22e">mean</span>(x, na.rm <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>))
 </span></span></code></pre></div><pre><code>##    Adelie Chinstrap    Gentoo 
 ##  38.79139  48.83382  47.50488
-</code></pre><p>What’s happening here:</p><ol><li><code>tapply()</code> splits the data into groups — here, by species.</li><li>The anonymous function <code>function(x) mean(x, na.rm = TRUE)</code> calculates the mean of each group, ignoring missing values.</li><li>The result is a small summary table showing average bill length per species.</li></ol><p>You can also summarise multiple statistics at once:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-r data-lang=r><span style=display:flex><span><span style=color:#a6e22e>aggregate</span>(bill_length_mm <span style=color:#f92672>~</span> species, data <span style=color:#f92672>=</span> penguins_clean, 
-</span></span><span style=display:flex><span>          FUN <span style=color:#f92672>=</span> <span style=color:#66d9ef>function</span>(x) <span style=color:#a6e22e>c</span>(mean <span style=color:#f92672>=</span> <span style=color:#a6e22e>mean</span>(x), sd <span style=color:#f92672>=</span> <span style=color:#a6e22e>sd</span>(x), n <span style=color:#f92672>=</span> <span style=color:#a6e22e>length</span>(x)))
+</code></pre>
+<p>What’s happening here:</p>
+<ol>
+<li><code>tapply()</code> splits the data into groups — here, by species.</li>
+<li>The anonymous function <code>function(x) mean(x, na.rm = TRUE)</code> calculates the mean of each group, ignoring missing values.</li>
+<li>The result is a small summary table showing average bill length per species.</li>
+</ol>
+<p>You can also summarise multiple statistics at once:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">aggregate</span>(bill_length_mm <span style="color:#f92672">~</span> species, data <span style="color:#f92672">=</span> penguins_clean, 
+</span></span><span style="display:flex;"><span>          FUN <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(x) <span style="color:#a6e22e">c</span>(mean <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span>(x), sd <span style="color:#f92672">=</span> <span style="color:#a6e22e">sd</span>(x), n <span style="color:#f92672">=</span> <span style="color:#a6e22e">length</span>(x)))
 </span></span></code></pre></div><pre><code>##     species bill_length_mm.mean bill_length_mm.sd bill_length_mm.n
 ## 1    Adelie           38.791391          2.663405       151.000000
 ## 2 Chinstrap           48.833824          3.339256        68.000000
 ## 3    Gentoo           47.504878          3.081857       123.000000
-</code></pre><p>Now we get the mean and SD for bill length and sample size per species in one glance. This gives a preview of what later t-tests or GLMs will formally test.</p><p>We can also adjust our plot from earlier to make it more meaningful.</p><p><img alt="Comparing SD, SE, CI for different groups" loading=lazy src=https://arcaravaggi.github.io/img/rcourse/r_mod4_variancegroup.png></p><ul><li>Compare the means across species: are they very different?</li><li>Look at the SDs: which species’ measurements are more variable?</li><li>Which species estimate has the greatest precision?</li></ul><p>By summarising by species, we’re building a clear picture of the data landscape. Later, when we run statistical tests, we’ll already have a solid understanding of our data.</p><h3 id=lessons-learned>Lessons learned<a hidden class=anchor aria-hidden=true href=#lessons-learned>#</a></h3><ul><li>Mean is central for later tests</li><li>Median shows the middle value</li><li>SD measures spread of data</li><li>SE measures precision of the mean</li><li>95% CI gives a plausible range for the true mean</li><li>Plotting these together helps visualize differences</li><li>Always summarise groups separately before testing</li></ul><div style=margin-top:2rem;display:flex;justify-content:space-between><p><a href=https://arcaravaggi.github.io/r-for-nervous-humans/module-3/ style="padding:.6rem 1.2rem;background-color:var(--theme-accent);color:var(--theme-fg);text-decoration:none;border-radius:6px">← Previous</a></p><p><a href=https://arcaravaggi.github.io/r-for-nervous-humans/module-5/ style="padding:.6rem 1.2rem;background-color:var(--theme-accent);color:var(--theme-fg);text-decoration:none;border-radius:6px">Next →</a></p></div></div><footer class=post-footer><ul class=post-tags></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://arcaravaggi.github.io/></a></span>·
-<span>Powered by
-<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentColor"><path d="M12 6H0l6-6z"/></svg>
-</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script></body></html>
+</code></pre>
+<p>Now we get the mean and SD for bill length and sample size per species in one glance. This gives a preview of what later t-tests or GLMs will formally test.</p>
+<p>We can also adjust our plot from earlier to make it more meaningful.</p>
+<p><img alt="Comparing SD, SE, CI for different groups" loading="lazy" src="https://arcaravaggi.github.io/img/rcourse/r_mod4_variancegroup.png"><!-- --></p>
+<ul>
+<li>Compare the means across species: are they very different?</li>
+<li>Look at the SDs: which species’ measurements are more variable?</li>
+<li>Which species estimate has the greatest precision?</li>
+</ul>
+<p>By summarising by species, we’re building a clear picture of the data landscape. Later, when we run statistical tests, we’ll already have a solid understanding of our data.</p>
+<h3 id="lessons-learned">Lessons learned<a hidden class="anchor" aria-hidden="true" href="#lessons-learned">#</a></h3>
+<ul>
+<li>Mean is central for later tests</li>
+<li>Median shows the middle value</li>
+<li>SD measures spread of data</li>
+<li>SE measures precision of the mean</li>
+<li>95% CI gives a plausible range for the true mean</li>
+<li>Plotting these together helps visualize differences</li>
+<li>Always summarise groups separately before testing</li>
+</ul>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/module-3/" 
+style="padding: 0.6rem 1.2rem; 
+background-color: var(--theme-accent); 
+color: var(--theme-fg); 
+text-decoration: none; 
+border-radius: 6px;"> ← Previous </a></p>
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/module-5/" 
+style="padding: 0.6rem 1.2rem; 
+background-color: var(--theme-accent); 
+color: var(--theme-fg); 
+text-decoration: none; 
+border-radius: 6px;"> Next → </a></p>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

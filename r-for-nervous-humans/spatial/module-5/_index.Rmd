@@ -1,0 +1,147 @@
+---
+title: "Module 5: Are Patterns Real?"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+```{r echo = FALSE,  message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+library(geodata)
+library(terra)
+library(rnaturalearth)
+
+world <- ne_countries(scale = "medium", returnclass = "sf")
+region <- world[world$name == "Costa Rica", ]
+
+species <- occ_search(
+  scientificName = "Alouatta palliata",  # mantled howler monkey
+  country = "CR",
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  species$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+
+geodata_path(".")
+
+elev <- elevation_global(res = 10)
+elev_cr <- crop(elev, vect(region))
+elev_cr <- mask(elev_cr, vect(region))
+
+```
+
+For this module, you'll need the following packages:
+- `sf`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+- `terra`
+- `geodata`
+
+So far, we’ve mapped our species. Now we can ask a crucial question, i.e., do these patterns tell us something ecological or just something about how the data were collected?
+
+Let’s go back to your species map:
+
+```{r}
+plot(st_geometry(region))
+plot(st_geometry(howler_sf), add = TRUE, col = "red")
+```
+
+You’ll almost always see clusters. From there, it's tempting to assume that your species just prefers those areas. But that’s not necessarily true. There are a few main reasons that we see points clustering in the landscape:
+1. Species genuinely prefer certain environments.
+2. Mountains, rivers, and other barriers constrain distributions.
+3. Sampling bias. People tend to sample near roads, cities, research stations, etc. 
+
+A simple way to visualise this is to compare species data to true randomness. What would it look like if points were randomly distributed? We can simulate that.
+
+```{r}
+set.seed(1) # This basically allows repeatability. See more here: https://researchdatapod.com/understanding-set-seed-r-comprehensive-guide/
+
+random_points <- st_sample(region, size = nrow(howler_sf))
+
+plot(st_geometry(region))
+plot(random_points, add = TRUE, col = "blue")
+plot(st_geometry(howler_sf), add = TRUE, col = "red")
+```
+
+In this figure, where red = observed and blue = random, see if you can identify whether the observed points are more clustered than random. This is sometimes difficult to distinguish but try looking for empty areas where there 'should' be points. Then consider whether the patterns in the species data might follow geography or some other ecologically-relevant feature of the landscape.
+
+Instead of eyeballing, we can summarise clustering using grids.
+
+```{r}
+grid <- st_make_grid(region, cellsize = 0.2) # Make a grid
+grid_sf <- st_sf(geometry = grid)
+
+obs_counts <- st_join(grid_sf, howler_sf) %>% # Join the species data to the grid
+  dplyr::count(geometry) # Count the number of points per grid cell
+
+rand_sf <- st_sf(geometry = random_points)
+
+rand_counts <- st_join(grid_sf, rand_sf) %>%
+  dplyr::count(geometry)
+```
+
+And then compare the variability. If observed data has higher variation, it’s more clustered than the random data.
+
+```{r}
+sd(obs_counts$n, na.rm = TRUE)
+sd(rand_counts$n, na.rm = TRUE)
+```
+
+This is a simple way of detecting spatial heterogeneity. Random data are fairly even spread across the landscape. In contrast, clustered data show high variation across space.
+
+This connects to a core principle: nearby locations tend to be more similar than distant ones. This is also known as spatial dependence (or autocorrelation) and is an important concept in spatial ecology. 
+
+Now we can ask whether clusters are linked to environmental conditions by extracting environmental data (in this instance elevation) for each point and comparing elevation in high- versus low-density cells. 
+
+```{r}
+howler_vect <- vect(howler_sf)
+howler_sf$elev <- extract(elev_cr[[1]], howler_vect)[,2]
+```
+
+Compare elevation in:
+
+```{r}
+grid_sf$counts <- obs_counts$n
+grid_sf$counts[is.na(grid_sf$counts)] <- 0
+
+grid_sf$counts[is.na(grid_sf$counts)] <- 0 # Replace NA values with 0
+
+high <- grid_sf[grid_sf$counts > median(grid_sf$counts, na.rm=TRUE), ]
+low  <- grid_sf[grid_sf$counts <= median(grid_sf$counts, na.rm=TRUE), ]
+
+high_vect <- vect(high)
+low_vect  <- vect(low)
+
+high_elev <- extract(elev_cr[[1]], high_vect, fun = mean, na.rm=TRUE)
+low_elev  <- extract(elev_cr[[1]], low_vect, fun = mean, na.rm=TRUE)
+```
+
+Now you can compare:
+
+```{r}
+mean(high_elev[,2], na.rm=TRUE)
+mean(low_elev[,2], na.rm=TRUE)
+```
+
+If values differ then it is possible that at least some of the clustering observed in the data is driven by the selected environment data. If not, consider whether you need to consider other data, or other potential drivers.  At this point, you should start thinking in two layers:
+
+1. Ecological process
+-- habitat preference
+-- climate constraints
+-- dispersal
+2. Observation process
+-- where people looked
+-- accessibility
+-- survey effort
+
+What you see in the GBIF data is process × observation, not pure ecology. If you ignore sampling bias then you might think a species avoids certain areas when actually no one surveyed there. This can lead to poor conservation decisions and incorrect habitat models. This is a common issue in ecology, where uneven sampling effort can distort patterns and inference.
+
+Now that you can summarise patterns and question their meaning, the next step is to start looking into species–environment relationships. Can we predict where species occur based on environment? That's what we'll do in the next module.

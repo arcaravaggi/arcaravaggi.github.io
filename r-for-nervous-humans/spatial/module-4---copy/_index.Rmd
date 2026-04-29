@@ -1,0 +1,77 @@
+---
+title: "Module 4: Points, polygons, and rasters"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+```{r echo = FALSE,  message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+library(geodata)
+library(terra)
+library(rnaturalearth)
+
+hedgehog <- occ_search(
+  scientificName = "Erinaceus europaeus",
+  limit = 500, # limit to 500 records for this example
+  hasCoordinate = TRUE # ensures we get usable locations
+)
+
+hedgehog_sf <- st_as_sf(
+  hedgehog$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326 # This is our coordinate system. We'll discuss this in the next module
+)
+
+geodata_path(".")
+```
+
+For this module, you'll need the following packages:
+- `sf`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+- `terra`
+
+So far, we’ve used points, but of course ecology isn't just looking at occurrences. We also need habitats and environmental layers to explain why species are where they are.
+
+We’ll now bring together three elements:
+1. Points. These will be our species records from GBIF.
+2. Polygons. These will be our regions.
+3. Rasters. These will be our environmental data.
+
+We already have points from GBIF. Let's download some climate and elevation data from WorldClim, via the `geodata` package so that we have some actual global environmental gradients. These provide some of the contextual background that is necessary in understanding why species are where they are and why they do what they do.
+
+```{r}
+elev <- elevation_global(res = 10)
+plot(elev)
+```
+
+Let's also download a polygon of country boundaries and coastlines.
+
+```{r}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+plot(world)
+```
+
+Before we think of combining anything, let's check the coordinate systems and transform if necessary.
+
+```{r}
+crs(elev)
+crs(world)
+crs(hedgehog_sf)
+```
+
+We can then plot this stack.
+
+```{r}
+plot(st_geometry(world), col = "grey90", border = "black")
+plot(elev, add = TRUE, alpha = 0.5)
+plot(st_geometry(hedgehog_sf), add = TRUE, col = "red", pch = 16)
+```
+
+We now have a standard ecological spatial model, consisting of landmasses (where things can exist), rasters (what conditions exist), and points (where species actually occur). Everything else in spatial ecology just builds on this. 
+
+Next we'll move from just looking at maps to summarising patterns in space.

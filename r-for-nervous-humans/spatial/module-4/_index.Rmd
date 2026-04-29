@@ -1,0 +1,91 @@
+---
+title: "Module 4: Points, polygons, and rasters"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+```{r echo = FALSE,  message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+library(geodata)
+library(terra)
+library(rnaturalearth)
+```
+
+For this module, you'll need the following packages:
+- `sf`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+- `terra`
+
+So far, we’ve used points, but of course ecology isn't just looking at occurrences. We also need habitats and environmental layers to explain why species are where they are.
+
+We’ll now bring together three elements:
+1. Points. These will be our species records from GBIF.
+2. Polygons. These will be our regions.
+3. Rasters. These will be our environmental data.
+
+Let's switch our example, too, to reduce file sizes and keep everything quick and smooth. First, let's get a regional polygon for Costa Rica.
+
+```{r}
+world <- ne_countries(scale = "medium", returnclass = "sf")
+region <- world[world$name == "Costa Rica", ]
+plot(st_geometry(region))
+```
+
+Now let's find a relevant species. I'm going to go with the mantled howler monkey, **Alouatta palliata**. I'm not going to download and crop the full howler monkey dataset, however. Instead, I'm going to filter it at the source before pulling the data in. 
+
+```{r}
+species <- occ_search(
+  scientificName = "Alouatta palliata",  # mantled howler monkey
+  country = "CR",
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  species$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+
+plot(st_geometry(region))
+plot(st_geometry(howler_sf), add = TRUE, col = "red")
+```
+
+Now let's download some elevation data from via the `geodata` package so that we have an actual environmental gradient. These layers provide some of the contextual background that is necessary for understanding why species are where they are and why they do what they do.
+
+```{r}
+elev <- elevation_global(res = 10)
+plot(elev)
+```
+
+Before we think of combining anything, let's check the coordinate systems and transform if necessary.
+
+```{r}
+crs(elev)
+crs(region)
+crs(howler_sf)
+```
+
+We'll now crop and mask our raster. `crop` rapdily reduces the extent of your layer to that of the focal region. `mask` removes any pixels that fall outside our regional polygon. Combining these functions avoids spatial artefacts and weird pixellation.
+
+```{r}
+elev_cr <- crop(elev, vect(region))
+elev_cr <- mask(elev_cr, vect(region))
+```
+
+We can then plot this stack.
+
+```{r}
+plot(st_geometry(region), col = "grey90", border = "black")
+plot(elev_cr, add = TRUE, alpha = 0.5)
+plot(st_geometry(howler_sf), add = TRUE, col = "red", pch = 16)
+```
+
+We now have a standard ecological spatial model, consisting of land masses (where things can exist), rasters (what conditions exist), and points (where species actually occur). Everything else in spatial ecology just builds on this. 
+
+Next we'll move from just looking at maps to summarising patterns in space.

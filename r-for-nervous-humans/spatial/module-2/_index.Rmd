@@ -1,0 +1,105 @@
+---
+title: "Module 2: Opening and exploring spatial data"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+### Opening and exploring spatial data in R
+
+So far, we’ve talked about what spatial data is and why it matters. Now comes the slightly more hands-on part - actually getting it into R and having a look around.
+
+When you load spatial data into R, it doesn’t just appear as a neat table like a spreadsheet. Instead, it’s stored in special objects that keep track of both:
+- the data (e.g. species, counts, habitat type)
+- the geometry (where those things are located)
+
+This is like a spreadsheet with a built-in map attached.
+
+If we have data from an amphibian survey in a wetland, for example, we might see:
+
+| Pond ID | Frog presence | Temperature | Location |
+| ------- | ------------- | ----------- | -------- |
+| 1       | Yes           | 12.4°C      | (x₁, y₁) |
+| 2       | No            | 10.1°C      | (x₂, y₂) |
+
+The **Location** column isn't text, it's geometry. It contains the coordinates that allow you to map and analyse those data appropriately. 
+
+#### Loading spatial data
+While there are different file types for spatial data, you’ll usually load your raw spatial data from a file, just like you would a CSV. It can then be combined with other data types when needed.
+
+First let's load a package. We’ll use the `sf` package, which is designed for spatial data.
+
+```{r echo = F}
+# install.packages("sf")   # only run once
+library(sf)
+```
+
+We’ll download real species records from the Global Biodiversity Information Facility (GBIF); a huge open database of biodiversity observations. For thsi we'll need the `rgbif` package.
+
+```{r echo = F}
+# install.packages("rgbif")   # only run once
+library(rgbif)
+```
+
+Let’s grab occurrences of European hedgehogs (**Erinaceus europaeus**).
+
+```{r}
+hedgehog <- occ_search(
+  scientificName = "Erinaceus europaeus",
+  limit = 500, # limit to 500 records for this example
+  hasCoordinate = TRUE # ensures we get usable locations
+)
+```
+
+#### Turn it into spatial data
+
+Right now the data is just a regular table. We need to convert it into something spatial and then take a look.
+
+```{r}
+hedgehog_sf <- st_as_sf(
+  hedgehog$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326 # This is our coordinate system. We'll discuss this in the next module
+)
+
+hedgehog_sf
+
+summary(hedgehog_sf)
+```
+
+You should see lots of rows (observations), columns like country, date, etc., and a geometry column (POINT).
+
+We can now plot our data:
+
+```{r}
+plot(hedgehog_sf)
+```
+
+This simple plot can tell you useful information. E.g.:
+- Where most records originate
+- Whether there are clusters where recording effort is higher
+
+Some areas might look empty. This is not necessarily because hedgehogs aren’t there, but because no one recorded them. It's important to remember that spatial data often reflects where people looked, not just where species are.
+
+We can do the same thing for other species.
+
+```{r}
+otter <- occ_search(
+  scientificName = "Lutra lutra",
+  limit = 500,
+  hasCoordinate = TRUE
+)
+
+otter_sf <- st_as_sf(
+  otter$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+
+plot(otter_sf)
+```
+
+Remember that these data re not perfect. For example, some points may be inaccurate, or sampling effort is likely to be uneven. This is common in ecological datasets. If we were aiming to conduct a robust analysis of our data we would want to thoroughly inspect it before we go any further. 
+
+Next, we'll look at coordinate systems and projections!

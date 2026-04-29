@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title></title>
+<meta name="keywords" content="">
+<meta name="description" content="Module 2: Opening and exploring spatial data
+Opening and exploring spatial data in R
+So far, we’ve talked about what spatial data is and why it matters. Now
+comes the slightly more hands-on part - actually getting it into R and
+having a look around.
+When you load spatial data into R, it doesn’t just appear as a neat
+table like a spreadsheet. Instead, it’s stored in special objects that
+keep track of both: - the data (e.g. species, counts, habitat type) -
+the geometry (where those things are located)">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/">
+  <meta property="og:description" content="Module 2: Opening and exploring spatial data Opening and exploring spatial data in R So far, we’ve talked about what spatial data is and why it matters. Now comes the slightly more hands-on part - actually getting it into R and having a look around.
+When you load spatial data into R, it doesn’t just appear as a neat table like a spreadsheet. Instead, it’s stored in special objects that keep track of both: - the data (e.g. species, counts, habitat type) - the geometry (where those things are located)">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:description" content="Module 2: Opening and exploring spatial data Opening and exploring spatial data in R So far, we’ve talked about what spatial data is and why it matters. Now comes the slightly more hands-on part - actually getting it into R and having a look around.
+When you load spatial data into R, it doesn’t just appear as a neat table like a spreadsheet. Instead, it’s stored in special objects that keep track of both: - the data (e.g. species, counts, habitat type) - the geometry (where those things are located)">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+<div class="post-content"><h1 id="module-2-opening-and-exploring-spatial-data">Module 2: Opening and exploring spatial data<a hidden class="anchor" aria-hidden="true" href="#module-2-opening-and-exploring-spatial-data">#</a></h1>
+<h3 id="opening-and-exploring-spatial-data-in-r">Opening and exploring spatial data in R<a hidden class="anchor" aria-hidden="true" href="#opening-and-exploring-spatial-data-in-r">#</a></h3>
+<p>So far, we’ve talked about what spatial data is and why it matters. Now
+comes the slightly more hands-on part - actually getting it into R and
+having a look around.</p>
+<p>When you load spatial data into R, it doesn’t just appear as a neat
+table like a spreadsheet. Instead, it’s stored in special objects that
+keep track of both: - the data (e.g. species, counts, habitat type) -
+the geometry (where those things are located)</p>
+<p>This is like a spreadsheet with a built-in map attached.</p>
+<p>If we have data from an amphibian survey in a wetland, for example, we
+might see:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Pond ID</th>
+          <th>Frog presence</th>
+          <th>Temperature</th>
+          <th>Location</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>Yes</td>
+          <td>12.4°C</td>
+          <td>(x₁, y₁)</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>No</td>
+          <td>10.1°C</td>
+          <td>(x₂, y₂)</td>
+      </tr>
+  </tbody>
+</table>
+<p>The <strong>Location</strong> column isn’t text, it’s geometry. It contains the
+coordinates that allow you to map and analyse those data appropriately.</p>
+<h4 id="loading-spatial-data">Loading spatial data<a hidden class="anchor" aria-hidden="true" href="#loading-spatial-data">#</a></h4>
+<p>While there are different file types for spatial data, you’ll usually
+load your raw spatial data from a file, just like you would a CSV. It
+can then be combined with other data types when needed.</p>
+<p>First let’s load a package. We’ll use the <code>sf</code> package, which is
+designed for spatial data.</p>
+<pre><code>## Warning: package 'sf' was built under R version 4.5.3
+
+## Linking to GEOS 3.14.1, GDAL 3.12.1, PROJ 9.7.1; sf_use_s2() is TRUE
+</code></pre>
+<p>We’ll download real species records from the Global Biodiversity
+Information Facility (GBIF); a huge open database of biodiversity
+observations. For thsi we’ll need the <code>rgbif</code> package.</p>
+<pre><code>## Warning: package 'rgbif' was built under R version 4.5.3
+</code></pre>
+<p>Let’s grab occurrences of European hedgehogs (<strong>Erinaceus europaeus</strong>).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>hedgehog <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">occ_search</span>(
+</span></span><span style="display:flex;"><span>  scientificName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Erinaceus europaeus&#34;</span>,
+</span></span><span style="display:flex;"><span>  limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>, <span style="color:#75715e"># limit to 500 records for this example</span>
+</span></span><span style="display:flex;"><span>  hasCoordinate <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span> <span style="color:#75715e"># ensures we get usable locations</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h4 id="turn-it-into-spatial-data">Turn it into spatial data<a hidden class="anchor" aria-hidden="true" href="#turn-it-into-spatial-data">#</a></h4>
+<p>Right now the data is just a regular table. We need to convert it into
+something spatial and then take a look.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>hedgehog_sf <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">st_as_sf</span>(
+</span></span><span style="display:flex;"><span>  hedgehog<span style="color:#f92672">$</span>data,
+</span></span><span style="display:flex;"><span>  coords <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;decimalLongitude&#34;</span>, <span style="color:#e6db74">&#34;decimalLatitude&#34;</span>),
+</span></span><span style="display:flex;"><span>  crs <span style="color:#f92672">=</span> <span style="color:#ae81ff">4326</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>hedgehog_sf
+</span></span></code></pre></div><pre><code>## Simple feature collection with 500 features and 127 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -9.434005 ymin: -46.10864 xmax: 176.8806 ymax: 62.45595
+## Geodetic CRS:  WGS 84
+## # A tibble: 500 × 128
+##    key     scientificName issues datasetKey publishingOrgKey installationKey hostingOrganizationKey
+##  * &lt;chr&gt;   &lt;chr&gt;          &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;           &lt;chr&gt;                 
+##  1 593796… Erinaceus eur… cdc,c… 6ac3f774-… bb646dff-a905-4… 36cae45c-1983-… bb646dff-a905-4403-a4…
+##  2 593796… Erinaceus eur… cdc,c… 6ac3f774-… bb646dff-a905-4… 36cae45c-1983-… bb646dff-a905-4403-a4…
+##  3 593797… Erinaceus eur… cdc,c… 6ac3f774-… bb646dff-a905-4… 36cae45c-1983-… bb646dff-a905-4403-a4…
+##  4 593797… Erinaceus eur… cdc,c… 6ac3f774-… bb646dff-a905-4… 36cae45c-1983-… bb646dff-a905-4403-a4…
+##  5 593802… Erinaceus eur… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+##  6 593803… Erinaceus eur… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+##  7 593810… Erinaceus eur… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+##  8 593818… Erinaceus eur… cdc    50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+##  9 593818… Erinaceus eur… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+## 10 593819… Erinaceus eur… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-… 28eb1a3f-1c15-4a95-93…
+## # ℹ 490 more rows
+## # ℹ 121 more variables: publishingCountry &lt;chr&gt;, protocol &lt;chr&gt;, lastCrawled &lt;chr&gt;,
+## #   lastParsed &lt;chr&gt;, crawlId &lt;int&gt;, basisOfRecord &lt;chr&gt;, occurrenceStatus &lt;chr&gt;, taxonKey &lt;int&gt;,
+## #   kingdomKey &lt;int&gt;, phylumKey &lt;int&gt;, classKey &lt;int&gt;, orderKey &lt;int&gt;, familyKey &lt;int&gt;,
+## #   genusKey &lt;int&gt;, speciesKey &lt;int&gt;, acceptedTaxonKey &lt;int&gt;, acceptedScientificName &lt;chr&gt;,
+## #   kingdom &lt;chr&gt;, phylum &lt;chr&gt;, order &lt;chr&gt;, family &lt;chr&gt;, genus &lt;chr&gt;, species &lt;chr&gt;,
+## #   genericName &lt;chr&gt;, specificEpithet &lt;chr&gt;, taxonRank &lt;chr&gt;, taxonomicStatus &lt;chr&gt;, …
+</code></pre>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(hedgehog_sf)
+</span></span></code></pre></div><pre><code>##      key            scientificName        issues           datasetKey        publishingOrgKey  
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##  installationKey    hostingOrganizationKey publishingCountry    protocol        
+##  Length:500         Length:500             Length:500         Length:500        
+##  Class :character   Class :character       Class :character   Class :character  
+##  Mode  :character   Mode  :character       Mode  :character   Mode  :character  
+##                                                                                 
+##                                                                                 
+##                                                                                 
+##                                                                                 
+##  lastCrawled         lastParsed           crawlId      basisOfRecord      occurrenceStatus  
+##  Length:500         Length:500         Min.   : 50.0   Length:500         Length:500        
+##  Class :character   Class :character   1st Qu.:195.0   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Median :278.0   Mode  :character   Mode  :character  
+##                                        Mean   :369.8                                        
+##                                        3rd Qu.:589.0                                        
+##                                        Max.   :592.0                                        
+##                                                                                             
+##     taxonKey         kingdomKey   phylumKey     classKey      orderKey     familyKey   
+##  Min.   :5219616   Min.   :1    Min.   :44   Min.   :359   Min.   :829   Min.   :5722  
+##  1st Qu.:5219616   1st Qu.:1    1st Qu.:44   1st Qu.:359   1st Qu.:829   1st Qu.:5722  
+##  Median :5219616   Median :1    Median :44   Median :359   Median :829   Median :5722  
+##  Mean   :5234419   Mean   :1    Mean   :44   Mean   :359   Mean   :829   Mean   :5722  
+##  3rd Qu.:5219616   3rd Qu.:1    3rd Qu.:44   3rd Qu.:359   3rd Qu.:829   3rd Qu.:5722  
+##  Max.   :8920434   Max.   :1    Max.   :44   Max.   :359   Max.   :829   Max.   :5722  
+##                                                                                        
+##     genusKey         speciesKey      acceptedTaxonKey  acceptedScientificName   kingdom         
+##  Min.   :8216553   Min.   :5219616   Min.   :5219616   Length:500             Length:500        
+##  1st Qu.:8216553   1st Qu.:5219616   1st Qu.:5219616   Class :character       Class :character  
+##  Median :8216553   Median :5219616   Median :5219616   Mode  :character       Mode  :character  
+##  Mean   :8216553   Mean   :5219616   Mean   :5219616                                            
+##  3rd Qu.:8216553   3rd Qu.:5219616   3rd Qu.:5219616                                            
+##  Max.   :8216553   Max.   :5219616   Max.   :5219616                                            
+##                                                                                                 
+##     phylum             order              family             genus             species         
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##  genericName        specificEpithet     taxonRank         taxonomicStatus    iucnRedListCategory
+##  Length:500         Length:500         Length:500         Length:500         Length:500         
+##  Class :character   Class :character   Class :character   Class :character   Class :character   
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character   
+##                                                                                                 
+##                                                                                                 
+##                                                                                                 
+##                                                                                                 
+##  coordinateUncertaintyInMeters  continent              year          month           day       
+##  Min.   :    1                 Length:500         Min.   :2026   Min.   :1.00   Min.   : 1.00  
+##  1st Qu.:    6                 Class :character   1st Qu.:2026   1st Qu.:1.00   1st Qu.: 8.00  
+##  Median :   41                 Mode  :character   Median :2026   Median :1.00   Median :17.00  
+##  Mean   : 2307                                    Mean   :2026   Mean   :1.52   Mean   :16.31  
+##  3rd Qu.: 5000                                    3rd Qu.:2026   3rd Qu.:2.00   3rd Qu.:24.00  
+##  Max.   :28505                                    Max.   :2026   Max.   :3.00   Max.   :31.00  
+##  NA's   :61                                                                                    
+##   eventDate         startDayOfYear   endDayOfYear   lastInterpreted     references       
+##  Length:500         Min.   : 1.00   Min.   : 1.00   Length:500         Length:500        
+##  Class :character   1st Qu.:17.00   1st Qu.:17.00   Class :character   Class :character  
+##  Mode  :character   Median :31.00   Median :31.00   Mode  :character   Mode  :character  
+##                     Mean   :32.35   Mean   :32.35                                        
+##                     3rd Qu.:50.00   3rd Qu.:50.00                                        
+##                     Max.   :67.00   Max.   :67.00                                        
+##                                                                                          
+##    license          isSequenced      identifier           facts            relations        
+##  Length:500         Mode :logical   Length:500         Length:500         Length:500        
+##  Class :character   FALSE:500       Class :character   Class :character   Class :character  
+##  Mode  :character                   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                             
+##                                                                                             
+##                                                                                             
+##                                                                                             
+##  isInCluster      recordedBy        geodeticDatum         class           countryCode       
+##  Mode :logical   Length:500         Length:500         Length:500         Length:500        
+##  FALSE:492       Class :character   Class :character   Class :character   Class :character  
+##  TRUE :8         Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                             
+##                                                                                             
+##                                                                                             
+##                                                                                             
+##  recordedByIDs      identifiedByIDs     gbifRegion          country          publishedByGbifRegion
+##  Length:500         Length:500         Length:500         Length:500         Length:500           
+##  Class :character   Class :character   Class :character   Class :character   Class :character     
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character     
+##                                                                                                   
+##                                                                                                   
+##                                                                                                   
+##                                                                                                   
+##  catalogNumber      institutionCode      locality            gbifID          collectionCode    
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##      name           dateIdentified     stateProvince        modified         datasetName       
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##  identifiedBy       rightsHolder       identifier.1       http...unknown.org.nick
+##  Length:500         Length:500         Length:500         Length:500             
+##  Class :character   Class :character   Class :character   Class :character       
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character       
+##                                                                                  
+##                                                                                  
+##                                                                                  
+##                                                                                  
+##  verbatimEventDate  verbatimLocality   occurrenceID         taxonID         
+##  Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##  http...unknown.org.captive_cultivated  eventTime         identificationID   informationWithheld
+##  Length:500                            Length:500         Length:500         Length:500         
+##  Class :character                      Class :character   Class :character   Class :character   
+##  Mode  :character                      Mode  :character   Mode  :character   Mode  :character   
+##                                                                                                 
+##                                                                                                 
+##                                                                                                 
+##                                                                                                 
+##  occurrenceRemarks   projectId          lifeStage         dynamicProperties    vitality        
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##  individualCount organismQuantity organismQuantityType   eventID             county         
+##  Min.   :1.000   Min.   :1        Length:500           Length:500         Length:500        
+##  1st Qu.:1.000   1st Qu.:1        Class :character     Class :character   Class :character  
+##  Median :1.000   Median :1        Mode  :character     Mode  :character   Mode  :character  
+##  Mean   :1.011   Mean   :1                                                                  
+##  3rd Qu.:1.000   3rd Qu.:1                                                                  
+##  Max.   :2.000   Max.   :1                                                                  
+##  NA's   :239     NA's   :494                                                                
+##    language             type           vernacularName      locationID        recordedByIDs.type
+##  Length:500         Length:500         Length:500         Length:500         Length:500        
+##  Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##                                                                                                
+##  recordedByIDs.value identifiedByIDs.type identifiedByIDs.value identificationRemarks
+##  Length:500          Length:500           Length:500            Length:500           
+##  Class :character    Class :character     Class :character      Class :character     
+##  Mode  :character    Mode  :character     Mode  :character      Mode  :character     
+##                                                                                      
+##                                                                                      
+##                                                                                      
+##                                                                                      
+##  samplingProtocol     habitat          dataGeneralizations identificationVerificationStatus
+##  Length:500         Length:500         Length:500          Length:500                      
+##  Class :character   Class :character   Class :character    Class :character                
+##  Mode  :character   Mode  :character   Mode  :character    Mode  :character                
+##                                                                                            
+##                                                                                            
+##                                                                                            
+##                                                                                            
+##      gadm           http...unknown.org.taxonRankID taxonConceptID     otherCatalogNumbers
+##  Length:500         Length:500                     Length:500         Length:500         
+##  Class :character   Class :character               Class :character   Class :character   
+##  Mode  :character   Mode  :character               Mode  :character   Mode  :character   
+##                                                                                          
+##                                                                                          
+##                                                                                          
+##                                                                                          
+##  eventRemarks       bibliographicCitation networkKeys         datasetID        
+##  Length:500         Length:500            Length:500         Length:500        
+##  Class :character   Class :character      Class :character   Class :character  
+##  Mode  :character   Mode  :character      Mode  :character   Mode  :character  
+##                                                                                
+##                                                                                
+##                                                                                
+##                                                                                
+##  nomenclaturalStatus verbatimSRS        municipality       parentNameUsageID  acceptedNameUsageID
+##  Length:500          Length:500         Length:500         Length:500         Length:500         
+##  Class :character    Class :character   Class :character   Class :character   Class :character   
+##  Mode  :character    Mode  :character   Mode  :character   Mode  :character   Mode  :character   
+##                                                                                                  
+##                                                                                                  
+##                                                                                                  
+##                                                                                                  
+##  ownerInstitutionCode accessRights       higherClassification associatedReferences
+##  Length:500           Length:500         Length:500           Length:500          
+##  Class :character     Class :character   Class :character     Class :character    
+##  Mode  :character     Mode  :character   Mode  :character     Mode  :character    
+##                                                                                   
+##                                                                                   
+##                                                                                   
+##                                                                                   
+##  distanceFromCentroidInMeters     sex            infraspecificEpithet   behavior        
+##  Min.   :3098                 Length:500         Length:500           Length:500        
+##  1st Qu.:3098                 Class :character   Class :character     Class :character  
+##  Median :3098                 Mode  :character   Mode  :character     Mode  :character  
+##  Mean   :3098                                                                           
+##  3rd Qu.:3098                                                                           
+##  Max.   :3098                                                                           
+##  NA's   :499                                                                            
+##   fieldNotes                 geometry  
+##  Length:500         POINT        :500  
+##  Class :character   epsg:4326    :  0  
+##  Mode  :character   +proj=long...:  0  
+##                                        
+##                                        
+##                                        
+## 
+</code></pre>
+<p>You should see lots of rows (observations), columns like country, date,
+etc., and a geometry column (POINT).</p>
+<p>We can now plot our data:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">plot</span>(hedgehog_sf)
+</span></span></code></pre></div><pre><code>## Warning: plotting the first 9 out of 127 attributes; use max.plot = 127 to plot all
+</code></pre>
+<p><img loading="lazy" src="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/_index_files/figure-gfm/unnamed-chunk-5-1.png"><!-- --></p>
+<p>This simple plot can tell you useful information. E.g.: - Where most
+records originate - Whether there are clusters where recording effort is
+higher</p>
+<p>Some areas might look empty. This is not necessarily because hedgehogs
+aren’t there, but because no one recorded them. It’s important to
+remember that spatial data often reflects where people looked, not just
+where species are.</p>
+<p>We can do the same thing for other species.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>otter <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">occ_search</span>(
+</span></span><span style="display:flex;"><span>  scientificName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Lutra lutra&#34;</span>,
+</span></span><span style="display:flex;"><span>  limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">500</span>,
+</span></span><span style="display:flex;"><span>  hasCoordinate <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>otter_sf <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">st_as_sf</span>(
+</span></span><span style="display:flex;"><span>  otter<span style="color:#f92672">$</span>data,
+</span></span><span style="display:flex;"><span>  coords <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;decimalLongitude&#34;</span>, <span style="color:#e6db74">&#34;decimalLatitude&#34;</span>),
+</span></span><span style="display:flex;"><span>  crs <span style="color:#f92672">=</span> <span style="color:#ae81ff">4326</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">plot</span>(otter_sf)
+</span></span></code></pre></div><pre><code>## Warning: plotting the first 9 out of 129 attributes; use max.plot = 129 to plot all
+</code></pre>
+<p><img loading="lazy" src="https://arcaravaggi.github.io/r-for-nervous-humans/spatial/module-2/_index_files/figure-gfm/unnamed-chunk-6-1.png"><!-- --></p>
+<p>Remember that these data re not perfect. For example, some points may be
+inaccurate, or sampling effort is likely to be uneven. This is common in
+ecological datasets. If we were aiming to conduct a robust analysis of
+our data we would want to thoroughly inspect it before we go any
+further.</p>
+<p>Next, we’ll look at coordinate systems and projections!</p>
+
+
+</div>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
