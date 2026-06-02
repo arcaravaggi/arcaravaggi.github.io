@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 5: Are patterns real? | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+Jump to a module…
+1. What is
+spatial data?
+2. Opening and
+exploring spatial data
+3. Coordinates
+and projections
+4. Points,
+polygons, and rasters
+5. Are patterns
+real?
+6. Working with
+environmental data
+7. Preparing
+occurrence data for modelling
+8. Exploring
+species-environment relationships
+9. Building a
+species distribution model
+10. Assessing
+and predicting your SDM
+11. MaxEnt —
+maximum entropy modelling
+12. Random
+forest and ensemble models  
+
+Are patterns real?
+For this module, you’ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/">
+  <meta property="og:title" content="Module 5: Are patterns real?">
+  <meta property="og:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Are patterns real?For this module, you’ll need the following packages:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 5: Are patterns real?">
+  <meta name="twitter:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Are patterns real?For this module, you’ll need the following packages:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Module 5: Are patterns real?",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 5: Are patterns real?
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content">
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and
+exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates
+and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns
+real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with
+environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a
+species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing
+and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt —
+maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select> </select></p>
+<div id="are-patterns-real" class="section level1">
+<h1>Are patterns real?</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>rgbif</code></li>
+<li><code>rnaturalearth</code></li>
+<li><code>rnaturalearthdata</code></li>
+<li><code>terra</code></li>
+<li><code>geodata</code></li>
+<li><code>dplyr</code></li>
+</ul>
+<p>We’ve mapped our species. Now we can ask a more difficult and
+important question: <em>do these patterns tell us something ecological,
+or just something about how the data were collected?</em></p>
+<p>This is not a minor technical concern. It’s one of the most
+consequential questions in applied biodiversity science. Models and
+conservation decisions built on spatially biased data can point in
+entirely the wrong direction, such as identifying “hotspots” that are
+really just survey hotspots, or predicting absences in places no one has
+ever looked (Guillera-Arroita et al. 2015).</p>
+</div>
+<div id="the-pattern-were-starting-with" class="section level1">
+<h1>The pattern we’re starting with</h1>
+<pre class="r"><code>plot(st_geometry(region), main = &quot;Mantled howler monkey — Costa Rica&quot;)
+plot(st_geometry(howler_sf), add = TRUE, col = &quot;red&quot;, pch = 19, cex = 0.5)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m5_1.png" width="70%" /></p>
+<p>You will almost certainly see clusters. The temptation is to assume
+that howler monkeys simply prefer those areas. But there are at least
+three distinct explanations for spatial clustering in GBIF data:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Ecological preference</strong>; the species genuinely uses
+certain habitats, avoids others, or is constrained by climate or
+resources</li>
+<li><strong>Physical barriers</strong>; mountains, rivers, land cover,
+or urbanisation limiting movement or distribution</li>
+<li><strong>Sampling bias</strong>; researchers, volunteers, and
+recorders tend to work near roads, cities, universities, and established
+field stations (Beck et al. 2014)</li>
+</ol>
+<p>What you see in the GBIF data is the product of ecology <em>and</em>
+observation effort combined. Disentangling these is non-trivial, but we
+can start with some simple diagnostics.</p>
+</div>
+<div id="comparing-observed-patterns-to-random" class="section level1">
+<h1>Comparing observed patterns to random</h1>
+<p>A useful baseline is to ask: what would the data look like if points
+were scattered completely at random across the study region? We can
+simulate this with <code>st_sample()</code>, which draws random points
+from within a polygon.</p>
+<pre class="r"><code>set.seed(42)  # set.seed() ensures the random points are the same every time you run this
+               # see https://researchdatapod.com/understanding-set-seed-r-comprehensive-guide/
+
+random_points &lt;- st_sample(region, size = nrow(howler_sf))
+
+plot(st_geometry(region), main = &quot;Observed (red) vs random (blue)&quot;)
+plot(random_points, add = TRUE, col = &quot;steelblue&quot;, pch = 19, cex = 0.4)
+plot(st_geometry(howler_sf), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.4)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m5_2.png" width="70%" /></p>
+<p>Randomly distributed points look even — no obvious gaps or
+concentrations. If the observed data (red) looks substantially more
+clustered than the random points (blue), that’s worth investigating.
+Eyeballing is a start, but it’s subjective. Let’s quantify it.</p>
+</div>
+<div id="quantifying-clustering-with-a-grid" class="section level1">
+<h1>Quantifying clustering with a grid</h1>
+<p>We can overlay a grid on the study region, count how many points fall
+in each cell, and compare the variability between observed and random
+counts. The logic is simple: random data should be relatively even
+across cells; clustered data will show high variance, i.e., lots of
+cells with zero records and some cells with many.</p>
+<pre class="r"><code>library(dplyr)
+
+grid    &lt;- st_make_grid(region, cellsize = 0.2)
+grid_sf &lt;- st_sf(geometry = grid)
+
+obs_counts &lt;- st_join(grid_sf, howler_sf) %&gt;%
+  dplyr::count(geometry)
+
+rand_sf    &lt;- st_sf(geometry = random_points)
+rand_counts &lt;- st_join(grid_sf, rand_sf) %&gt;%
+  dplyr::count(geometry)
+
+# Compare spread: higher SD = more clustered
+sd(obs_counts$n, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 22.13138</code></pre>
+<pre class="r"><code>sd(rand_counts$n, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 8.397568</code></pre>
+<p>If the observed standard deviation is noticeably higher than the
+random one, the data are more spatially aggregated than chance would
+produce. This is <strong>spatial heterogeneity</strong> (uneven
+distribution across space) and it’s a direct expression of Tobler’s
+first law: nearby locations tend to be more similar, so species (and
+observers) cluster rather than spread evenly.</p>
+<p>This clustering is also related to <strong>spatial
+autocorrelation</strong>: nearby records are not independent of each
+other, which matters enormously for statistical inference. Models that
+ignore spatial autocorrelation can dramatically underestimate
+uncertainty and produce falsely precise results (Dormann et
+al. 2007).</p>
+</div>
+<div id="is-the-clustering-linked-to-environment" class="section level1">
+<h1>Is the clustering linked to environment?</h1>
+<p>Clustering alone doesn’t tell us <em>why</em> records clump. To start
+testing environmental hypotheses, we can extract elevation at each
+occurrence point and compare it between high-density and low-density
+grid cells.</p>
+<pre class="r"><code># Extract elevation at each howler occurrence
+howler_vect  &lt;- vect(howler_sf)
+howler_sf$elev &lt;- terra::extract(elev_cr[[1]], howler_vect)[, 2]
+
+# Assign cell counts to the grid
+grid_sf$counts &lt;- obs_counts$n
+grid_sf$counts[is.na(grid_sf$counts)] &lt;- 0
+
+# Split grid into high- and low-density cells
+high &lt;- grid_sf[grid_sf$counts &gt; median(grid_sf$counts, na.rm = TRUE), ]
+low  &lt;- grid_sf[grid_sf$counts &lt;= median(grid_sf$counts, na.rm = TRUE), ]
+
+# Extract mean elevation in each group of cells
+high_elev &lt;- terra::extract(elev_cr[[1]], vect(high), fun = mean, na.rm = TRUE)
+low_elev  &lt;- terra::extract(elev_cr[[1]], vect(low),  fun = mean, na.rm = TRUE)
+
+mean(high_elev[, 2], na.rm = TRUE)</code></pre>
+<pre><code>## [1] 264.1994</code></pre>
+<pre class="r"><code>mean(low_elev[, 2],  na.rm = TRUE)</code></pre>
+<pre><code>## [1] 689.9616</code></pre>
+<p>If high-density cells have systematically different mean elevations
+from low-density cells, that suggests at least some of the clustering is
+environmentally driven and not purely a sampling artefact. If they’re
+similar, consider other potential drivers: proximity to roads, forest
+cover, or the locations of known research stations.</p>
+</div>
+<div id="the-two-process-framework" class="section level1">
+<h1>The two-process framework</h1>
+<p>By this point, it’s useful to think about your data in two layers
+simultaneously:</p>
+<p><strong>Ecological process</strong> - Habitat preference - Climate
+constraints - Dispersal ability and barriers - Social behaviour and
+territory</p>
+<p><strong>Observation process</strong> - Where people looked - Road and
+trail accessibility - Survey effort and institutional capacity -
+Recording culture (citizen science vs. professional surveys)</p>
+<p>What you see in GBIF data is the product of both, not just the
+ecology. If you ignore the observation process, you might conclude that
+howlers avoid the central highlands when in fact the central highlands
+are simply less accessible to field teams, or have fewer research
+stations. This conflation leads to poor habitat models and misguided
+conservation prioritisation (Phillips et al. 2009).</p>
+<p>There is no simple fix for sampling bias, but awareness of it shapes
+how we design our analyses: we’ll use background points sampled from
+within the region rather than true absences, apply spatial thinning to
+reduce over-representation of surveyed areas, and interpret model
+outputs with appropriate scepticism. All of that comes in Modules
+7–10.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Beck, J., Böller, M., Erhardt, A. &amp; Schwanghart, W. (2014).
+Spatial bias in the GBIF database and its effect on modeling species’
+geographic distributions. <em>Ecological Informatics</em>, 19,
+10–15.</p>
+<p>Dormann, C.F., McPherson, J.M., Araújo, M.B., Bivand, R., Bolliger,
+J., Carl, G., Davies, R.G., Hirzel, A., Jetz, W., Kissling, W.D., Kühn,
+I., Ohlemüller, R., Peres-Neto, P.R., Reineking, B., Schröder, B.,
+Schurr, F.M. &amp; Wilson, R. (2007). Methods to account for spatial
+autocorrelation in the analysis of species distributional data: a
+review. <em>Ecography</em>, 30, 609–628.</p>
+<p>Guillera-Arroita, G., Lahoz-Monfort, J.J., Elith, J., Gordon, A.,
+Kujala, H., Lentini, P.E., McCarthy, M.A., Tingley, R. &amp; Wintle,
+B.A. (2015). Is my species distribution model fit for purpose? Matching
+data and models to applications. <em>Global Ecology and
+Biogeography</em>, 24, 276–292.</p>
+<p>Phillips, S.J., Dudík, M., Elith, J., Graham, C.H., Lehmann, A.,
+Leathwick, J. &amp; Ferrier, S. (2009). Sample selection bias and
+presence-only distribution models: implications for background and
+pseudo-absence data. <em>Ecological Applications</em>, 19, 181–197.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a>
+<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

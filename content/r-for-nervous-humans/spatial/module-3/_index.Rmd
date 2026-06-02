@@ -1,0 +1,171 @@
+---
+title: "Module 3: Coordinates and projections"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+howler <- occ_search(
+  scientificName = "Alouatta palliata",
+  limit = 300,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  howler$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+```
+
+# Coordinates and projections
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+
+At some point, you will plot spatial data and notice that something looks wrong. Layers don't line up, points appear in the ocean, or your map looks oddly stretched. Nine times out of ten, the culprit is **coordinate systems**. This module explains what they are, why they matter, and how to fix the problems they cause.
+
+# The fundamental problem: Earth is not flat
+
+This sounds obvious, but it has real consequences. The Earth is roughly spherical (technically an oblate spheroid), slightly squashed at the poles. Your screen is resolutely flat. Representing a curved surface in two dimensions always requires compromise, and that compromise is formalised through two related concepts:
+
+**Coordinate Reference Systems (CRS)** define how locations on Earth are described. They are mathematical models of Earth's shape and the framework for specifying positions on it.
+
+**Projections** define how those 3D coordinates are flattened onto a 2D map. Every projection preserves some properties (shape, area, distance, direction) and distorts others. The Mercator projection — the one that makes Greenland look roughly the same size as Africa — preserves shape locally but massively distorts area at high latitudes. Equal-area projections do the opposite. There is no perfect projection, only appropriate ones for different purposes (Snyder 1987).
+
+In ecology, this matters most when you're measuring distances or areas, combining datasets from different sources, or doing anything where spatial accuracy affects the result. A distance calculated in degrees of latitude/longitude is not the same as one calculated in metres, and treating them as equivalent is a common source of silent error.
+
+# Latitude, longitude, and WGS84
+
+Most GBIF data and most GPS receivers use **latitude and longitude** in the **WGS84** coordinate system. WGS84 (World Geodetic System 1984) is the global standard used in satellite navigation and geodesy. In R, you'll often see it referred to by its EPSG code: `4326`. EPSG codes are standardised numeric identifiers for coordinate reference systems; a full searchable list is at [epsg.io](https://epsg.io/).
+
+Let's check the CRS of our howler monkey data from Module 2:
+
+```{r}
+st_crs(howler_sf)
+```
+
+You should see WGS84 in the output. If a dataset has no CRS listed or returns `NA` that's a warning sign. You'll need to establish what system the coordinates are actually in before doing anything spatial.
+
+# Why mismatched CRS causes problems
+
+When you combine two datasets with different coordinate systems, R does not automatically know they should line up. It treats the coordinate numbers as directly comparable even when they refer to completely different spatial frameworks. The result can look absurd.
+
+Let's demonstrate. We'll take our howler monkey data (WGS84, in decimal degrees) and a Costa Rica polygon that we've deliberately reprojected into a projected coordinate system using metres, the Costa Rica Topo Map projection (EPSG:5367). Because one dataset uses degrees and the other uses metres, the numbers are completely different in scale and meaning.
+
+```{r}
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+world <- ne_countries(scale = "medium", 
+                      returnclass = "sf")
+cr    <- world[world$name == "Costa Rica", ]
+
+# Reproject Costa Rica into a metre-based projected system
+cr_proj <- st_transform(cr, 5367)
+
+# Now try to plot both layers together
+plot(st_geometry(cr_proj), 
+     main = "A CRS mismatch in action")
+plot(st_geometry(howler_sf), 
+     add = TRUE, col = "red", 
+     pch = 19, 
+     cex = 0.5)
+
+# Compare coordinate ranges
+st_bbox(howler_sf)
+st_bbox(cr_proj)
+
+hist(st_coordinates(howler_sf)[,1],
+     main = "Howler longitude (degrees)",
+     xlab = "Longitude")
+
+hist(st_coordinates(cr_proj)[,1],
+     main = "Costa Rica CRS (metres)",
+     xlab = "Projected X coordinate")
+```
+
+The howler points appear nowhere near Costa Rica. This is not a data error - it is a coordinate system mismatch. The polygon coordinates are in metres (EPSG:5367); the point coordinates are in degrees (EPSG:4326). R plots both on the same axis without complaint, because it doesn't know they're incompatible.
+
+Whenever layers fail to align, this is the first thing to check:
+
+```{r}
+st_crs(cr_proj)$epsg
+st_crs(howler_sf)$epsg
+```
+
+# Fixing it: reprojection
+
+The solution is `st_transform()`. You pick a target CRS and reproject one layer to match. Since we'll mostly work in WGS84 (it's what GBIF uses, and it's what most global environmental datasets use) the simplest fix is to transform the polygon back:
+
+```{r}
+cr_wgs84 <- st_transform(cr_proj, 4326)
+
+plot(st_geometry(cr_wgs84), 
+     main = "After reprojection — layers now align")
+plot(st_geometry(howler_sf), 
+     add = TRUE, 
+     col = "red", 
+     pch = 19, cex = 0.6)
+```
+
+The layers now align. You can also see that some howler records fall outside Costa Rica because we downloaded the full global dataset in Module 2, not just Costa Rica records. We'll fix that in Module 4.
+
+# Which projection should I use?
+
+For large-scale analyses (continental or global), **WGS84** (EPSG:4326) is usually appropriate and keeps everything consistent with source data. For regional analyses where accurate distances or areas are needed, such as spatial thinning, home range estimation, or connectivity modelling, a projected system in metres is more appropriate.
+
+For Central America and Costa Rica specifically, sensible options include **EPSG:5367** (Costa Rica Topo Map, national standard), or **EPSG:32616** (UTM Zone 16N, metres, widely used in ecological research in the region).
+
+The key rule is simple: **all layers in an analysis must use the same CRS**. Check every time you read in new data, and transform early rather than late. Future you will be grateful.
+
+# References
+
+Snyder, J.P. (1987). *Map Projections: A Working Manual*. US Geological Survey Professional Paper 1395. US Government Printing Office, Washington DC.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/spatial/module-2/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r_for_nervous_humans/spatial/module-4/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

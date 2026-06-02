@@ -1,0 +1,461 @@
+---
+title: "Module 10: Assessing and predicting your SDM"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening
+and exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3.
+Coordinates and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are
+patterns real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working
+with environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building
+a species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10.
+Assessing and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt
+— maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select></p>
+<div id="assessing-and-predicting-your-sdm" class="section level1">
+<h1>Assessing and predicting your SDM</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>terra</code></li>
+<li><code>geodata</code></li>
+<li><code>PresenceAbsence</code></li>
+<li><code>AUC</code></li>
+<li><code>RColorBrewer</code></li>
+<li><code>lattice</code></li>
+</ul>
+<p>In Module 9 we built a GLM-based species distribution model for the
+mantled howler monkey. But fitting a model is only half the job. A model
+that runs without errors isn’t necessarily a good model; it might be
+capturing noise rather than ecological signal, or systematically wrong
+in ways that only become apparent when you look at its predictions
+spatially.</p>
+<p>This module covers the remaining two steps: model assessment (how
+well does it perform?) and prediction (what does it say about the
+landscape?).</p>
+</div>
+<div id="load-your-data" class="section level1">
+<h1>Load your data</h1>
+<pre class="r"><code>load(&#39;data/region.RData&#39;)
+load(&#39;data/module9_sdm.RData&#39;)
+env_stack &lt;- terra::rast(&#39;data/env_stack.tif&#39;)
+
+# Refit the final model in case it&#39;s not in your environment
+m_step &lt;- step(
+  glm(
+    as.formula(paste0(
+      &quot;occ ~ &quot;, p1, &quot; + I(&quot;, p1, &quot;^2) + &quot;,
+                 p2, &quot; + I(&quot;, p2, &quot;^2)&quot;
+    )),
+    family = &#39;binomial&#39;,
+    data   = howler_sdm
+  )
+)</code></pre>
+<pre><code>## Start:  AIC=645.63
+## occ ~ bio10 + I(bio10^2) + bio18 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - I(bio10^2)  1   635.64 643.64
+## - bio10       1   635.64 643.64
+## - bio18       1   635.75 643.75
+## - I(bio18^2)  1   635.78 643.78
+## &lt;none&gt;            635.63 645.63
+## 
+## Step:  AIC=643.64
+## occ ~ bio10 + bio18 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - bio18       1   635.76 641.76
+## - I(bio18^2)  1   635.81 641.81
+## &lt;none&gt;            635.64 643.64
+## - bio10       1   645.55 651.55
+## 
+## Step:  AIC=641.76
+## occ ~ bio10 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - I(bio18^2)  1   635.95 639.95
+## &lt;none&gt;            635.76 641.76
+## - bio10       1   645.77 649.77
+## 
+## Step:  AIC=639.95
+## occ ~ bio10
+## 
+##         Df Deviance    AIC
+## &lt;none&gt;       635.95 639.95
+## - bio10  1   650.62 652.62</code></pre>
+</div>
+<div id="visualising-the-species-environment-relationship" class="section level1">
+<h1>Visualising the species-environment relationship</h1>
+<p>Before assessing performance, it’s worth seeing what the model has
+actually learned. Partial response curves show how predicted occurrence
+probability changes along each predictor variable, while all other
+variables are held at their mean.</p>
+<pre class="r"><code>par(mfrow = c(1, 2))
+
+for (pred in my_preds) {
+  newdat        &lt;- data.frame(
+    x = seq(min(howler_sdm[[pred]]), max(howler_sdm[[pred]]), length = 100)
+  )
+  names(newdat) &lt;- pred
+
+  other         &lt;- setdiff(my_preds, pred)
+  newdat[[other]] &lt;- mean(howler_sdm[[other]], na.rm = TRUE)
+
+  newdat$prob &lt;- predict(m_step, newdata = newdat, type = &#39;response&#39;)
+
+  plot(newdat[[pred]], newdat$prob,
+       type = &#39;l&#39;, lwd = 2, col = &quot;tomato&quot;,
+       xlab = pred, ylab = &quot;Occurrence probability&quot;,
+       ylim = c(0, 1),
+       main = paste(&quot;Partial response:&quot;, pred))
+  abline(h = 0.5, lty = 2, col = &#39;grey60&#39;)
+  rug(howler_sdm[[pred]][howler_sdm$occ == 1], col = &quot;tomato&quot;, alpha = 0.3)
+  rug(howler_sdm[[pred]][howler_sdm$occ == 0], side = 3, col = &quot;grey60&quot;, alpha = 0.2)
+}</code></pre>
+<pre><code>## Warning in axis(side = side, at = at, labels = labels, ...): &quot;alpha&quot; is not a
+## graphical parameter
+## Warning in axis(side = side, at = at, labels = labels, ...): &quot;alpha&quot; is not a
+## graphical parameter
+## Warning in axis(side = side, at = at, labels = labels, ...): &quot;alpha&quot; is not a
+## graphical parameter
+## Warning in axis(side = side, at = at, labels = labels, ...): &quot;alpha&quot; is not a
+## graphical parameter</code></pre>
+<p><img src="/img/spatial_sdm/m10_1.png" width="70%" /></p>
+<pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
+<p>The <code>rug()</code> calls add tick marks along the x-axis showing
+where actual presence (bottom, red) and background (top, grey) values
+fall. This lets you see not just the shape of the model’s prediction,
+but also whether it’s being asked to predict outside the range of
+training data.</p>
+<p>Look at the curve shapes. Is the response monotonic (always
+increasing or decreasing), or unimodal (peaks at an intermediate value)?
+Does this match what you’d expect biologically for a lowland tropical
+primate?</p>
+</div>
+<div id="cross-validation" class="section level1">
+<h1>Cross-validation</h1>
+<p>Explained deviance measures how well the model fits the data it was
+trained on. Cross-validation gives us a more honest picture by testing
+the model on data it hasn’t seen. We use 5-fold cross-validation to
+explore the performance of our model. This splits the data into 5 equal
+groups (folds), fit the model on 4 folds, predict to the 5th, and cycle
+through all 5 combinations so every observation gets a turn in the test
+set.</p>
+<pre class="r"><code>set.seed(123)
+k        &lt;- 5
+folds    &lt;- sample(rep(1:k, length.out = nrow(howler_sdm)))
+preds_cv &lt;- numeric(nrow(howler_sdm))
+
+for (i in 1:k) {
+  train &lt;- howler_sdm[folds != i, ]
+  test  &lt;- howler_sdm[folds == i, ]
+
+  m_cv  &lt;- glm(formula(m_step), family = &#39;binomial&#39;, data = train)
+  preds_cv[folds == i] &lt;- predict(m_cv, newdata = test, type = &#39;response&#39;)
+}</code></pre>
+<p>How do cross-validated predictions compare to the training fit?</p>
+<pre class="r"><code>plot(m_step$fitted.values, preds_cv,
+     xlab = &#39;Fitted values (training)&#39;,
+     ylab = &#39;Cross-validated predictions&#39;,
+     pch = 19, cex = 0.4,
+     col = adjustcolor(&quot;steelblue&quot;, alpha.f = 0.4),
+     main = &quot;Training vs cross-validated predictions&quot;)
+abline(0, 1, col = &#39;red&#39;, lwd = 2)</code></pre>
+<p><img src="/img/spatial_sdm/m10_2.png" width="70%" /></p>
+<p>A well-behaved model has points clustered around the 1:1 line. If
+cross-validated predictions are systematically lower or more variable
+than training predictions, the model is sensitive to training
+observations, i.e., is overfitted or unstable.</p>
+</div>
+<div id="performance-metrics" class="section level1">
+<h1>Performance metrics</h1>
+<div id="threshold-dependent-metrics" class="section level2">
+<h2>Threshold-dependent metrics</h2>
+<p>Our model predicts a continuous probability. Many performance metrics
+require a binary prediction (present/absent), so we need to choose a
+threshold to convert probabilities. This choice is not trivial. A low
+threshold calls more absences as presences (high sensitivity, low
+specificity); a high threshold does the opposite.</p>
+<pre class="r"><code>library(PresenceAbsence)
+
+thresh_dat &lt;- data.frame(
+  ID   = seq_len(nrow(howler_sdm)),
+  obs  = howler_sdm$occ,
+  pred = preds_cv
+)
+
+thresh_cv &lt;- PresenceAbsence::optimal.thresholds(DATA = thresh_dat)</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat): req.sens
+## defaults to 0.85</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat): req.spec
+## defaults to 0.85</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat): costs
+## assumed to be equal</code></pre>
+<pre class="r"><code>thresh_cv</code></pre>
+<pre><code>##          Method      pred
+## 1       Default 0.5000000
+## 2     Sens=Spec 0.1900000
+## 3  MaxSens+Spec 0.1600000
+## 4      MaxKappa 0.1600000
+## 5        MaxPCC 0.6350000
+## 6  PredPrev=Obs 0.2100000
+## 7       ObsPrev 0.1655172
+## 8      MeanProb 0.1655325
+## 9    MinROCdist 0.1800000
+## 10      ReqSens 0.1300000
+## 11      ReqSpec 0.2200000
+## 12         Cost 0.6350000</code></pre>
+<p>We’ll use the *MaxSens+Spec** threshold (row 3), which maximises the
+sum of sensitivity and specificity. This balances the cost of false
+presences against false absences and is widely recommended for SDMs (Liu
+et al. 2005).</p>
+<pre class="r"><code>cmx &lt;- PresenceAbsence::cmx(DATA = thresh_dat, threshold = thresh_cv[3, 2])
+cmx</code></pre>
+<pre><code>##          observed
+## predicted   1   0
+##         1  95 378
+##         0  25 227</code></pre>
+<p>This confusion matrix shows how many presences and background points
+were correctly or incorrectly classified. From it we derive:</p>
+<pre class="r"><code># Proportion correctly classified
+PresenceAbsence::pcc(cmx, st.dev = FALSE)</code></pre>
+<pre><code>## [1] 0.4441379</code></pre>
+<pre class="r"><code># Sensitivity: proportion of presences correctly predicted (true positive rate)
+sens &lt;- PresenceAbsence::sensitivity(cmx, st.dev = FALSE)
+sens</code></pre>
+<pre><code>## [1] 0.7916667</code></pre>
+<pre class="r"><code># Specificity: proportion of absences correctly predicted (true negative rate)
+spec &lt;- PresenceAbsence::specificity(cmx, st.dev = FALSE)
+spec</code></pre>
+<pre><code>## [1] 0.3752066</code></pre>
+<pre class="r"><code># Kappa: agreement above chance (&gt; 0.4 considered acceptable)
+PresenceAbsence::Kappa(cmx, st.dev = FALSE)</code></pre>
+<pre><code>## [1] 0.07657907</code></pre>
+<p>The <em>True Skill Statistic (TSS)</em> is sensitivity + specificity
+- 1. It removes the effect of prevalence (how common the species is in
+the dataset), making it more comparable across studies. TSS &gt; 0.5 is
+generally considered reasonable (Allouche et al. 2006).</p>
+<pre class="r"><code>TSS &lt;- sens + spec - 1
+TSS</code></pre>
+<pre><code>## [1] 0.1668733</code></pre>
+</div>
+<div id="threshold-independent-metric-auc" class="section level2">
+<h2>Threshold-independent metric: AUC</h2>
+<p>The Area Under the ROC Curve (AUC) evaluates discrimination ability
+across all possible thresholds simultaneously. The ROC curve plots the
+true positive rate (sensitivity) against the false positive rate (1 -
+specificity) as the threshold varies; the AUC is the area under that
+curve.</p>
+<ul>
+<li>AUC = 0.5: no better than random</li>
+<li>AUC = 0.7–0.8: reasonable discrimination</li>
+<li>AUC &gt; 0.9: excellent</li>
+</ul>
+<pre class="r"><code>library(AUC)
+
+roc_cv &lt;- AUC::roc(preds_cv, as.factor(howler_sdm$occ))
+plot(roc_cv, col = &quot;steelblue&quot;, lwd = 2,
+     main = &quot;ROC curve — howler monkey SDM&quot;)
+abline(0, 1, lty = 2, col = &quot;grey60&quot;)</code></pre>
+<p><img src="/img/spatial_sdm/m10_3.png" width="70%" /></p>
+<pre class="r"><code>cat(&quot;AUC:&quot;, AUC::auc(roc_cv), &quot;\n&quot;)</code></pre>
+<pre><code>## AUC: 0.5626377</code></pre>
+</div>
+<div id="summary-table" class="section level2">
+<h2>Summary table</h2>
+<p>Let’s collect everything into one tidy object.</p>
+<pre class="r"><code>perf_summary &lt;- data.frame(
+  AUC       = AUC::auc(roc_cv),
+  TSS       = TSS,
+  Kappa     = PresenceAbsence::Kappa(cmx, st.dev = FALSE),
+  Sens      = sens,
+  Spec      = spec,
+  PCC       = PresenceAbsence::pcc(cmx, st.dev = FALSE),
+  D2        = 1 - (deviance(m_step) / m_step$null.deviance),
+  Threshold = thresh_cv[3, 2]
+)
+perf_summary</code></pre>
+<pre><code>##         AUC       TSS      Kappa      Sens      Spec       PCC         D2
+## 1 0.5626377 0.1668733 0.07657907 0.7916667 0.3752066 0.4441379 0.02256085
+##   Threshold
+## 1      0.16</code></pre>
+<p>How does your model perform? For a simple two-predictor GLM, don’t
+expect perfection — but AUC above 0.7 and TSS above 0.4 suggest the
+model has captured something real.</p>
+</div>
+</div>
+<div id="predicting-across-the-landscape" class="section level1">
+<h1>Predicting across the landscape</h1>
+<p>Now the rewarding part: projecting the model across Costa Rica to
+produce a distribution map. This is conceptually simple — we take the
+fitted model and apply it to every pixel in our raster stack.</p>
+<pre class="r"><code># Build a data frame from the raster: one row per pixel with x, y, and all predictors
+env_df         &lt;- data.frame(crds(env_stack), as.data.frame(env_stack))
+env_df$pred_glm &lt;- predict(m_step, newdata = env_df, type = &quot;response&quot;)
+
+# Reconstruct as a raster for plotting
+r_pred &lt;- terra::rast(env_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_glm&#39;)],
+                      type = &#39;xyz&#39;, crs = crs(env_stack))
+
+plot(r_pred, main = &quot;Howler monkey — predicted occurrence probability&quot;)
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
+<p><img src="/img/spatial_sdm/m10_4.png" width="70%" /></p>
+<p>We can also make a binary presence/absence map using our selected
+threshold:</p>
+<pre class="r"><code>env_df$bin_glm &lt;- ifelse(env_df$pred_glm &gt;= thresh_cv[3, 2], 1, 0)
+
+r_bin &lt;- terra::rast(env_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;bin_glm&#39;)],
+                     type = &#39;xyz&#39;, crs = crs(env_stack))
+
+plot(r_bin, main = &quot;Howler monkey — predicted presence/absence&quot;,
+     col = c(&quot;grey90&quot;, &quot;tomato&quot;))
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
+<p><img src="/img/spatial_sdm/m10_5.png" width="70%" /></p>
+<p>Compare the two maps. Where does the model predict highest occurrence
+probability? Does this align with what you’d expect from the species’
+known distribution in lowland and mid-elevation Costa Rican forest? Are
+there areas of predicted presence that seem surprising, or areas of
+absence that seem like they should be suitable?</p>
+</div>
+<div id="predicting-under-future-climate" class="section level1">
+<h1>Predicting under future climate</h1>
+<p>One of the most powerful applications of SDMs is projecting species
+range shifts under climate change. We can download future climate
+projections from WorldClim and run our model on them with no
+modifications. Our model stays the same, only the input data changes.
+This is called temporal transferability, and it’s one of the key reasons
+SDMs are so widely used in conservation planning (Araújo et
+al. 2019).</p>
+<pre class="r"><code>library(geodata)
+
+# terra SpatVectors cannot be saved and reloaded reliably between sessions —
+# recreate region_vect from the sf object after loading region.RData
+region_vect &lt;- vect(region)
+
+# Future climate: 2041-2060, SSP2-4.5 (moderate emissions scenario)
+# Set download = TRUE the first time
+bio_fut &lt;- geodata::cmip6_world(
+  model    = &#39;ACCESS-ESM1-5&#39;,
+  ssp      = &#39;245&#39;,
+  time     = &#39;2041-2060&#39;,
+  var      = &#39;bioc&#39;,
+  download = FALSE,
+  res      = 10,
+  path     = &#39;data&#39;
+)
+
+bio_fut &lt;- terra::crop(bio_fut, region_vect)
+bio_fut &lt;- terra::mask(bio_fut, region_vect)
+
+# CMIP6 variable names differ from WorldClim; rename to match our model
+names(bio_fut) &lt;- c(paste0(&#39;bio0&#39;, 1:9), paste0(&#39;bio&#39;, 10:19))</code></pre>
+<pre class="r"><code>fut_df         &lt;- data.frame(crds(bio_fut), as.data.frame(bio_fut))
+fut_df$pred_glm &lt;- predict(m_step, newdata = fut_df, type = &quot;response&quot;)
+
+r_pred_fut &lt;- terra::rast(fut_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_glm&#39;)],
+                          type = &#39;xyz&#39;, crs = crs(env_stack))
+
+# Side-by-side comparison
+par(mfrow = c(1, 2))
+plot(r_pred,     main = &quot;Current climate&quot;,       zlim = c(0, 1))
+plot(r_pred_fut, main = &quot;Future climate (2041–60)&quot;, zlim = c(0, 1))</code></pre>
+<p><img src="/img/spatial_sdm/m10_6.png" width="70%" /></p>
+<pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
+<p>What has changed? Does the predicted range expand, contract, or shift
+geographically? For a lowland tropical species like <em>Alouatta
+palliata</em>, range contractions under warming scenarios are a common
+model finding, though the picture is complicated by forest cover,
+dispersal ability, and the specifics of which climate variables drive
+the model (Mendoza-González et al. 2013).</p>
+<p>Always interpret future projections with appropriate caution. They
+assume the modelled species-environment relationship is stable over
+time, that the species can actually reach newly suitable areas, and that
+other factors (habitat loss, disease, hunting) don’t intervene. They are
+scenarios, not predictions.</p>
+</div>
+<div id="save-your-work" class="section level1">
+<h1>Save your work</h1>
+<pre class="r"><code>terra::writeRaster(bio_fut, &#39;data/bio_fut.tif&#39;, overwrite = TRUE)
+terra::writeRaster(r_pred, &#39;data/pred_current.tif&#39;, overwrite = TRUE)
+terra::writeRaster(r_pred_fut, &#39;data/pred_future.tif&#39;, overwrite = TRUE)
+save(m_step, my_preds, preds_cv, thresh_cv, perf_summary,
+     file = &#39;data/module10_sdm.RData&#39;)</code></pre>
+</div>
+<div id="exercise" class="section level1">
+<h1>Exercise</h1>
+<ol style="list-style-type: decimal">
+<li>Fit an alternative model (<code>m2</code>) using more variables in
+<code>pred_sel</code> instead of just the top two.</li>
+<li>Run cross-validation on <code>m2</code> using the same 5-fold
+code.</li>
+<li>Compare the performance of <code>m_step</code> and <code>m2</code>
+using AUC, TSS, and explained deviance.</li>
+<li>Project <code>m2</code> under current and future climate and compare
+the maps to those from <code>m_step</code>.</li>
+</ol>
+<ul>
+<li>Which model performs better by cross-validated AUC?</li>
+<li>Do the two models predict similar or different distributions under
+future climate?</li>
+<li>What might explain the differences?</li>
+</ul>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Allouche, O., Tsoar, A. &amp; Kadmon, R. (2006). Assessing the
+accuracy of species distribution models: prevalence, kappa and the true
+skill statistic (TSS). <em>Journal of Applied Ecology</em>, 43,
+1223–1232.</p>
+<p>Araújo, M.B., Anderson, R.P., Barbosa, A.M., Beresford, A.E.,
+Boykoff, M., Buchkowski, R.W., Chen, Y., Dolan, J., Donald, P.F.,
+Duarte, C.M., Elith, J., Emerson, B., Gavin, D.G., Guisan, A., Hijmans,
+R.J., Huettmann, F., Jetz, W., Kissling, W.D., Lees, A.C., Levinsky, I.,
+Loyola, R., Merow, C., Mestre, F., Nori, J., Olivero, J., Osborne, P.E.,
+Pagel, J., Pearson, R.G., Peterson, A.T., Platts, P.J., Regan, H.,
+Santos, M.J., Soria-Auza, R.W., Thuiller, W., Veloz, S.D., Warren, D.L.
+&amp; Rahbek, C. (2019). Standards for distribution models in
+biodiversity assessments. <em>Science Advances</em>, 5, eaat4858.</p>
+<p>Liu, C., Berry, P.M., Dawson, T.P. &amp; Pearson, R.G. (2005).
+Selecting thresholds of occurrence in the prediction of species
+distributions. <em>Ecography</em>, 28, 385–393.</p>
+<p>Mendoza-González, G., Martínez, M.L., Lithgow, D., Pérez-Maqueo, O.
+&amp; Simonin, P. (2013). Land use change and its effects on the value
+of ecosystem services along the coast of the Gulf of Mexico.
+<em>Ecological Economics</em>, 82, 23–32.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="/r-for-nervous-humans/spatial_sdm/module-9/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a>
+<a href="/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>
+

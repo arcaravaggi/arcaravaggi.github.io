@@ -1,0 +1,365 @@
+---
+title: "Module 11: MaxEnt — maximum entropy modelling"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+  <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(terra)
+library(geodata)
+library(ENMeval)
+library(PresenceAbsence)
+library(AUC)
+
+load('data/region.RData')
+load('data/module7_occdata.RData')
+load('data/module10_sdm.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+bio_fut <- terra::rast('data/bio_fut.tif')
+env_vars <- read.csv("data/env_vars.csv")
+```
+
+# MaxEnt — maximum entropy modelling
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `terra`
+- `geodata`
+- `ENMeval`
+- `PresenceAbsence`
+- `AUC`
+
+You'll also need Java installed on your system, as MaxEnt runs on the Java Virtual Machine. `ENMeval` will prompt you if it's missing.
+
+In the last two modules we built a logistic regression SDM, evaluated it, and projected it under current and future climate. The GLM is a solid, interpretable starting point but it makes assumptions that may not always hold. It requires you to manually specify the shape of species-environment relationships (linear? quadratic?), it handles interactions between variables poorly unless you explicitly include them, and it can struggle when relationships are genuinely complex or nonlinear.
+
+MaxEnt takes a different approach entirely. Rather than fitting a regression, it finds the probability distribution of species occurrence that is as spread out (has maximum entropy) as possible while still matching the observed environmental conditions at occurrence points. The intuition is that MaxEnt doesn't assume more than it has to. This makes it well suited to presence-background data, where we have records of where a species was found but no reliable information about where it wasn't.
+
+MaxEnt has been the dominant SDM algorithm in ecology for some time (Phillips et al. 2006) and is still among the best-performing algorithms across comparative studies. If you read SDM papers, you will encounter it constantly.
+
+# A note on overfitting and regularisation
+
+MaxEnt's default settings have a well-documented problem: they tend to produce overfitted models. The algorithm can fit very complex, wiggly response surfaces that track the training data closely but generalise poorly to new locations or time periods. This is controlled by a *regularisation multiplier* where higher values produce smoother, more generalised predictions; lower values allow more complex fits.
+
+The default regularisation in MaxEnt (β = 1) was chosen for a general-purpose setting and is often too low for real datasets, especially when occurrence records are few or spatially biased. Using it uncritically is one of the most common methodological errors in published SDM work (Warren & Seifert 2011, Merow et al. 2013).
+
+We'll use the `ENMeval` package, which automates the selection of the best regularisation value using cross-validation. It also lets us test different feature types (the shapes of response functions MaxEnt can fit), which is the other main tuning decision.
+
+# Load your data
+
+```{r}
+load('data/region.RData')
+load('data/module7_occdata.RData')
+load('data/module10_sdm.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+env_vars <- read.csv("data/env_vars.csv")
+```
+
+MaxEnt needs presence coordinates and background coordinates as separate data frames, plus the raster stack as a `SpatRaster`.
+
+```{r}
+# Presence coordinates
+occ_coords <- howler_sdm[howler_sdm$occ == 1, c('x', 'y')]
+
+# Background coordinates
+bg_coords  <- howler_sdm[howler_sdm$occ == 0, c('x', 'y')]
+
+nrow(occ_coords)
+nrow(bg_coords)
+```
+
+We'll use the same selected predictors from Module 9 to keep the comparison to the GLM fair.
+
+```{r}
+# Subset the raster stack to selected predictors only
+pred_sel <- c("bio10", "bio18", "bio15", "bio02", "bio13", "bio19")
+env_sel <- env_stack[[pred_sel]]
+env_sel
+```
+
+# Tuning MaxEnt with ENMeval
+
+`ENMeval` fits MaxEnt across a grid of regularisation multipliers and feature type combinations, evaluating each with spatial block cross-validation. Spatial block cross-validation is used instead of random cross-validation for SDMs because it is more applicable to predicting to new geographic areas (Valavi et al. 2019).
+
+Feature types define the shapes of response functions MaxEnt can use:
+
+- **L** (linear): straight-line responses
+- **Q** (quadratic): curved, hump-shaped responses — analogous to the `I(x^2)` terms in our GLM
+- **P** (product): interactions between pairs of variables
+- **H** (hinge): piecewise linear responses that can change slope at a threshold
+- **T** (threshold): step functions
+
+We'll test combinations of L, Q, and H across a range of regularisation multipliers from 0.5 to 4. This produces a grid of candidate models that we can evaluate and select from.
+
+```{r}
+set.seed(42)
+
+enmeval_results <- ENMevaluate(
+  occs      = occ_coords,
+  envs      = env_sel,
+  bg        = bg_coords,
+  algorithm = 'maxnet',        # maxnet is the R-native MaxEnt implementation
+  partitions = 'block',        # spatial block cross-validation
+  tune.args = list(
+    fc = c('L', 'LQ', 'LQH'),  # feature type combinations to test
+    rm = seq(0.5, 4, by = 0.5) # regularisation multipliers to test
+  )
+)
+
+enmeval_results
+```
+
+This may take a minute or two as it's fitting many models, not just one. The output summarises performance across the full tuning grid.
+
+# Selecting the best model
+
+We select the model with the lowest AICc (AIC corrected for small sample sizes) across the tuning grid. AICc balances model fit against complexity, penalising models that use more parameters to achieve only small improvements in fit.
+
+```{r}
+# Model results table, sorted by AICc
+results_tab <- eval.results(enmeval_results)
+results_tab[order(results_tab$AICc), ]
+
+# The best model by AICc
+best_settings <- results_tab[which.min(results_tab$AICc), ]
+best_settings
+
+cat("Best feature class:", best_settings$fc, "\n")
+cat("Best regularisation:", best_settings$rm, "\n")
+```
+
+Take note of the selected regularisation multiplier. Is it close to the default of 1, or substantially different? A higher value suggests the data support a simpler, more generalised model than the default would produce.
+
+```{r}
+# Extract the best fitted model object
+m_maxent <- eval.models(enmeval_results)[[best_settings$tune.args]]
+```
+
+# Response curves
+
+MaxEnt's response curves show how predicted suitability changes along each predictor while others are held at their mean. This is the same concept as the partial response plots in Module 10.
+
+```{r}
+# Response curves for each selected predictor
+plot(m_maxent, vars = pred_sel, 
+     type = 'cloglog',
+     ylab = 'Predicted suitability',
+     col = 'tomato', 
+     lwd = 2)
+```
+
+The `cloglog` transformation converts MaxEnt's raw output to an approximate occurrence probability on a 0–1 scale that is comparable to the probabilities produced by the GLM. Compare the shapes here to the partial response curves from Module 10. Do the two algorithms agree on the direction and shape of relationships?
+
+# Variable importance
+
+One advantage of MaxEnt over a GLM is that it provides a measure of variable contribution directly. Two metrics are available:
+
+- **Percent contribution**: how much each variable contributed to the final model during training
+- **Permutation importance**: how much model performance drops when each variable's values are randomly shuffled
+
+```{r}
+# Variable importance
+# Ensure predictor names match model
+env_sel <- env_stack[[pred_sel]]
+
+# Baseline prediction
+base_pred <- terra::predict(env_sel, 
+                            m_maxent, type = "cloglog", 
+                            na.rm = TRUE)
+base_vals <- values(base_pred)
+
+#Permutation importance
+perm_imp <- sapply(names(env_sel), function(v) {
+  perm_env <- env_sel
+  perm_env[[v]] <- sample(perm_env[[v]])
+  perm_pred <- terra::predict(perm_env, #
+                              m_maxent, 
+                              type = "cloglog", 
+                              na.rm = TRUE)
+  perm_vals <- values(perm_pred)
+  cor(base_vals, perm_vals, use = "complete.obs")   # importance = loss of agreement with baseline
+})
+
+perm_imp <- 1 - perm_imp  # convert to "importance"
+
+# Contribution proxy (maxnet doesn't store training contribution cleanly)
+coef_vals <- m_maxent$betas
+coef_names <- names(coef_vals)
+
+# Match only environmental variables (ignore regularisation terms)
+contrib_proxy <- sapply(names(env_sel), function(v) {
+  sum(abs(coef_vals[grepl(v, coef_names)]), na.rm = TRUE)
+})
+
+contrib_proxy <- contrib_proxy / sum(contrib_proxy)
+
+# Final table
+var_imp <- data.frame(  
+  variable = names(env_sel),
+  permutation_importance = perm_imp,
+  contribution_proxy = contrib_proxy
+)
+
+var_imp <- var_imp[order(var_imp$permutation_importance, 
+                         decreasing = TRUE), ]
+var_imp
+```
+
+Do the most important variables match your expectations from Module 8? Do they agree with the variables that ended up in the stepwise GLM?
+
+# Predictions and evaluation
+
+Let's generate predictions and evaluate them using the same framework as Module 10, so the comparison to the GLM is direct.
+
+```{r}
+# Predict across the current climate raster
+pred_maxent_curr <- terra::predict(env_sel, m_maxent, 
+                                   type = 'cloglog',
+                                   na.rm = TRUE)
+
+plot(pred_maxent_curr,
+     main = "MaxEnt — predicted suitability (current climate)",
+     col  = rev(terrain.colors(100)))
+plot(st_geometry(region), add = TRUE, 
+     border = "black", 
+     lwd = 1.2)
+```
+
+Now evaluate with cross-validated predictions. We'll extract the cross-validated predictions from the `ENMeval` results object. These were already computed during the tuning step, so no extra computation is needed.
+
+```{r}
+library(AUC)
+library(PresenceAbsence)
+
+# Cross-validated predictions are stored in the results object
+# We need to reconstruct them from the evaluation partition predictions
+best_i <- which.min(eval.results(enmeval_results)$AICc)
+cv_preds_maxent <- eval.predictions(enmeval_results)[[best_i]]
+
+# Extract the values at occurrence and background points
+occ_preds <- cv_preds_maxent[eval.occs.grp(enmeval_results) > 0]
+bg_preds  <- cv_preds_maxent
+
+# Build evaluation data frame
+thresh_dat_mx <- data.frame(
+  ID   = seq_len(nrow(howler_sdm)),
+  obs  = howler_sdm$occ,
+  pred = c(
+    terra::extract(cv_preds_maxent, vect(
+      st_as_sf(occ_coords, coords = c('x','y'), crs = 4326)
+    ))[, 2],
+    terra::extract(cv_preds_maxent, vect(
+      st_as_sf(bg_coords, coords = c('x','y'), crs = 4326)
+    ))[, 2]
+  )
+)
+thresh_dat_mx <- na.omit(thresh_dat_mx)
+
+# AUC
+roc_mx <- AUC::roc(thresh_dat_mx$pred, 
+                   as.factor(thresh_dat_mx$obs))
+auc_mx <- AUC::auc(roc_mx)
+cat("MaxEnt AUC:", auc_mx, "\n")
+
+# Threshold and TSS
+thresh_mx <- PresenceAbsence::optimal.thresholds(DATA = thresh_dat_mx)
+cmx_mx    <- PresenceAbsence::cmx(DATA = thresh_dat_mx, 
+                                  threshold = thresh_mx[3, 2])
+sens_mx   <- PresenceAbsence::sensitivity(cmx_mx, st.dev = FALSE)
+spec_mx   <- PresenceAbsence::specificity(cmx_mx, st.dev = FALSE)
+tss_mx    <- sens_mx + spec_mx - 1
+
+cat("MaxEnt TSS:", tss_mx, "\n")
+```
+
+How does MaxEnt perform compared to the GLM from Module 10? Remember that a better AUC doesn't necessarily mean a better ecological model. A more complex algorithm can overfit to spatial patterns in the training data rather than capturing real environmental responses.
+
+# Predicting under future climate
+
+```{r}
+bio_fut <- terra::rast('data/bio_fut.tif')
+
+# Subset future climate to selected predictors
+bio_fut_sel <- bio_fut[[pred_sel]]
+
+pred_maxent_fut <- terra::predict(bio_fut_sel, m_maxent, 
+                                  type = 'cloglog',
+                                  na.rm = TRUE)
+
+par(mfrow = c(1, 2))
+plot(pred_maxent_curr, main = "Current climate",        
+     zlim = c(0, 1),
+     col = rev(terrain.colors(100)))
+plot(pred_maxent_fut,  main = "Future climate (2041–60)", 
+     zlim = c(0, 1),
+     col = rev(terrain.colors(100)))
+par(mfrow = c(1, 1))
+```
+
+# Save your work
+
+```{r}
+terra::writeRaster(pred_maxent_curr, 'data/pred_maxent_curr.tif', overwrite = TRUE)
+terra::writeRaster(pred_maxent_fut,  'data/pred_maxent_fut.tif',  overwrite = TRUE)
+
+save(m_maxent, best_settings, auc_mx, tss_mx, thresh_mx,
+     file = 'data/module11_maxent.RData')
+```
+
+# Exercise
+
+1. Re-run `ENMevaluate()` with a wider regularisation range (e.g. `rm = seq(0.5, 6, by = 0.5)`). Does the selected regularisation multiplier change? Plot the AICc values across the full tuning grid to see how sensitive the selection is.
+
+2. Compare the MaxEnt response curve for `p1` to the partial response curve from the GLM (Module 10). Are the shapes similar? If they differ substantially, what might that tell you about the assumptions each algorithm is making?
+
+3. Look at the variable importance table. Does the ranking from `permutation.importance` match the ranking from the univariate AIC selection in Module 9? What does disagreement between these rankings suggest?
+
+#### References
+
+Merow, C., Smith, M.J. & Silander, J.A. (2013). A practical guide to MaxEnt for modeling species' distributions: what it does, and why inputs and settings matter. *Ecography*, 36, 1058–1069.
+
+Phillips, S.J., Anderson, R.P. & Schapire, R.E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190, 231–259.
+
+Valavi, R., Elith, J., Lahoz-Monfort, J.J. & Guillera-Arroita, G. (2019). blockCV: an R package for generating spatially or environmentally separated folds for k-fold cross-validation of species distribution models. *Methods in Ecology and Evolution*, 10, 225–232.
+
+Warren, D.L. & Seifert, S.N. (2011). Ecological niche modeling in Maxent: the importance of model complexity and the performance of model selection criteria. *Ecological Applications*, 21, 335–342.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/spatial/module-10/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r_for_nervous_humans/spatial/module-12/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

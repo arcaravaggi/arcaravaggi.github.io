@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Module 9: Building a species distribution model | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+  Jump to a module...
+  1. What is spatial data?
+  2. Opening and exploring spatial data
+  3. Coordinates and projections
+  4. Points, polygons, and rasters
+  5. Are patterns real?
+  6. Working with environmental data
+  7. Preparing occurrence data for modelling
+  8. Exploring species-environment relationships
+  9. Building a species distribution model
+  10. Assessing and predicting your SDM
+    11. MaxEnt — maximum entropy modelling
+  12. Random forest and ensemble models
+
+Building a species distribution model
+For this module, you&rsquo;ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/r-for-nervous-humans/spatial/module-9/_index.knit/">
+<link crossorigin="anonymous" href="http://localhost:1313/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/r-for-nervous-humans/spatial/module-9/_index.knit/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 9: Building a species distribution model
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+<h1 id="building-a-species-distribution-model">Building a species distribution model<a hidden class="anchor" aria-hidden="true" href="#building-a-species-distribution-model">#</a></h1>
+<p>For this module, you&rsquo;ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>terra</code></li>
+<li><code>corrplot</code></li>
+</ul>
+<p>In Module 8 we explored which environmental variables seem most associated with howler monkey occurrences. Now we formalise that into a species distribution model (SDM) that quantifies the relationship between environment and occurrence probability, and can be projected across the landscape to predict where the species is likely to be found.</p>
+<p>SDMs have become one of the most widely used tools in ecology and conservation biology over the past two decades. They&rsquo;ve been applied to assess climate change impacts on species ranges (Thomas et al. 2004), guide survey effort for undiscovered populations, identify priority areas for conservation, and predict invasive species spread. Getting to grips with even a simple SDM puts a powerful analytical framework in your hands.</p>
+<h1 id="why-a-glm">Why a GLM?<a hidden class="anchor" aria-hidden="true" href="#why-a-glm">#</a></h1>
+<p>Several algorithm families are used for SDMs, ranging from simple regression approaches to complex machine learning methods like MaxEnt, random forests, and boosted regression trees. We&rsquo;ll use a Generalised Linear Model (GLM).</p>
+<p>Why? GLMs are transparent, well-understood statistically, and produce interpretable coefficients. You can read the model and understand what it&rsquo;s saying: &ldquo;occurrence probability increases with temperature up to a point, then decreases.&rdquo; More complex algorithms can produce better predictive performance but are harder to interpret and easier to overfit. Starting with a GLM gives a solid baseline and a clear understanding of the modelling process (Guisan et al. 2017).</p>
+<p>The key distinction from ordinary linear regression is the link function. Our response variable is binary (0/1), so predicted values must stay between 0 and 1. The model estimates log-odds on an unbounded scale; we back-transform to get probabilities. This is also known as logistic regression.</p>
+<h1 id="load-your-data">Load your data<a hidden class="anchor" aria-hidden="true" href="#load-your-data">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">load</span>(<span style="color:#e6db74">&#39;data/region.RData&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">load</span>(<span style="color:#e6db74">&#39;data/module7_occdata.RData&#39;</span>)
+</span></span><span style="display:flex;"><span>env_stack <span style="color:#f92672">&lt;-</span> terra<span style="color:#f92672">::</span><span style="color:#a6e22e">rast</span>(<span style="color:#e6db74">&#39;data/env_stack.tif&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">nrow</span>(howler_sdm)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 725
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">table</span>(howler_sdm<span style="color:#f92672">$</span>occ)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+##   0   1 
+## 605 120
+</code></pre><h1 id="dealing-with-correlated-variables">Dealing with correlated variables<a hidden class="anchor" aria-hidden="true" href="#dealing-with-correlated-variables">#</a></h1>
+<p>Before fitting, we need to address multicollinearity. Including two highly correlated predictors in a regression model is like asking someone to describe two things while wearing a blindfold on one eye; it&rsquo;s technically possible but the result is unstable and hard to interpret. Coefficient estimates become unreliable, standard errors inflate, and the model can give very different answers with small changes in the data (Dormann et al. 2013).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(corrplot)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Spearman correlation matrix on all predictor variables</span>
+</span></span><span style="display:flex;"><span>cor_mat <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cor</span>(howler_sdm[, <span style="color:#ae81ff">4</span><span style="color:#f92672">:</span><span style="color:#a6e22e">ncol</span>(howler_sdm)], 
+</span></span><span style="display:flex;"><span>               method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;spearman&#39;</span>, 
+</span></span><span style="display:flex;"><span>               use <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;complete.obs&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">corrplot.mixed</span>(cor_mat, tl.pos <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;lt&#39;</span>, 
+</span></span><span style="display:flex;"><span>               tl.cex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.6</span>,
+</span></span><span style="display:flex;"><span>               number.cex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>, 
+</span></span><span style="display:flex;"><span>               addCoefasPercent <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+</span></span></code></pre></div><img src="_index_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+<p>We&rsquo;ll select variables by ranking them on individual predictive importance (AIC from a single-variable GLM), then working through the ranked list and dropping any variable that is too correlated (|r| &gt; 0.7) with one already kept (Dormann et al. 2013).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Step 1: rank all variables by univariate AIC (lower AIC = more important)</span>
+</span></span><span style="display:flex;"><span>univar_aic <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sapply</span>(<span style="color:#a6e22e">names</span>(howler_sdm)[4<span style="color:#f92672">:</span><span style="color:#a6e22e">ncol</span>(howler_sdm)], 
+</span></span><span style="display:flex;"><span>                     <span style="color:#66d9ef">function</span>(v) {
+</span></span><span style="display:flex;"><span>                       m <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">glm</span>(<span style="color:#a6e22e">reformulate</span>(v, 
+</span></span><span style="display:flex;"><span>                                            response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;occ&#39;</span>), 
+</span></span><span style="display:flex;"><span>                                family <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;binomial&#39;</span>, 
+</span></span><span style="display:flex;"><span>                                data <span style="color:#f92672">=</span> howler_sdm)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">AIC</span>(m)
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>univar_aic <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sort</span>(univar_aic)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Step 2: select weakly correlated subset</span>
+</span></span><span style="display:flex;"><span>vars_ranked <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">names</span>(univar_aic)
+</span></span><span style="display:flex;"><span>pred_sel    <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> (v <span style="color:#66d9ef">in</span> vars_ranked) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">length</span>(pred_sel) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    pred_sel <span style="color:#f92672">&lt;-</span> v
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    cors <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">abs</span>(cor_mat[v, pred_sel])
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">all</span>(cors <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.7</span>)) {
+</span></span><span style="display:flex;"><span>      pred_sel <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(pred_sel, v)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>pred_sel
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] &#34;bio10&#34; &#34;bio18&#34; &#34;bio15&#34; &#34;bio02&#34; &#34;bio13&#34; &#34;bio19&#34;
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>p1 <span style="color:#f92672">&lt;-</span> pred_sel[1]
+</span></span><span style="display:flex;"><span>p2 <span style="color:#f92672">&lt;-</span> pred_sel[2]
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">cat</span>(<span style="color:#e6db74">&#34;Top two predictors:&#34;</span>, p1, <span style="color:#e6db74">&#34;and&#34;</span>, p2, <span style="color:#e6db74">&#34;\n&#34;</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## Top two predictors: bio10 and bio18
+</code></pre><p>Compare these top predictors to the ranking you calculated manually in Module 8. Do they agree?</p>
+<h1 id="fitting-your-first-sdm">Fitting your first SDM<a hidden class="anchor" aria-hidden="true" href="#fitting-your-first-sdm">#</a></h1>
+<p>The <code>glm()</code> function is built into R. We specify <code>family = &quot;binomial&quot;</code> to indicate a binary response and the logit link.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Simple single-predictor model</span>
+</span></span><span style="display:flex;"><span>m1 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">glm</span>(<span style="color:#a6e22e">reformulate</span>(p1, 
+</span></span><span style="display:flex;"><span>                      response <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;occ&#39;</span>), 
+</span></span><span style="display:flex;"><span>          family <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;binomial&#34;</span>, 
+</span></span><span style="display:flex;"><span>          data <span style="color:#f92672">=</span> howler_sdm)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(m1)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+## Call:
+## glm(formula = reformulate(p1, response = &#34;occ&#34;), family = &#34;binomial&#34;, 
+##     data = howler_sdm)
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -5.04046    1.01884  -4.947 7.53e-07 ***
+## bio10        0.13433    0.03915   3.431 0.000601 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 650.62  on 724  degrees of freedom
+## Residual deviance: 635.95  on 723  degrees of freedom
+## AIC: 639.95
+## 
+## Number of Fisher Scoring iterations: 5
+</code></pre><p>The summary gives us:</p>
+<ul>
+<li><strong>Coefficients</strong>: the direction and magnitude of the relationship. A positive coefficient means occurrence probability increases with the variable; negative means it decreases.</li>
+<li><strong>Null deviance</strong>: how poorly a model with no predictors fits the data.</li>
+<li><strong>Residual deviance</strong>: how poorly our model fits — lower is better.</li>
+<li><strong>AIC</strong>: model quality penalised for complexity. Lower AIC = better.</li>
+</ul>
+<p>Explained deviance (D²) is the SDM analogue of R² in linear regression; the proportion of variation in the response accounted for by the model:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Explained deviance: 1 - (residual deviance / null deviance)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">deviance</span>(m1) <span style="color:#f92672">/</span> m1<span style="color:#f92672">$</span>null.deviance)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02256085
+</code></pre><p>Values above 0.1–0.15 are considered reasonable for SDMs; above 0.3 is quite good (Guisan &amp; Zimmermann 2000).</p>
+<h1 id="more-complex-model-structures">More complex model structures<a hidden class="anchor" aria-hidden="true" href="#more-complex-model-structures">#</a></h1>
+<p>Species responses to environmental gradients are rarely linear. A species might prefer intermediate temperatures and decline at both extremes giving a hump-shaped (unimodal) response. We can capture this with a quadratic term.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Quadratic model — allows a hump-shaped response</span>
+</span></span><span style="display:flex;"><span>m1_q <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">glm</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">as.formula</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;occ ~ &#34;</span>, p1, <span style="color:#e6db74">&#34; + I(&#34;</span>, p1, <span style="color:#e6db74">&#34;^2)&#34;</span>)),
+</span></span><span style="display:flex;"><span>  family <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;binomial&#34;</span>, 
+</span></span><span style="display:flex;"><span>  data <span style="color:#f92672">=</span> howler_sdm
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(m1_q)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+## Call:
+## glm(formula = as.formula(paste0(&#34;occ ~ &#34;, p1, &#34; + I(&#34;, p1, &#34;^2)&#34;)), 
+##     family = &#34;binomial&#34;, data = howler_sdm)
+## 
+## Coefficients:
+##              Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -5.726015   5.225758  -1.096    0.273
+## bio10        0.194723   0.452128   0.431    0.667
+## I(bio10^2)  -0.001297   0.009659  -0.134    0.893
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 650.62  on 724  degrees of freedom
+## Residual deviance: 635.93  on 722  degrees of freedom
+## AIC: 641.93
+## 
+## Number of Fisher Scoring iterations: 5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">deviance</span>(m1_q) <span style="color:#f92672">/</span> m1_q<span style="color:#f92672">$</span>null.deviance)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02258906
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Compare AIC: which fits better?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">AIC</span>(m1, m1_q)
+</span></span></code></pre></div><pre tabindex="0"><code>##      df      AIC
+## m1    2 639.9458
+## m1_q  3 641.9275
+</code></pre><p>A lower AIC for <code>m1_q</code> means the quadratic term is worth including. Now let&rsquo;s add a second predictor.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Two predictors, both linear</span>
+</span></span><span style="display:flex;"><span>m2 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">glm</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">as.formula</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#34;occ ~ &#34;</span>, p1, <span style="color:#e6db74">&#34; + &#34;</span>, p2)),
+</span></span><span style="display:flex;"><span>  family <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;binomial&#34;</span>, data <span style="color:#f92672">=</span> howler_sdm
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(m2)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+## Call:
+## glm(formula = as.formula(paste0(&#34;occ ~ &#34;, p1, &#34; + &#34;, p2)), family = &#34;binomial&#34;, 
+##     data = howler_sdm)
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -4.7503090  1.2841354  -3.699 0.000216 ***
+## bio10        0.1281961  0.0425033   3.016 0.002560 ** 
+## bio18       -0.0002868  0.0007739  -0.371 0.710963    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 650.62  on 724  degrees of freedom
+## Residual deviance: 635.81  on 722  degrees of freedom
+## AIC: 641.81
+## 
+## Number of Fisher Scoring iterations: 5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">deviance</span>(m2) <span style="color:#f92672">/</span> m2<span style="color:#f92672">$</span>null.deviance)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02277233
+</code></pre><h1 id="stepwise-model-simplification">Stepwise model simplification<a hidden class="anchor" aria-hidden="true" href="#stepwise-model-simplification">#</a></h1>
+<p>We&rsquo;ll now fit a full model with linear and quadratic terms for both top predictors, then use <code>step()</code> to simplify it. Stepwise selection adds and drops terms based on AIC at each step, removing parameters that don&rsquo;t improve fit. This is a pragmatic approach to variable selection and helps guard against a model that generalises poorly (Burnham &amp; Anderson 2002).</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>m_full <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">glm</span>(
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">as.formula</span>(<span style="color:#a6e22e">paste0</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;occ ~ &#34;</span>, p1, <span style="color:#e6db74">&#34; + I(&#34;</span>, p1, <span style="color:#e6db74">&#34;^2) + &#34;</span>,
+</span></span><span style="display:flex;"><span>               p2, <span style="color:#e6db74">&#34; + I(&#34;</span>, p2, <span style="color:#e6db74">&#34;^2)&#34;</span>
+</span></span><span style="display:flex;"><span>  )),
+</span></span><span style="display:flex;"><span>  family <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;binomial&#39;</span>,
+</span></span><span style="display:flex;"><span>  data   <span style="color:#f92672">=</span> howler_sdm
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(m_full)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+## Call:
+## glm(formula = as.formula(paste0(&#34;occ ~ &#34;, p1, &#34; + I(&#34;, p1, &#34;^2) + &#34;, 
+##     p2, &#34; + I(&#34;, p2, &#34;^2)&#34;)), family = &#34;binomial&#34;, data = howler_sdm)
+## 
+## Coefficients:
+##               Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept) -4.565e+00  5.844e+00  -0.781    0.435
+## bio10        6.835e-02  5.613e-01   0.122    0.903
+## I(bio10^2)   1.254e-03  1.197e-02   0.105    0.917
+## bio18        2.154e-03  6.316e-03   0.341    0.733
+## I(bio18^2)  -2.624e-06  6.725e-06  -0.390    0.696
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 650.62  on 724  degrees of freedom
+## Residual deviance: 635.63  on 720  degrees of freedom
+## AIC: 645.63
+## 
+## Number of Fisher Scoring iterations: 5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">AIC</span>(m_full)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 645.6293
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">deviance</span>(m_full) <span style="color:#f92672">/</span> m_full<span style="color:#f92672">$</span>null.deviance)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02304733
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Stepwise simplification</span>
+</span></span><span style="display:flex;"><span>m_step <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">step</span>(m_full)
+</span></span></code></pre></div><pre tabindex="0"><code>## Start:  AIC=645.63
+## occ ~ bio10 + I(bio10^2) + bio18 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - I(bio10^2)  1   635.64 643.64
+## - bio10       1   635.64 643.64
+## - bio18       1   635.75 643.75
+## - I(bio18^2)  1   635.78 643.78
+## &lt;none&gt;            635.63 645.63
+## 
+## Step:  AIC=643.64
+## occ ~ bio10 + bio18 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - bio18       1   635.76 641.76
+## - I(bio18^2)  1   635.81 641.81
+## &lt;none&gt;            635.64 643.64
+## - bio10       1   645.55 651.55
+## 
+## Step:  AIC=641.76
+## occ ~ bio10 + I(bio18^2)
+## 
+##              Df Deviance    AIC
+## - I(bio18^2)  1   635.95 639.95
+## &lt;none&gt;            635.76 641.76
+## - bio10       1   645.77 649.77
+## 
+## Step:  AIC=639.95
+## occ ~ bio10
+## 
+##         Df Deviance    AIC
+## &lt;none&gt;       635.95 639.95
+## - bio10  1   650.62 652.62
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(m_step)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+## Call:
+## glm(formula = occ ~ bio10, family = &#34;binomial&#34;, data = howler_sdm)
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)    
+## (Intercept) -5.04046    1.01884  -4.947 7.53e-07 ***
+## bio10        0.13433    0.03915   3.431 0.000601 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 650.62  on 724  degrees of freedom
+## Residual deviance: 635.95  on 723  degrees of freedom
+## AIC: 639.95
+## 
+## Number of Fisher Scoring iterations: 5
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">AIC</span>(m_step)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 639.9458
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> (<span style="color:#a6e22e">deviance</span>(m_step) <span style="color:#f92672">/</span> m_step<span style="color:#f92672">$</span>null.deviance)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0.02256085
+</code></pre><p>Compare the full and simplified models. The simplified model should have lower or equal AIC — stepwise selection won&rsquo;t simplify if doing so makes the model worse by this criterion. How much did the explained deviance change?</p>
+<h1 id="save-your-work">Save your work<a hidden class="anchor" aria-hidden="true" href="#save-your-work">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>my_preds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(p1, p2)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">save</span>(howler_sdm, pred_sel, p1, p2, my_preds, m_step, file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data/module9_sdm.RData&#39;</span>)
+</span></span></code></pre></div><h1 id="exercise">Exercise<a hidden class="anchor" aria-hidden="true" href="#exercise">#</a></h1>
+<p>Using all variables in <code>pred_sel</code> (not just the top two):</p>
+<ol>
+<li>Fit a full model with linear and quadratic terms for all selected variables. You can build the formula string with <code>paste(paste0(pred_sel, &quot; + I(&quot;, pred_sel, &quot;^2)&quot;), collapse = &quot; + &quot;)</code>.</li>
+<li>Simplify it with <code>step()</code>.</li>
+<li>Compare the full and simplified models using <code>AIC()</code> and explained deviance.</li>
+</ol>
+<ul>
+<li>Which model has lower AIC?</li>
+<li>Is the gain in explained deviance worth the additional complexity of the full model?</li>
+</ul>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>Burnham, K.P. &amp; Anderson, D.R. (2002). <em>Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach</em>. 2nd edition. Springer, New York.</p>
+<p>Dormann, C.F., Elith, J., Bacher, S., Buchmann, C., Carl, G., Carré, G., Marquéz, J.R.G., Gruber, B., Lafourcade, B., Leitão, P.J., Münkemüller, T., McClean, C., Osborne, P.E., Reineking, B., Schröder, B., Skidmore, A.K., Zurell, D. &amp; Lautenbach, S. (2013). Collinearity: a review of methods to deal with it and a simulation study evaluating their performance. <em>Ecography</em>, 36, 27–46.</p>
+<p>Guisan, A. &amp; Zimmermann, N.E. (2000). Predictive habitat distribution models in ecology. <em>Ecological Modelling</em>, 135, 147–186.</p>
+<p>Guisan, A., Thuiller, W. &amp; Zimmermann, N.E. (2017). <em>Habitat Suitability and Distribution Models: With Applications in R</em>. Cambridge University Press, Cambridge.</p>
+<p>Thomas, C.D., Cameron, A., Green, R.E., Bakkenes, M., Beaumont, L.J., Collingham, Y.C., Erasmus, B.F.N., de Siqueira, M.F., Grainger, A., Hannah, L., Hughes, L., Huntley, B., van Jaarsveld, A.S., Midgley, G.F., Miles, L., Ortega-Huerta, M.A., Peterson, A.T., Phillips, O.L. &amp; Williams, S.E. (2004). Extinction risk from climate change. <em>Nature</em>, 427, 145–148.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="http://localhost:1313/r_for_nervous_humans/spatial/module-8/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="http://localhost:1313/r_for_nervous_humans/spatial/module-10/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

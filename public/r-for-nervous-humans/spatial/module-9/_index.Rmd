@@ -1,0 +1,256 @@
+---
+title: "Module 9: Building a species distribution model"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(terra)
+library(corrplot)
+
+load('data/region.RData')
+load('data/module7_occdata.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+```
+
+# Building a species distribution model
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `terra`
+- `corrplot`
+
+In Module 8 we explored which environmental variables seem most associated with howler monkey occurrences. Now we formalise that into a species distribution model (SDM) that quantifies the relationship between environment and occurrence probability, and can be projected across the landscape to predict where the species is likely to be found.
+
+SDMs have become one of the most widely used tools in ecology and conservation biology over the past two decades. They've been applied to assess climate change impacts on species ranges (Thomas et al. 2004), guide survey effort for undiscovered populations, identify priority areas for conservation, and predict invasive species spread. Getting to grips with even a simple SDM puts a powerful analytical framework in your hands.
+
+# Why a GLM?
+
+Several algorithm families are used for SDMs, ranging from simple regression approaches to complex machine learning methods like MaxEnt, random forests, and boosted regression trees. We'll use a Generalised Linear Model (GLM).
+
+Why? GLMs are transparent, well-understood statistically, and produce interpretable coefficients. You can read the model and understand what it's saying: "occurrence probability increases with temperature up to a point, then decreases." More complex algorithms can produce better predictive performance but are harder to interpret and easier to overfit. Starting with a GLM gives a solid baseline and a clear understanding of the modelling process (Guisan et al. 2017).
+
+The key distinction from ordinary linear regression is the link function. Our response variable is binary (0/1), so predicted values must stay between 0 and 1. The model estimates log-odds on an unbounded scale; we back-transform to get probabilities. This is also known as logistic regression.
+
+# Load your data
+
+```{r}
+load('data/region.RData')
+load('data/module7_occdata.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+
+nrow(howler_sdm)
+table(howler_sdm$occ)
+```
+
+# Dealing with correlated variables
+
+Before fitting, we need to address multicollinearity. Including two highly correlated predictors in a regression model is like asking someone to describe two things while wearing a blindfold on one eye; it's technically possible but the result is unstable and hard to interpret. Coefficient estimates become unreliable, standard errors inflate, and the model can give very different answers with small changes in the data (Dormann et al. 2013).
+
+```{r}
+library(corrplot)
+
+# Spearman correlation matrix on all predictor variables
+cor_mat <- cor(howler_sdm[, 4:ncol(howler_sdm)], 
+               method = 'spearman', 
+               use = 'complete.obs')
+
+corrplot.mixed(cor_mat, tl.pos = 'lt', 
+               tl.cex = 0.6,
+               number.cex = 0.5, 
+               addCoefasPercent = TRUE)
+```
+
+We'll select variables by ranking them on individual predictive importance (AIC from a single-variable GLM), then working through the ranked list and dropping any variable that is too correlated (|r| > 0.7) with one already kept (Dormann et al. 2013).
+
+```{r}
+# Step 1: rank all variables by univariate AIC (lower AIC = more important)
+univar_aic <- sapply(names(howler_sdm)[4:ncol(howler_sdm)], 
+                     function(v) {
+                       m <- glm(reformulate(v, 
+                                            response = 'occ'), 
+                                family = 'binomial', 
+                                data = howler_sdm)
+  AIC(m)
+})
+univar_aic <- sort(univar_aic)
+
+# Step 2: select weakly correlated subset
+vars_ranked <- names(univar_aic)
+pred_sel    <- c()
+
+for (v in vars_ranked) {
+  if (length(pred_sel) == 0) {
+    pred_sel <- v
+  } else {
+    cors <- abs(cor_mat[v, pred_sel])
+    if (all(cors < 0.7)) {
+      pred_sel <- c(pred_sel, v)
+    }
+  }
+}
+
+pred_sel
+
+p1 <- pred_sel[1]
+p2 <- pred_sel[2]
+cat("Top two predictors:", p1, "and", p2, "\n")
+```
+
+Compare these top predictors to the ranking you calculated manually in Module 8. Do they agree?
+
+# Fitting your first SDM
+
+The `glm()` function is built into R. We specify `family = "binomial"` to indicate a binary response and the logit link.
+
+```{r}
+# Simple single-predictor model
+m1 <- glm(reformulate(p1, 
+                      response = 'occ'), 
+          family = "binomial", 
+          data = howler_sdm)
+summary(m1)
+```
+
+The summary gives us:
+
+- **Coefficients**: the direction and magnitude of the relationship. A positive coefficient means occurrence probability increases with the variable; negative means it decreases.
+- **Null deviance**: how poorly a model with no predictors fits the data.
+- **Residual deviance**: how poorly our model fits — lower is better.
+- **AIC**: model quality penalised for complexity. Lower AIC = better.
+
+Explained deviance (D²) is the SDM analogue of R² in linear regression; the proportion of variation in the response accounted for by the model:
+
+```{r}
+# Explained deviance: 1 - (residual deviance / null deviance)
+1 - (deviance(m1) / m1$null.deviance)
+```
+
+Values above 0.1–0.15 are considered reasonable for SDMs; above 0.3 is quite good (Guisan & Zimmermann 2000).
+
+# More complex model structures
+
+Species responses to environmental gradients are rarely linear. A species might prefer intermediate temperatures and decline at both extremes giving a hump-shaped (unimodal) response. We can capture this with a quadratic term.
+
+```{r}
+# Quadratic model — allows a hump-shaped response
+m1_q <- glm(
+  as.formula(paste0("occ ~ ", p1, " + I(", p1, "^2)")),
+  family = "binomial", 
+  data = howler_sdm
+)
+summary(m1_q)
+1 - (deviance(m1_q) / m1_q$null.deviance)
+
+# Compare AIC: which fits better?
+AIC(m1, m1_q)
+```
+
+A lower AIC for `m1_q` means the quadratic term is worth including. Now let's add a second predictor.
+
+```{r}
+# Two predictors, both linear
+m2 <- glm(
+  as.formula(paste0("occ ~ ", p1, " + ", p2)),
+  family = "binomial", data = howler_sdm
+)
+summary(m2)
+1 - (deviance(m2) / m2$null.deviance)
+```
+
+# Stepwise model simplification
+
+We'll now fit a full model with linear and quadratic terms for both top predictors, then use `step()` to simplify it. Stepwise selection adds and drops terms based on AIC at each step, removing parameters that don't improve fit. This is a pragmatic approach to variable selection and helps guard against a model that generalises poorly (Burnham & Anderson 2002).
+
+```{r}
+m_full <- glm(
+  as.formula(paste0(
+    "occ ~ ", p1, " + I(", p1, "^2) + ",
+               p2, " + I(", p2, "^2)"
+  )),
+  family = 'binomial',
+  data   = howler_sdm
+)
+
+summary(m_full)
+AIC(m_full)
+1 - (deviance(m_full) / m_full$null.deviance)
+
+# Stepwise simplification
+m_step <- step(m_full)
+summary(m_step)
+AIC(m_step)
+1 - (deviance(m_step) / m_step$null.deviance)
+```
+
+Compare the full and simplified models. The simplified model should have lower or equal AIC — stepwise selection won't simplify if doing so makes the model worse by this criterion. How much did the explained deviance change?
+
+# Save your work
+
+```{r}
+my_preds <- c(p1, p2)
+save(howler_sdm, pred_sel, p1, p2, my_preds, m_step, file = 'data/module9_sdm.RData')
+```
+
+# Exercise
+
+Using all variables in `pred_sel` (not just the top two):
+
+1. Fit a full model with linear and quadratic terms for all selected variables. You can build the formula string with `paste(paste0(pred_sel, " + I(", pred_sel, "^2)"), collapse = " + ")`.
+2. Simplify it with `step()`.
+3. Compare the full and simplified models using `AIC()` and explained deviance.
+
+- Which model has lower AIC?
+- Is the gain in explained deviance worth the additional complexity of the full model?
+
+# References
+
+Burnham, K.P. & Anderson, D.R. (2002). *Model Selection and Multimodel Inference: A Practical Information-Theoretic Approach*. 2nd edition. Springer, New York.
+
+Dormann, C.F., Elith, J., Bacher, S., Buchmann, C., Carl, G., Carré, G., Marquéz, J.R.G., Gruber, B., Lafourcade, B., Leitão, P.J., Münkemüller, T., McClean, C., Osborne, P.E., Reineking, B., Schröder, B., Skidmore, A.K., Zurell, D. & Lautenbach, S. (2013). Collinearity: a review of methods to deal with it and a simulation study evaluating their performance. *Ecography*, 36, 27–46.
+
+Guisan, A. & Zimmermann, N.E. (2000). Predictive habitat distribution models in ecology. *Ecological Modelling*, 135, 147–186.
+
+Guisan, A., Thuiller, W. & Zimmermann, N.E. (2017). *Habitat Suitability and Distribution Models: With Applications in R*. Cambridge University Press, Cambridge.
+
+Thomas, C.D., Cameron, A., Green, R.E., Bakkenes, M., Beaumont, L.J., Collingham, Y.C., Erasmus, B.F.N., de Siqueira, M.F., Grainger, A., Hannah, L., Hughes, L., Huntley, B., van Jaarsveld, A.S., Midgley, G.F., Miles, L., Ortega-Huerta, M.A., Peterson, A.T., Phillips, O.L. & Williams, S.E. (2004). Extinction risk from climate change. *Nature*, 427, 145–148.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/spatial/module-8/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r_for_nervous_humans/spatial/module-10/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

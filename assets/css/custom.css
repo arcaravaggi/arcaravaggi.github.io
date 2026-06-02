@@ -1,0 +1,23 @@
+.course-dropdown {
+  font-family: inherit;           /* match main text */
+  font-size: 1rem;
+  padding: 0.5rem 0.8rem;
+  border-radius: 6px;
+  border: 1px solid var(--theme-border);
+  background-color: var(--theme-bg);
+  color: var(--theme-fg);
+  transition: background-color 0.3s, color 0.3s;
+  min-width: 220px;
+}
+
+.course-dropdown:focus {
+  outline: 2px solid var(--theme-accent);
+  outline-offset: 2px;
+}
+
+@media screen and (max-width: 640px) {
+  .course-dropdown {
+    width: 100%;
+    font-size: 0.95rem;
+  }
+}

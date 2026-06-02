@@ -1,0 +1,42 @@
+{{ define "main" }}
+
+<article style="max-width:900px; margin:auto; line-height:1.6; font-family:Arial, sans-serif;">
+
+  <h1>Contact</h1>
+  <p>If you’d like to reach out, here’s how you can get in touch:</p>
+
+  <!-- Contact Info Grid -->
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:1rem; margin:2rem 0;">
+
+    <!-- Address Card -->
+    <div style="padding:1rem; border:1px solid #ddd; border-radius:0.5rem; text-align:left; background-color:var(--pm-bg); color:var(--pm-fg);">
+      <h3>Work Address</h3>
+      <p>University of South Wales<br>
+         9 Graig Fach<br>
+		 Treforest, CF37 4BD<br>
+         United Kingdom</p>
+    </div>
+
+    <!-- Phone Card -->
+    <div style="padding:1rem; border:1px solid #ddd; border-radius:0.5rem; text-align:left; background-color:var(--pm-bg); color:var(--pm-fg);">
+      <h3>Phone</h3>
+      <p><a href="tel:+441443654701" style="text-decoration:underline; color:inherit;">+44 1443 654701</a></p>
+    </div>
+
+    <!-- Email Card -->
+    <div style="padding:1rem; border:1px solid #ddd; border-radius:0.5rem; text-align:left; background-color:var(--pm-bg); color:var(--pm-fg);">
+      <h3>Email</h3>
+      <p><a href="mailto:anthony.caravaggi@southwales.ac.uk" style="text-decoration:underline; color:inherit;">anthony.caravaggi@southwales.ac.uk</a></p>
+    </div>
+
+  </div>
+
+  <!-- Embedded Map -->
+  <div style="margin-bottom:2rem;">
+    <h3>Find Us</h3>
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2478.521027573477!2d-3.3218519496972747!3d51.595341230519445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486e179d43a1493d%3A0x49dd30e9a71f35ad!2sCemetery%20Rd%2C%20Pontypridd%20CF37%204BD%2C%20UK!5e0!3m2!1sen!2sus!4v1774465881711!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+
+</article>
+
+{{ end }}

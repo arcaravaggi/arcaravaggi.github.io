@@ -1,0 +1,83 @@
+{{ define "main" }}
+
+<article>
+
+<h1>{{ .Title }}</h1>
+
+<!-- Citation -->
+<p>
+  
+    {{ range $i, $a := .Params.authors }}
+      {{ if in $a "Caravaggi" }}
+        <strong>{{ $a }}</strong>
+      {{ else }}
+        {{ $a }}
+      {{ end }}
+      {{ if lt $i (sub (len $.Params.authors) 1) }}, {{ end }}
+    {{ end }}
+  
+  ({{ .Params.year }}).
+  <em>{{ .Params.journal }}</em>.
+  {{ with .Params.pages }} {{ . }}. {{ end }}
+</p>
+<!-- Links -->
+<p>
+  {{ with .Params.doi }}
+    <a href="https://doi.org/{{ . }}">DOI</a>
+  {{ end }}
+
+  {{ with .Params.pdf }}
+    | <a href="{{ . }}">PDF</a>
+  {{ end }}
+
+  {{ with .Params.url }}
+    | <a href="{{ . }}">Source</a>
+  {{ end }}
+
+  {{ with .Params.data }}
+    | <a href="{{ . }}">Data & Code</a>
+  {{ end }}
+
+  {{ with .Params.video }}
+    | <a href="{{ . }}">Video</a>
+  {{ end }}
+
+  {{ with .Params.audio }}
+    | <a href="{{ . }}">Audio</a>
+  {{ end }}
+
+  {{ with .Params.news }}
+    | <a href="{{ . }}">Media</a>
+  {{ end }}
+
+  {{ with .Params.infographic }}
+    | <a href="{{ . }}">Infographic</a>
+  {{ end }}
+</p>
+<br>
+
+<!-- Abstract -->
+{{ with .Params.abstract }}
+<h4>Abstract</h4>
+<p>{{ . }}</p>
+{{ end }}
+
+<!-- Plain-language summary (optional upgrade later) -->
+{{ with .Params.summary }}
+<h4>Summary</h4>
+<p>{{ . }}</p>
+{{ end }}
+<br>
+
+<!-- BibTeX (collapsible) -->
+{{ with .Params.bibtex }}
+<h4>BibTeX</h4>
+<details>
+  <summary>Show BibTeX</summary>
+  <pre><code>{{ . }}</code></pre>
+</details>
+{{ end }}
+
+</article>
+
+{{ end }}

@@ -1,0 +1,329 @@
+---
+title: "Module 7: Preparing occurrence data for modelling"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and
+exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates
+and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns
+real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with
+environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a
+species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing
+and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt —
+maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select></p>
+<div id="preparing-occurrence-data-for-modelling" class="section level1">
+<h1>Preparing occurrence data for modelling</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>terra</code></li>
+<li><code>dplyr</code></li>
+<li><code>rgbif</code></li>
+<li><code>rnaturalearth</code></li>
+<li><code>rnaturalearthdata</code></li>
+</ul>
+<p>In Module 5 we established that GBIF data is a mix of ecological
+signal and observation effort. In Module 6 we assembled our
+environmental layers. Now we need to bridge the two: prepare the
+occurrence data so that it’s clean, spatially appropriate, and paired
+with environmental values — ready to feed into a statistical model.</p>
+<p>This step is often glossed over in tutorials. That’s a mistake. As
+the saying goes in data science: garbage in, garbage out. An SDM built
+on uncleaned data can perform well statistically while being
+ecologically meaningless (Hijmans &amp; Elith 2019).</p>
+</div>
+<div id="load-the-data" class="section level1">
+<h1>Load the data</h1>
+<pre class="r"><code>library(sf)
+library(terra)
+library(dplyr)</code></pre>
+<pre class="r"><code>load(&#39;data/region.RData&#39;)
+env_stack &lt;- terra::rast(&#39;data/env_stack.tif&#39;)</code></pre>
+<p>And re-download the howler monkey records if they’re not already in
+your environment:</p>
+<pre class="r"><code>library(rgbif)
+
+species &lt;- occ_search(
+  scientificName = &quot;Alouatta palliata&quot;,
+  country = &quot;CR&quot;,
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf &lt;- st_as_sf(
+  species$data,
+  coords = c(&quot;decimalLongitude&quot;, &quot;decimalLatitude&quot;),
+  crs = 4326
+)</code></pre>
+<pre class="r"><code>nrow(howler_sf)</code></pre>
+<pre><code>## [1] 2000</code></pre>
+</div>
+<div id="step-1-remove-duplicate-records" class="section level1">
+<h1>Step 1: Remove duplicate records</h1>
+<p>GBIF aggregates records from many sources, and the same observation
+can appear multiple times — submitted by different institutions,
+transcribed from the same museum specimen, or simply repeated.
+Duplicates inflate the apparent importance of heavily recorded
+locations.</p>
+<p>We’ll round coordinates to three decimal places (roughly 100 m
+resolution) and remove any records that share identical rounded
+positions.</p>
+<pre class="r"><code>howler_sf &lt;- howler_sf %&gt;%
+  mutate(
+    lon_round = round(st_coordinates(.)[, 1], 3),
+    lat_round = round(st_coordinates(.)[, 2], 3)
+  ) %&gt;%
+  distinct(lon_round, lat_round, .keep_all = TRUE)
+
+nrow(howler_sf)</code></pre>
+<pre><code>## [1] 1399</code></pre>
+</div>
+<div id="step-2-remove-records-with-imprecise-coordinates" class="section level1">
+<h1>Step 2: Remove records with imprecise coordinates</h1>
+<p>Some GBIF records have whole-number coordinates — e.g. exactly 9.0°N,
+84.0°W. These often represent rough centroids or poorly georeferenced
+historical specimens rather than real GPS locations. We’ll flag and
+remove them.</p>
+<pre class="r"><code>coords &lt;- as.data.frame(st_coordinates(howler_sf))
+names(coords) &lt;- c(&quot;lon&quot;, &quot;lat&quot;)
+
+# Flag records where both coordinates are whole numbers
+imprecise &lt;- coords$lon == round(coords$lon) &amp; coords$lat == round(coords$lat)
+cat(sum(imprecise), &quot;records with whole-number coordinates removed\n&quot;)</code></pre>
+<pre><code>## 0 records with whole-number coordinates removed</code></pre>
+<pre class="r"><code>howler_sf &lt;- howler_sf[!imprecise, ]
+
+# Also remove any records at exactly 0, 0 — a classic georeferencing error
+zero_coords &lt;- coords$lon == 0 &amp; coords$lat == 0
+howler_sf   &lt;- howler_sf[!zero_coords, ]
+
+nrow(howler_sf)</code></pre>
+<pre><code>## [1] 1399</code></pre>
+</div>
+<div id="step-3-clip-to-the-study-region" class="section level1">
+<h1>Step 3: Clip to the study region</h1>
+<p>Although we filtered by <code>country = &quot;CR&quot;</code> when downloading,
+GBIF coordinates are not always precise enough to guarantee every point
+actually falls inside the country polygon. Some records sit just
+offshore, straddle a border, or have coordinates that place them in a
+neighbouring country due to georeferencing error. Before doing anything
+spatial, we should remove these.</p>
+<pre class="r"><code># Keep only points that fall within the Costa Rica polygon
+howler_sf &lt;- howler_sf[st_within(howler_sf, region, sparse = FALSE)[, 1], ]
+
+nrow(howler_sf)</code></pre>
+<pre><code>## [1] 1125</code></pre>
+<p><code>st_within()</code> returns TRUE only for points that fall
+strictly inside the polygon. Any points on the coast, in the ocean, or
+across the border are silently removed. Always do this before thinning —
+there’s no point thinning data you’d discard anyway.</p>
+</div>
+<div id="step-4-spatial-thinning" class="section level1">
+<h1>Step 4: Spatial thinning</h1>
+<p>Even after removing duplicates, GBIF data is spatially uneven.
+Decades of research near La Selva Biological Station and Corcovado
+National Park mean those areas are far more densely sampled than remote
+highland zones. If we feed this directly into a model, the model will
+effectively learn “this species is associated with areas that ecologists
+like to visit” — not what we’re after.</p>
+<p><strong>Spatial thinning</strong> addresses this by keeping at most
+one record per raster grid cell. It’s worth being clear about why this
+is appropriate here, and when it might not be.</p>
+<p>The rasters we’re using are at <strong>10-minute resolution</strong>
+— each cell covers roughly 18 × 18 km at the equator. Two occurrence
+points falling in the same cell will always receive <em>identical</em>
+environmental predictor values when we extract from those rasters,
+because they occupy the same pixel. Keeping both adds nothing to the
+model: it’s the same information twice, just inflating the sample size
+and the apparent weight of heavily sampled locations. One record per
+cell is therefore not discarding ecological information — it’s
+discarding redundancy.</p>
+<p>If you were working with higher-resolution rasters (1 km WorldClim,
+LiDAR-derived canopy height, etc.), finer-scale thinning would be
+appropriate. If you were using very coarse rasters (0.5° or lower),
+thinning to one point per cell would be extremely aggressive and
+genuinely wasteful. The right thinning resolution is the raster
+resolution.</p>
+<pre class="r"><code>ref_grid &lt;- env_stack[[1]]
+
+# Find which raster cell each presence point falls in
+howler_vect    &lt;- vect(howler_sf)
+cells          &lt;- terra::cellFromXY(ref_grid, geom(howler_vect)[, c(&#39;x&#39;, &#39;y&#39;)])
+howler_sf$cell &lt;- cells
+
+# Keep one record per cell
+howler_thinned &lt;- howler_sf %&gt;%
+  group_by(cell) %&gt;%
+  slice(1) %&gt;%
+  ungroup() %&gt;%
+  select(-cell)
+
+nrow(howler_thinned)</code></pre>
+<pre><code>## [1] 121</code></pre>
+<pre class="r"><code># Visualise before and after
+par(mfrow = c(1, 2))
+plot(st_geometry(region), main = paste(&quot;Before thinning\n(n =&quot;, nrow(howler_sf), &quot;)&quot;))
+plot(st_geometry(howler_sf), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.4)
+
+plot(st_geometry(region), main = paste(&quot;After thinning\n(n =&quot;, nrow(howler_thinned), &quot;)&quot;))
+plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.4)</code></pre>
+<p><img src="/img/spatial_sdm/m7_1.png" width="70%" /></p>
+<pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
+<p>The thinned dataset should look less bunched. We’ve traded record
+volume for spatial representativeness, and because the raster resolution
+sets the limit on what environmental information is recoverable anyway,
+we haven’t actually lost anything the model could have used (Boria et
+al. 2014).</p>
+</div>
+<div id="step-4-generate-background-points" class="section level1">
+<h1>Step 4: Generate background points</h1>
+<p>Our model needs a reference: what does “not specifically selected by
+the species” look like environmentally? For this, we generate
+<strong>background points</strong> — random locations across the study
+region.</p>
+<p>Background points are sometimes called pseudo-absences. They’re not
+true absences (we don’t know the species is absent there), but they
+represent the range of environmental conditions available across the
+landscape. Without them, a model has no baseline to compare presence
+conditions against.</p>
+<p>We sample from within the <code>region</code> polygon — the same
+approach we used in Module 5 to generate random points.</p>
+<pre class="r"><code>set.seed(42)
+n_bg  &lt;- nrow(howler_thinned) * 5   # 5x presences is a common rule of thumb
+bg_sf &lt;- st_sample(region, size = n_bg)
+bg_sf &lt;- st_sf(geometry = bg_sf)
+
+plot(st_geometry(region), main = &quot;Presence (red) and background (grey) points&quot;)
+plot(st_geometry(bg_sf), add = TRUE, col = adjustcolor(&quot;grey50&quot;, 0.4), pch = 19, cex = 0.3)
+plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.5)
+legend(&quot;bottomleft&quot;, legend = c(&quot;Presence&quot;, &quot;Background&quot;),
+       col = c(&quot;tomato&quot;, &quot;grey50&quot;), pch = 19, bty = &quot;n&quot;)</code></pre>
+<p><img src="/img/spatial_sdm/m7_2.png" width="70%" /></p>
+<p>The 5× ratio is a reasonable starting point; some studies use 10× or
+more. The key is that background points sample broadly from available
+environmental space, not just areas near presences (Phillips et
+al. 2009).</p>
+</div>
+<div id="step-5-extract-environmental-values" class="section level1">
+<h1>Step 5: Extract environmental values</h1>
+<p>Now we extract environmental values at both presences and background
+points, creating the data frame that the model will actually learn
+from.</p>
+<pre class="r"><code># Presence points
+pres_vect   &lt;- vect(howler_thinned)
+pres_env    &lt;- terra::extract(env_stack, pres_vect)
+pres_coords &lt;- as.data.frame(st_coordinates(howler_thinned))
+names(pres_coords) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+pres_df &lt;- data.frame(pres_coords, occ = 1, pres_env[, -1])
+
+# Background points
+bg_vect   &lt;- vect(bg_sf)
+bg_env    &lt;- terra::extract(env_stack, bg_vect)
+bg_coords &lt;- as.data.frame(st_coordinates(bg_sf))
+names(bg_coords) &lt;- c(&quot;x&quot;, &quot;y&quot;)
+bg_df &lt;- data.frame(bg_coords, occ = 0, bg_env[, -1])
+
+# Combine and clean
+howler_sdm &lt;- rbind(pres_df, bg_df)
+howler_sdm &lt;- na.omit(howler_sdm)
+
+nrow(howler_sdm)</code></pre>
+<pre><code>## [1] 725</code></pre>
+<pre class="r"><code>table(howler_sdm$occ)</code></pre>
+<pre><code>## 
+##   0   1 
+## 605 120</code></pre>
+<pre class="r"><code>head(howler_sdm)</code></pre>
+<pre><code>##           x        y occ    bio01    bio02    bio03    bio04    bio05    bio06
+## 1 -85.73189 11.03608   1 26.31638 7.191382 71.24990 69.52401 31.83011 21.73693
+## 2 -85.59351 11.12194   1 25.75554 7.619792 71.51208 72.19042 31.62700 20.97175
+## 3 -84.72051 11.02987   1 26.20991 7.753187 73.59457 74.72079 31.76125 21.22625
+## 4 -85.73476 10.95183   1 26.51744 8.294092 72.65295 73.01652 32.79776 21.38172
+## 5 -85.61836 10.83835   1 25.83055 8.521063 72.60619 74.77908 32.34800 20.61200
+## 6 -85.49022 10.85402   1 22.91079 8.188958 74.82088 69.78344 28.70600 17.76125
+##      bio07    bio08    bio09    bio10    bio11 bio12 bio13 bio14    bio15 bio16
+## 1 10.09318 26.10009 26.91695 27.35275 25.56411  1739   345     5 87.74148   882
+## 2 10.65525 25.55842 26.35017 26.80375 24.94571  1978   328     6 71.11481   873
+## 3 10.53500 26.40621 26.67200 27.18171 25.27837  2607   361    43 53.89819  1030
+## 4 11.41604 26.16182 26.59708 27.61306 25.78750  1658   340     1 94.26595   868
+## 5 11.73600 25.49813 25.87858 26.93763 25.04779  1749   331     2 87.81650   865
+## 6 10.94475 22.86354 23.31437 23.80442 22.05571  2694   366    39 50.67036  1013
+##   bio17 bio18 bio19 elev
+## 1    33   210   193  116
+## 2    55   224   338  221
+## 3   163   282   629   38
+## 4     9   223   129  144
+## 5    17   240   165  259
+## 6   180   296   675  683</code></pre>
+<p>The <code>occ</code> column is what our model will predict: 1 =
+presence, 0 = background. Every other column is an environmental
+predictor.</p>
+</div>
+<div id="save-your-work" class="section level1">
+<h1>Save your work</h1>
+<pre class="r"><code>save(howler_thinned, bg_sf, howler_sdm, file = &#39;data/module7_occdata.RData&#39;)</code></pre>
+</div>
+<div id="exercise" class="section level1">
+<h1>Exercise</h1>
+<ol style="list-style-type: decimal">
+<li>How many records were lost at each cleaning step — duplicates,
+imprecise coordinates, clipping to polygon, spatial thinning? Which step
+had the largest effect?</li>
+<li>Try running the clipping step (<code>st_within</code>)
+<em>before</em> the duplicate removal step. Does the order matter? Why
+or why not?</li>
+<li>Plot the thinned presence points on top of the <code>bio12</code>
+(annual precipitation) raster. Do howler records appear to cluster in
+wetter areas, drier areas, or show no obvious pattern?</li>
+<li>Change <code>n_bg</code> to 10× the number of thinned presences. How
+does <code>table(howler_sdm$occ)</code> change? Why might a very high
+ratio of background to presence points cause problems for a statistical
+model?</li>
+</ol>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Boria, R.A., Olson, L.E., Goodman, S.M. &amp; Anderson, R.P. (2014).
+Spatial filtering to reduce sampling bias can improve the performance of
+ecological niche models. <em>Ecological Modelling</em>, 275, 73–77.</p>
+<p>Hijmans, R.J. &amp; Elith, J. (2019). <em>Species Distribution
+Modeling with R</em>. CRAN vignette. Available at: <a href="https://rspatial.org/sdm/" class="uri">https://rspatial.org/sdm/</a></p>
+<p>Phillips, S.J., Dudík, M., Elith, J., Graham, C.H., Lehmann, A.,
+Leathwick, J. &amp; Ferrier, S. (2009). Sample selection bias and
+presence-only distribution models: implications for background and
+pseudo-absence data. <em>Ecological Applications</em>, 19, 181–197.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a>
+<a href="/r-for-nervous-humans/spatial_sdm/module-8/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>

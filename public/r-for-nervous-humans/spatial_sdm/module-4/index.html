@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 4: Points, polygons, and rasters | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+Jump to a module…
+1. What is
+spatial data?
+2. Opening and
+exploring spatial data
+3. Coordinates
+and projections
+4. Points,
+polygons, and rasters
+5. Are patterns
+real?
+6. Working with
+environmental data
+7. Preparing
+occurrence data for modelling
+8. Exploring
+species-environment relationships
+9. Building a
+species distribution model
+10. Assessing
+and predicting your SDM
+11. MaxEnt —
+maximum entropy modelling
+12. Random
+forest and ensemble models  
+
+Points, polygons, and rasters
+For this module, you’ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/">
+  <meta property="og:title" content="Module 4: Points, polygons, and rasters">
+  <meta property="og:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Points, polygons, and rastersFor this module, you’ll need the following packages:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 4: Points, polygons, and rasters">
+  <meta name="twitter:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Points, polygons, and rastersFor this module, you’ll need the following packages:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Module 4: Points, polygons, and rasters",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 4: Points, polygons, and rasters
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content">
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and
+exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates
+and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns
+real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with
+environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a
+species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing
+and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt —
+maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select> </select></p>
+<div id="points-polygons-and-rasters" class="section level1">
+<h1>Points, polygons, and rasters</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>rgbif</code></li>
+<li><code>rnaturalearth</code></li>
+<li><code>rnaturalearthdata</code></li>
+<li><code>terra</code></li>
+<li><code>geodata</code></li>
+</ul>
+<p>So far we’ve worked with occurrence points and learned how coordinate
+systems work. But a single layer of data rarely tells the whole
+ecological story. To understand <em>why</em> species are where they are,
+we need to combine multiple layers: the species records, a boundary
+defining our study area, and environmental data describing the
+landscape. This module brings all three together.</p>
+</div>
+<div id="three-layers-one-framework" class="section level1">
+<h1>Three layers, one framework</h1>
+<p>Almost every spatial ecology workflow combines the same fundamental
+data types:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Points</strong>; individual observations at specific
+locations (species records, survey sites, GPS tracks)</li>
+<li><strong>Polygons</strong>; bounded areas representing regions,
+habitats, or administrative units</li>
+<li><strong>Rasters</strong>; continuous environmental surfaces
+(elevation, temperature, land cover, vegetation index)</li>
+</ol>
+<p>Together, these form the backbone of landscape ecology, species
+distribution modelling, and conservation planning. The field of
+macroecology, or understanding broad-scale patterns in biodiversity, is
+built almost entirely on combining these data types at regional to
+global scales (Gaston &amp; Blackburn 2000). Getting comfortable with
+how they interact is one of the most transferable skills in ecological
+data analysis.</p>
+</div>
+<div id="step-1-define-the-study-region" class="section level1">
+<h1>Step 1: Define the study region</h1>
+<p>We’ll continue to focus on <strong>Costa Rica</strong> for the rest
+of this course. Straddling Central America between roughly 8–11°N, Costa
+Rica packs an extraordinary range of habitats into a small area,
+including Pacific dry forest, Caribbean rainforest, highland cloud
+forest, mangroves, and everything in between. It is one of the most
+biodiverse countries on Earth per unit area, and the mantled howler
+monkey (<em>Alouatta palliata</em>) is one of its most visible and
+well-studied forest mammals. Costa Rica has good biodiversity data
+infrastructure, partly as a legacy of long-running primate research
+programmes (Fedigan &amp; Jack 2001).</p>
+<pre class="r"><code>library(sf)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+world  &lt;- ne_countries(scale = &quot;medium&quot;, returnclass = &quot;sf&quot;)
+region &lt;- world[world$name == &quot;Costa Rica&quot;, ]
+
+plot(st_geometry(region), main = &quot;Costa Rica&quot;)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m4_1.png" width="70%" /></p>
+</div>
+<div id="step-2-download-howler-monkey-records-for-costa-rica" class="section level1">
+<h1>Step 2: Download howler monkey records for Costa Rica</h1>
+<p>Now we’ll download occurrence records filtered to Costa Rica at
+source. Specifying <code>country = &quot;CR&quot;</code> is more efficient than
+downloading the full global dataset and clipping it afterwards —
+especially as the species occurs across much of Central America.</p>
+<pre class="r"><code>library(rgbif)
+
+species &lt;- occ_search(
+  scientificName = &quot;Alouatta palliata&quot;,
+  country = &quot;CR&quot;,
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf &lt;- st_as_sf(
+  species$data,
+  coords = c(&quot;decimalLongitude&quot;, &quot;decimalLatitude&quot;),
+  crs = 4326
+)
+
+nrow(howler_sf)</code></pre>
+<pre><code>## [1] 2000</code></pre>
+<pre class="r"><code>plot(st_geometry(region), main = &quot;Mantled howler monkey — Costa Rica&quot;)
+plot(st_geometry(howler_sf), add = TRUE, col = &quot;red&quot;, pch = 16, cex = 0.5)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m4_2.png" width="70%" /></p>
+<p>Records are not evenly spread. You’ll likely see clusters near the
+Osa Peninsula, around research stations in Guanacaste, and along the
+Caribbean lowlands. These are areas with long histories of primate
+research. Gaps elsewhere may reflect genuine habitat limits, but also
+simply where researchers have and haven’t worked. We’ll investigate this
+properly in Module 5.</p>
+</div>
+<div id="step-3-download-elevation-data" class="section level1">
+<h1>Step 3: Download elevation data</h1>
+<p>Environmental rasters give us the “why” behind species distributions.
+We’ll start with <strong>elevation</strong> — one of the most powerful
+predictors of species occurrence in tropical systems, because it
+correlates tightly with temperature, rainfall, and vegetation structure
+(Rahbek et al. 2019). A species recorded predominantly at low elevations
+might be limited by cold temperatures at altitude, or by the
+distribution of the forest types it depends on.</p>
+<pre class="r"><code>library(geodata)
+library(terra)
+
+geodata_path(&quot;.&quot;)   # sets where downloaded files are cached
+
+elev &lt;- elevation_global(res = 10)   # 10-minute resolution global elevation model
+plot(elev, main = &quot;Global elevation&quot;)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m4_3.png" width="70%" /></p>
+<p>That’s the entire world, which is considerably more than we need.
+Time to cut it down.</p>
+</div>
+<div id="step-4-crop-and-mask-to-the-study-region" class="section level1">
+<h1>Step 4: Crop and mask to the study region</h1>
+<p>Two operations are useful here, almost always applied in
+sequence:</p>
+<ul>
+<li><code>crop()</code> trims the raster to the <strong>bounding
+box</strong> of the polygon. This is quick, but includes cells that fall
+outside the polygon boundary.</li>
+<li><code>mask()</code> sets any cells <strong>outside</strong> the
+polygon to NA, removing data beyond the border.</li>
+</ul>
+<p>Always check coordinate systems match before combining spatial
+layers:</p>
+<pre class="r"><code>crs(elev, describe = TRUE)</code></pre>
+<pre><code>##     name authority code  area             extent
+## 1 WGS 84      EPSG 4326 World -180, 180, -90, 90</code></pre>
+<pre class="r"><code>st_crs(region)$input</code></pre>
+<pre><code>## [1] &quot;WGS 84&quot;</code></pre>
+<p>Both should be WGS84. If not, transform before proceeding.</p>
+<pre class="r"><code>elev_cr &lt;- crop(elev, vect(region))
+elev_cr &lt;- mask(elev_cr, vect(region))
+
+plot(elev_cr, main = &quot;Elevation — Costa Rica (m)&quot;)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m4_4.png" width="70%" /></p>
+<p>Costa Rica’s topography is immediately apparent: a central cordillera
+running roughly northeast to southwest, with lower-lying areas to the
+Pacific coast and the Caribbean lowlands. Howler monkeys are primarily
+lowland and mid-elevation animals, typically recorded below about 1,500
+m, where lowland and premontane wet forests dominate (Estrada et
+al. 2006).</p>
+</div>
+<div id="step-5-bring-it-all-together" class="section level1">
+<h1>Step 5: Bring it all together</h1>
+<p>Now we can overlay all three layers to see our species distribution
+in its environmental context.</p>
+<pre class="r"><code>plot(elev_cr, main = &quot;Mantled howler monkey — elevation context&quot;)
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.5)
+plot(st_geometry(howler_sf), add = TRUE, col = &quot;red&quot;, pch = 16, cex = 0.5)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m4_5.png" width="70%" /></p>
+<p>This is the basic template for spatial ecology: an environmental
+layer providing landscape context, a boundary defining the study region,
+and species observations embedded within it. Everything we do for the
+rest of this course builds on exactly this structure.</p>
+</div>
+<div id="what-does-this-tell-us" class="section level1">
+<h1>What does this tell us?</h1>
+<p>Even from this map, you can start forming hypotheses. Are howler
+records more common in the lowlands? Do they avoid the central
+mountains? Are there coastal clusters that might reflect accessible
+survey sites rather than real density?</p>
+<p>Don’t try to answer those questions from the map alone — that’s what
+the analysis is for. But this is the process: map the data, form
+hypotheses, then test them rigorously. Spatial ecology at its best is
+just the scientific method with an explicit geography.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Estrada, A., Garber, P.A., Pavelka, M. &amp; Luecke, L. (eds.)
+(2006). <em>New Perspectives in the Study of Mesoamerican Primates</em>.
+Springer, New York.</p>
+<p>Fedigan, L.M. &amp; Jack, K. (2001). Neotropical primates in a
+regenerating Costa Rican dry forest: a comparison of howler and capuchin
+population patterns. <em>International Journal of Primatology</em>, 22,
+689–713.</p>
+<p>Gaston, K.J. &amp; Blackburn, T.M. (2000). <em>Pattern and Process in
+Macroecology</em>. Blackwell Science, Oxford.</p>
+<p>Rahbek, C., Borregaard, M.K., Colwell, R.K., Dalsgaard, B., Holt,
+B.G., Morueta-Holme, N., Nogues-Bravo, D., Whittaker, R.J. &amp;
+Fjeldså, J. (2019). Humboldt’s enigma: what causes global patterns of
+mountain biodiversity? <em>Science</em>, 365, 1108–1113.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a>
+<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-5/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>
+
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

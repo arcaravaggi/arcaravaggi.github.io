@@ -6,8 +6,29 @@
     <description>Recent content in Tags on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://arcaravaggi.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Questionnaire</title>
+      <link>https://arcaravaggi.github.io/tags/questionnaire/</link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/tags/questionnaire/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>R</title>
+      <link>https://arcaravaggi.github.io/tags/r/</link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/tags/r/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Social Science</title>
+      <link>https://arcaravaggi.github.io/tags/social-science/</link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/tags/social-science/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Analysis</title>
       <link>https://arcaravaggi.github.io/tags/analysis/</link>
@@ -20,13 +41,6 @@
       <link>https://arcaravaggi.github.io/tags/ecology/</link>
       <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/tags/ecology/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title>R</title>
-      <link>https://arcaravaggi.github.io/tags/r/</link>
-      <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/tags/r/</guid>
       <description></description>
     </item>
   </channel>

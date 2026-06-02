@@ -1,7 +1,7 @@
 ---
 title: "Generate Random Sampling Points by Minimum Distance"
 author: "Anthony Caravaggi"
-date: "2026-03"
+date: "2026-03-01"
 output: html_document
 categories: ["Blog"]
 tags: ["ecology","R","analysis"]

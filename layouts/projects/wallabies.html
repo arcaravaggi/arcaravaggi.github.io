@@ -1,0 +1,85 @@
+{{ define "main" }}
+
+<article style="max-width:900px; margin:auto; line-height:1.6; font-family:Arial, sans-serif;">
+
+  <!-- Project Title -->
+  <h1>{{ .Title }}</h1>
+
+  <!-- Top "Submit a Sighting" button -->
+  <a href="#sighting-form" 
+     style="display:inline-block; margin:1rem 0; padding:0.5rem 1rem; background-color:#007ACC; color:white; text-decoration:none; border-radius:0.25rem; font-weight:bold; cursor:pointer;">
+    Submit a Sighting
+  </a>
+
+  <!-- Plain-language summary -->
+  {{ with .Params.summary }}
+    <p><strong>{{ . }}</strong></p>
+  {{ end }}
+  <br>
+
+  <!-- First image floated left with text -->
+  <div style="display:flex; gap:1rem; flex-wrap:wrap; align-items:flex-start; margin-bottom:1.5rem;">
+    {{ with index .Params.images 0 }}
+      <img src="{{ . | relURL }}" alt="Wallaby image" 
+           style="width:25%; min-width:150px; height:auto; border-radius:0.5rem; object-fit:cover; flex-shrink:0;">
+    {{ end }}
+    <div style="flex:1; text-align:left;">
+      <h3>About this project</h3>
+      {{ with .Params.description }}
+        <p>{{ . }}</p>
+      {{ else }}
+        <p>Red-necked wallabies are native to south-east Australia, including Tasmania. They are popular and charismatic animals, often kept in zoological collections, and some small populations have been recorded in the UK since the mid-1900s.</p>
+        <p>In 2020, Drs Holly English and Anthony Caravaggi published the first paper exploring wallabies in the UK since the Peak District population disappeared. This project continues that work, combining field observations, citizen science submissions, and historical data to understand population trends.</p>
+      {{ end }}
+    </div>
+  </div>
+
+  <!-- Prior Study Link -->
+  {{ with .Params.prior_study_url }}
+    <h3>Prior Study</h3>
+    <p>
+      Read our paper: 
+      <a href="{{ . }}" target="_blank" rel="noopener" style="text-decoration:underline;">
+        Where’s wallaby? Using public records and media reports to describe the status of red-necked wallabies in Britain
+      </a>
+    </p>
+  {{ end }}
+
+  <!-- Second image (full width) -->
+  {{ with index .Params.images 1 }}
+    <div style="margin:1rem 0;">
+      <img src="{{ . | relURL }}" alt="Wallaby image" style="width:100%; height:auto; border-radius:0.5rem;">
+    </div>
+  {{ end }}
+
+  <!-- Sighting Submission Form -->
+  {{ with .Params.show_sighting_form }}
+    <h3 id="sighting-form">Submit a Sighting</h3>
+    <p>If you spot a wallaby, please submit your observation below:</p>
+    <form action="https://formspree.io/f/xbjqjvon" method="POST" 
+          style="display:flex; flex-direction:column; gap:0.5rem; max-width:400px;">
+      <label for="name">Your Name</label>
+      <input type="text" name="name" required
+             style="padding:0.5rem; border:2px solid #007ACC; border-radius:0.25rem; background-color:#f0f8ff; color:black;">
+
+      <label for="email">Email</label>
+      <input type="email" name="email" required
+             style="padding:0.5rem; border:2px solid #007ACC; border-radius:0.25rem; background-color:#f0f8ff; color:black;">
+
+      <label for="location">Location of sighting</label>
+      <input type="text" name="location" required
+             style="padding:0.5rem; border:2px solid #007ACC; border-radius:0.25rem; background-color:#f0f8ff; color:black;">
+
+      <label for="notes">Details</label>
+      <textarea name="notes" rows="4"
+                style="padding:0.5rem; border:2px solid #007ACC; border-radius:0.25rem; background-color:#f0f8ff; color:black;"></textarea>
+
+      <button type="submit" style="padding:0.5rem 1rem; background-color:#007ACC; color:white; border:none; border-radius:0.25rem; cursor:pointer;">
+        Submit
+      </button>
+    </form>
+  {{ end }}
+
+</article>
+
+{{ end }}

@@ -6,16 +6,44 @@
     <description>Recent content in Blog on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 25 Mar 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://arcaravaggi.github.io/categories/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Analysing Respondent Attitudes from Surveys in R</title>
+      <link>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</guid>
+      <description>&lt;p&gt;Wildlife management decisions are rarely settled by ecological data
+alone. They live or die in the messy human world of competing values.
+Understanding what people think and why is as much a scientific skill as
+counting animals in a field. This tutorial walks you through
+quantitative analysis of a real attitude survey, using R.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;background&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Background and Learning Objectives&lt;/h1&gt;
+&lt;div id=&#34;the-ecological-context&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The ecological context&lt;/h2&gt;
+&lt;p&gt;The Irish hare (&lt;em&gt;Lepus timidus hibernicus&lt;/em&gt;) is a subspecies
+endemic to Ireland — found nowhere else on Earth. It has been present
+since before the last Ice Age, making it one of the island’s oldest
+residents and a genuine conservation priority.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Generate Random Sampling Points by Minimum Distance</title>
       <link>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</link>
       <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
       <guid>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</guid>
-      <description>&lt;div id=&#34;overview&#34; class=&#34;section level2&#34;&gt;
+      <description>&lt;h1 class=&#34;title toc-ignore&#34;&gt;Generate Random Sampling Points by Minimum
+Distance&lt;/h1&gt;
+&lt;h4 class=&#34;author&#34;&gt;Anthony Caravaggi&lt;/h4&gt;
+&lt;h4 class=&#34;date&#34;&gt;2026-03-25&lt;/h4&gt;
+
+
+&lt;div id=&#34;overview&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Overview&lt;/h2&gt;
-&lt;p&gt;This document demonstrates how to generate random sampling points within a polygon while enforcing a minimum distance between points using a Simple Sequential Inhibition (SSI) process.&lt;/p&gt;
+&lt;p&gt;This document demonstrates how to generate random sampling points
+within a polygon while enforcing a minimum distance between points using
+a Simple Sequential Inhibition (SSI) process.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div id=&#34;libraries&#34; class=&#34;section level2&#34;&gt;
 &lt;h2&gt;Libraries&lt;/h2&gt;
@@ -30,12 +58,24 @@ library(units)&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;We load:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;sf&lt;/code&gt; for modern spatial data handling&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;spatstat&lt;/code&gt; modules for generating spatial point patterns&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spatstat&lt;/code&gt; modules for generating spatial point
+patterns&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;ggplot2&lt;/code&gt; for plotting&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;maptiles&lt;/code&gt; and &lt;code&gt;ggspatial&lt;/code&gt; for modern basemaps and map annotations&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;units&lt;/code&gt; to safely handle distance units (e.g. metres)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;maptiles&lt;/code&gt; and &lt;code&gt;ggspatial&lt;/code&gt; for modern basemaps
+and map annotations&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;units&lt;/code&gt; to safely handle distance units
+(e.g. metres)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;First, create a bounding polygon using longitude and latitude coordinates in the WGS84 coordinate system. While this format is convenient for defining locations, it is not suitable for measuring distances because the units are in degrees rather than metres. To address this, the polygon is reprojected into the British National Grid coordinate system (EPSG:27700), which uses metres as its unit. This transformation is essential for ensuring that the minimum distance constraint applied later is accurate and interpretable. You can of course use our own shapefile if you don’t want to manually create a bounding polygon.&lt;/p&gt;</description>
+&lt;p&gt;First, create a bounding polygon using longitude and latitude
+coordinates in the WGS84 coordinate system. While this format is
+convenient for defining locations, it is not suitable for measuring
+distances because the units are in degrees rather than metres. To
+address this, the polygon is reprojected into the British National Grid
+coordinate system (EPSG:27700), which uses metres as its unit. This
+transformation is essential for ensuring that the minimum distance
+constraint applied later is accurate and interpretable. You can of
+course use our own shapefile if you don’t want to manually create a
+bounding polygon.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

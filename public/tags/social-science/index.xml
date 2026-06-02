@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Social Science on </title>
+    <link>https://arcaravaggi.github.io/tags/social-science/</link>
+    <description>Recent content in Social Science on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://arcaravaggi.github.io/tags/social-science/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Analysing Respondent Attitudes from Surveys in R</title>
+      <link>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</link>
+      <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</guid>
+      <description>&lt;p&gt;Wildlife management decisions are rarely settled by ecological data
+alone. They live or die in the messy human world of competing values.
+Understanding what people think and why is as much a scientific skill as
+counting animals in a field. This tutorial walks you through
+quantitative analysis of a real attitude survey, using R.&lt;/p&gt;
+&lt;hr /&gt;
+&lt;div id=&#34;background&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;Background and Learning Objectives&lt;/h1&gt;
+&lt;div id=&#34;the-ecological-context&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;The ecological context&lt;/h2&gt;
+&lt;p&gt;The Irish hare (&lt;em&gt;Lepus timidus hibernicus&lt;/em&gt;) is a subspecies
+endemic to Ireland — found nowhere else on Earth. It has been present
+since before the last Ice Age, making it one of the island’s oldest
+residents and a genuine conservation priority.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

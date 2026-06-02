@@ -1,0 +1,159 @@
+---
+title: "Module 2: Opening and exploring spatial data"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+</select>
+
+### Opening and exploring spatial data in R
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `rgbif`
+
+So far, we've talked about what spatial data is and why it matters. Now comes the hands-on part — actually getting it into R and having a look around.
+
+When you load spatial data into R, it doesn't appear as a neat table like a spreadsheet. Instead, it's stored in special objects that keep track of both the **data** (species names, counts, measurements) and the **geometry** (where those things are). Think of it as a spreadsheet with a built-in map attached — which is essentially what it is.
+
+If we had data from a primate survey, it might look like this:
+
+| Site ID | Species seen | Temperature | Location |
+| ------- | ------------ | ----------- | -------- |
+| 1       | Yes          | 27.4°C      | (x₁, y₁) |
+| 2       | No           | 24.1°C      | (x₂, y₂) |
+
+The **Location** column isn't plain text — it's geometry. It contains the coordinates that allow R to map and spatially analyse those data. This is the fundamental structure of a **simple features** object, which is what the `sf` package works with (Pebesma 2018). The "simple features" standard is an international specification for how geographic vector data should be represented, and `sf` is its R implementation.
+
+#### Where does species data come from?
+
+We'll use the **Global Biodiversity Information Facility** (GBIF) — a huge open-access database of biodiversity observations compiled from museum collections, citizen science platforms, research surveys, and automated monitoring. It currently holds over 2 billion occurrence records and is one of the primary data sources in contemporary macroecology and conservation biology (Chamberlain & Boettiger 2017). The `rgbif` package lets us query it directly from R, which means we can pull real data, from a real database, and work with it immediately.
+
+That said, GBIF data comes with important caveats. Records are contributed by many sources with wildly varying standards of accuracy and completeness. Coordinates can be imprecise, duplicated, or wrong. Sampling effort is deeply uneven — well-studied areas near roads and research stations are heavily over-represented. We will deal with all of this carefully in Module 7. For now, we load and explore.
+
+#### Loading packages
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(rgbif)
+```
+
+```{r eval = FALSE}
+# install.packages(c("sf", "rgbif"))  # only run once
+library(sf)
+library(rgbif)
+```
+
+#### Downloading howler monkey records
+
+Let's download occurrence records for the mantled howler monkey (*Alouatta palliata*). We'll keep the download modest to start (just 300 records) to keep things quick. We'll work with a fuller, geographically filtered dataset from Module 4 onwards.
+
+```{r}
+howler <- occ_search(
+  scientificName = "Alouatta palliata",
+  limit = 300,
+  hasCoordinate = TRUE  # only return records with usable coordinates
+)
+```
+
+#### Turning it into spatial data
+
+Right now `howler$data` is a plain data frame — rows and columns, nothing spatial. We tell R which columns contain the coordinates and what coordinate system they use. We'll discuss coordinate systems properly in Module 3; for now, `crs = 4326` refers to WGS84, the standard global system used by GPS receivers and GBIF.
+
+```{r}
+howler_sf <- st_as_sf(
+  howler$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+
+howler_sf
+```
+
+You'll see rows of observations, columns like `country`, `stateProvince`, and `eventDate`, and, crucially, a `geometry` column of type POINT. That geometry column is what makes this a spatial object. Everything else in the `sf` package flows from it.
+
+```{r}
+summary(howler_sf)
+```
+
+#### A first map
+
+```{r}
+plot(st_geometry(howler_sf),
+     main = "Mantled howler monkey — GBIF occurrences",
+     pch = 19, cex = 0.5, col = "tomato")
+```
+
+Note that we use `st_geometry()` here rather than just `plot(howler_sf)`. The latter would attempt to produce a separate map for every column in the data frame — which is technically valid R but not what we want right now.
+
+Even this basic map is informative. Records cluster in certain areas, and large parts of the species' potential range look empty. This could reflect genuine habitat preferences. For example, howlers are forest-dependent and associate strongly with lowland and mid-elevation tropical forest (Fedigan & Jack 2001). But it could equally reflect where researchers happened to work, or where road access made surveys feasible.
+
+This ambiguity (signal versus sampling) is one of the central challenges of biodiversity informatics, and we'll address it directly in Module 5.
+
+#### Exploring the data
+
+Let's look at a few useful fields to get a feel for what we're working with.
+
+```{r}
+# Which countries do records come from?
+table(howler_sf$countryCode)
+
+# Date range of records
+range(howler_sf$eventDate, na.rm = TRUE)
+
+# How many records lack a date?
+sum(is.na(howler_sf$eventDate))
+```
+
+Records span multiple decades and countries, a reminder that GBIF aggregates historical museum specimens alongside recent field surveys. A specimen collected in 1952 and a camera trap photo from last year sit in the same dataset, treated equivalently unless you filter by date or some other criteria. For modelling present-day distributions, this is worth keeping in mind.
+
+#### A note on data quality
+
+It's tempting to treat downloaded data as ready to use. It isn't, at least not yet. GBIF records have been shown to contain substantial proportions of coordinate errors, including points placed in the ocean, at country centroids (a common georeferencing shortcut), and at 0°, 0° in the Gulf of Guinea (Maldonado et al. 2015). These are not rare edge cases; they're common enough to meaningfully bias analyses if left unchecked.
+
+For now, we're just getting familiar with how spatial data looks and behaves in R. Cleaning and quality control come in Module 7.
+
+#### References
+
+Chamberlain, S. & Boettiger, C. (2017). R Python, and Ruby clients for the GBIF species occurrence API. *PeerJ Preprints*, 5, e3304v1.
+
+Fedigan, L.M. & Jack, K. (2001). Neotropical primates in a regenerating Costa Rican dry forest: a comparison of howler and capuchin population patterns. *International Journal of Primatology*, 22, 689–713.
+
+Maldonado, C., Molina, C.I., Zizka, A., Persson, C., Taylor, C.M., Albán, J., Chilquillo, E., Rønsted, N. & Antonelli, A. (2015). Estimating species diversity and distribution in the era of Big Data. *Global Ecology and Biogeography*, 24, 1305–1317.
+
+Pebesma, E. (2018). Simple features for R: standardized support for spatial vector data. *The R Journal*, 10, 439–446.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/spatial/module-1/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r_for_nervous_humans/spatial/module-3/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style type="text/css">
+@font-face {
+font-family: octicons-link;
+src: url(data:font/woff;charset=utf-8;base64,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) format('woff');
+}
+body {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+color: #333;
+font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+font-size: 16px;
+line-height: 1.6;
+word-wrap: break-word;
+}
+a {
+background-color: transparent;
+}
+a:active,
+a:hover {
+outline: 0;
+}
+strong {
+font-weight: bold;
+}
+h1 {
+font-size: 2em;
+margin: 0.67em 0;
+}
+img {
+border: 0;
+}
+hr {
+box-sizing: content-box;
+height: 0;
+}
+pre {
+overflow: auto;
+}
+code,
+kbd,
+pre {
+font-family: monospace, monospace;
+font-size: 1em;
+}
+input {
+color: inherit;
+font: inherit;
+margin: 0;
+}
+html input[disabled] {
+cursor: default;
+}
+input {
+line-height: normal;
+}
+input[type="checkbox"] {
+box-sizing: border-box;
+padding: 0;
+}
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+td,
+th {
+padding: 0;
+}
+* {
+box-sizing: border-box;
+}
+input {
+font: 13px / 1.4 Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+a {
+color: #4078c0;
+text-decoration: none;
+}
+a:hover,
+a:active {
+text-decoration: underline;
+}
+hr {
+height: 0;
+margin: 15px 0;
+overflow: hidden;
+background: transparent;
+border: 0;
+border-bottom: 1px solid #ddd;
+}
+hr:before {
+display: table;
+content: "";
+}
+hr:after {
+display: table;
+clear: both;
+content: "";
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 15px;
+margin-bottom: 15px;
+line-height: 1.1;
+}
+h1 {
+font-size: 30px;
+}
+h2 {
+font-size: 21px;
+}
+h3 {
+font-size: 16px;
+}
+h4 {
+font-size: 14px;
+}
+h5 {
+font-size: 12px;
+}
+h6 {
+font-size: 11px;
+}
+blockquote {
+margin: 0;
+}
+ul,
+ol {
+padding: 0;
+margin-top: 0;
+margin-bottom: 0;
+}
+ol ol,
+ul ol {
+list-style-type: lower-roman;
+}
+ul ul ol,
+ul ol ol,
+ol ul ol,
+ol ol ol {
+list-style-type: lower-alpha;
+}
+dd {
+margin-left: 0;
+}
+code {
+font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+font-size: 12px;
+}
+pre {
+margin-top: 0;
+margin-bottom: 0;
+font: 12px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+}
+.select::-ms-expand {
+opacity: 0;
+}
+.octicon {
+font: normal normal normal 16px/1 octicons-link;
+display: inline-block;
+text-decoration: none;
+text-rendering: auto;
+-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+user-select: none;
+}
+.octicon-link:before {
+content: '\f05c';
+}
+.markdown-body:before {
+display: table;
+content: "";
+}
+.markdown-body:after {
+display: table;
+clear: both;
+content: "";
+}
+.markdown-body>*:first-child {
+margin-top: 0 !important;
+}
+.markdown-body>*:last-child {
+margin-bottom: 0 !important;
+}
+a:not([href]) {
+color: inherit;
+text-decoration: none;
+}
+.anchor {
+display: inline-block;
+padding-right: 2px;
+margin-left: -18px;
+}
+.anchor:focus {
+outline: none;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+margin-top: 1em;
+margin-bottom: 16px;
+font-weight: bold;
+line-height: 1.4;
+}
+h1 .octicon-link,
+h2 .octicon-link,
+h3 .octicon-link,
+h4 .octicon-link,
+h5 .octicon-link,
+h6 .octicon-link {
+color: #000;
+vertical-align: middle;
+visibility: hidden;
+}
+h1:hover .anchor,
+h2:hover .anchor,
+h3:hover .anchor,
+h4:hover .anchor,
+h5:hover .anchor,
+h6:hover .anchor {
+text-decoration: none;
+}
+h1:hover .anchor .octicon-link,
+h2:hover .anchor .octicon-link,
+h3:hover .anchor .octicon-link,
+h4:hover .anchor .octicon-link,
+h5:hover .anchor .octicon-link,
+h6:hover .anchor .octicon-link {
+visibility: visible;
+}
+h1 {
+padding-bottom: 0.3em;
+font-size: 2.25em;
+line-height: 1.2;
+border-bottom: 1px solid #eee;
+}
+h1 .anchor {
+line-height: 1;
+}
+h2 {
+padding-bottom: 0.3em;
+font-size: 1.75em;
+line-height: 1.225;
+border-bottom: 1px solid #eee;
+}
+h2 .anchor {
+line-height: 1;
+}
+h3 {
+font-size: 1.5em;
+line-height: 1.43;
+}
+h3 .anchor {
+line-height: 1.2;
+}
+h4 {
+font-size: 1.25em;
+}
+h4 .anchor {
+line-height: 1.2;
+}
+h5 {
+font-size: 1em;
+}
+h5 .anchor {
+line-height: 1.1;
+}
+h6 {
+font-size: 1em;
+color: #777;
+}
+h6 .anchor {
+line-height: 1.1;
+}
+p,
+blockquote,
+ul,
+ol,
+dl,
+table,
+pre {
+margin-top: 0;
+margin-bottom: 16px;
+}
+hr {
+height: 4px;
+padding: 0;
+margin: 16px 0;
+background-color: #e7e7e7;
+border: 0 none;
+}
+ul,
+ol {
+padding-left: 2em;
+}
+ul ul,
+ul ol,
+ol ol,
+ol ul {
+margin-top: 0;
+margin-bottom: 0;
+}
+li>p {
+margin-top: 16px;
+}
+dl {
+padding: 0;
+}
+dl dt {
+padding: 0;
+margin-top: 16px;
+font-size: 1em;
+font-style: italic;
+font-weight: bold;
+}
+dl dd {
+padding: 0 16px;
+margin-bottom: 16px;
+}
+blockquote {
+padding: 0 15px;
+color: #777;
+border-left: 4px solid #ddd;
+}
+blockquote>:first-child {
+margin-top: 0;
+}
+blockquote>:last-child {
+margin-bottom: 0;
+}
+table {
+display: block;
+width: 100%;
+overflow: auto;
+word-break: normal;
+word-break: keep-all;
+}
+table th {
+font-weight: bold;
+}
+table th,
+table td {
+padding: 6px 13px;
+border: 1px solid #ddd;
+}
+table tr {
+background-color: #fff;
+border-top: 1px solid #ccc;
+}
+table tr:nth-child(2n) {
+background-color: #f8f8f8;
+}
+img {
+max-width: 100%;
+box-sizing: content-box;
+background-color: #fff;
+}
+code {
+padding: 0;
+padding-top: 0.2em;
+padding-bottom: 0.2em;
+margin: 0;
+font-size: 85%;
+background-color: rgba(0,0,0,0.04);
+border-radius: 3px;
+}
+code:before,
+code:after {
+letter-spacing: -0.2em;
+content: "\00a0";
+}
+pre>code {
+padding: 0;
+margin: 0;
+font-size: 100%;
+word-break: normal;
+white-space: pre;
+background: transparent;
+border: 0;
+}
+.highlight {
+margin-bottom: 16px;
+}
+.highlight pre,
+pre {
+padding: 16px;
+overflow: auto;
+font-size: 85%;
+line-height: 1.45;
+background-color: #f7f7f7;
+border-radius: 3px;
+}
+.highlight pre {
+margin-bottom: 0;
+word-break: normal;
+}
+pre {
+word-wrap: normal;
+}
+pre code {
+display: inline;
+max-width: initial;
+padding: 0;
+margin: 0;
+overflow: initial;
+line-height: inherit;
+word-wrap: normal;
+background-color: transparent;
+border: 0;
+}
+pre code:before,
+pre code:after {
+content: normal;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font-size: 11px;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.pl-c {
+color: #969896;
+}
+.pl-c1,
+.pl-s .pl-v {
+color: #0086b3;
+}
+.pl-e,
+.pl-en {
+color: #795da3;
+}
+.pl-s .pl-s1,
+.pl-smi {
+color: #333;
+}
+.pl-ent {
+color: #63a35c;
+}
+.pl-k {
+color: #a71d5d;
+}
+.pl-pds,
+.pl-s,
+.pl-s .pl-pse .pl-s1,
+.pl-sr,
+.pl-sr .pl-cce,
+.pl-sr .pl-sra,
+.pl-sr .pl-sre {
+color: #183691;
+}
+.pl-v {
+color: #ed6a43;
+}
+.pl-id {
+color: #b52a1d;
+}
+.pl-ii {
+background-color: #b52a1d;
+color: #f8f8f8;
+}
+.pl-sr .pl-cce {
+color: #63a35c;
+font-weight: bold;
+}
+.pl-ml {
+color: #693a17;
+}
+.pl-mh,
+.pl-mh .pl-en,
+.pl-ms {
+color: #1d3e81;
+font-weight: bold;
+}
+.pl-mq {
+color: #008080;
+}
+.pl-mi {
+color: #333;
+font-style: italic;
+}
+.pl-mb {
+color: #333;
+font-weight: bold;
+}
+.pl-md {
+background-color: #ffecec;
+color: #bd2c00;
+}
+.pl-mi1 {
+background-color: #eaffea;
+color: #55a532;
+}
+.pl-mdr {
+color: #795da3;
+font-weight: bold;
+}
+.pl-mo {
+color: #1d3e81;
+}
+kbd {
+display: inline-block;
+padding: 3px 5px;
+font: 11px Consolas, "Liberation Mono", Menlo, Courier, monospace;
+line-height: 10px;
+color: #555;
+vertical-align: middle;
+background-color: #fcfcfc;
+border: solid 1px #ccc;
+border-bottom-color: #bbb;
+border-radius: 3px;
+box-shadow: inset 0 -1px 0 #bbb;
+}
+.task-list-item {
+list-style-type: none;
+}
+.task-list-item+.task-list-item {
+margin-top: 3px;
+}
+.task-list-item input {
+margin: 0 0.35em 0.25em -1.6em;
+vertical-align: middle;
+}
+:checked+.radio-label {
+z-index: 1;
+position: relative;
+border-color: #4078c0;
+}
+.sourceLine {
+display: inline-block;
+}
+code .kw { color: #000000; }
+code .dt { color: #ed6a43; }
+code .dv { color: #009999; }
+code .bn { color: #009999; }
+code .fl { color: #009999; }
+code .ch { color: #009999; }
+code .st { color: #183691; }
+code .co { color: #969896; }
+code .ot { color: #0086b3; }
+code .al { color: #a61717; }
+code .fu { color: #63a35c; }
+code .er { color: #a61717; background-color: #e3d2d2; }
+code .wa { color: #000000; }
+code .cn { color: #008080; }
+code .sc { color: #008080; }
+code .vs { color: #183691; }
+code .ss { color: #183691; }
+code .im { color: #000000; }
+code .va {color: #008080; }
+code .cf { color: #000000; }
+code .op { color: #000000; }
+code .bu { color: #000000; }
+code .ex { color: #000000; }
+code .pp { color: #999999; }
+code .at { color: #008080; }
+code .do { color: #969896; }
+code .an { color: #008080; }
+code .cv { color: #008080; }
+code .in { color: #008080; }
+</style>
+<style>
+body {
+box-sizing: border-box;
+min-width: 200px;
+max-width: 980px;
+margin: 0 auto;
+padding: 45px;
+padding-top: 0px;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<h1 id="module-4--descriptive-statistics">Module 4 — Descriptive
+Statistics</h1>
+<!-- Dropdown -->
+
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r_for_nervous_humans/intro_stats/">Welcome</option>
+<option value="/r_for_nervous_humans/intro_stats/module-1/">1. Getting
+Started</option>
+<option value="/r_for_nervous_humans/intro_stats/module-2/">2. Data &amp;
+Penguins</option>
+<option value="/r_for_nervous_humans/intro_stats/module-3/">3.
+Visualisation</option>
+<option value="/r_for_nervous_humans/intro_stats/module-5/">5. Are These
+Groups Different?</option>
+<option value="/r_for_nervous_humans/intro_stats/module-6/">6. Working
+with Categories</option>
+<option value="/r_for_nervous_humans/intro_stats/module-7/">7. When Data
+Gets Weird</option>
+<option value="/r_for_nervous_humans/intro_stats/module-8/">8.
+Relationships Between Variables</option>
+<option value="/r_for_nervous_humans/intro_stats/module-9/">9. Linear
+Regression</option> </select>
+
+<h2 id="welcome-to-module-4">Welcome to module 4</h2>
+<p>Now that we can look at penguin data and visualise them, it’s time to
+<em>summarise</em> our data numerically.<br />
+Descriptive statistics help us answer questions like:</p>
+<ul>
+<li>What’s a “typical” value?</li>
+<li>How much do values vary (differ)?</li>
+<li>How confident are we about the average value of our sample? Does it
+accurately reflect the population?</li>
+</ul>
+<p>Think of this as learning the language of the data before asking
+bigger questions.</p>
+<hr />
+<h2 id="prepare-your-dataset">Prepare your dataset</h2>
+<p>Notice that we’re now using an additional package,
+<code>ggplot2</code>. This supports more sophisticated plots and makes
+it easier to construct high-quality figures.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(palmerpenguins)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;penguins&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="co"># Remove only the missing values for columns we need</span></span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a>penguins_clean <span class="ot">&lt;-</span> penguins[<span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>bill_length_mm) <span class="sc">&amp;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a>                            <span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>species) <span class="sc">&amp;</span></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a>                            <span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>body_mass_g), ]</span></code></pre></div>
+<p>Here, the square brackets mean ‘look inside this thing’. Square
+brackets support indexing with rows separated from columns by a comma.
+So:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>penguins_clean[<span class="dv">1</span>,]</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 8
+##   species island    bill_length_mm bill_depth_mm flipper_length_mm body_mass_g sex    year
+##   &lt;fct&gt;   &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;       &lt;int&gt; &lt;fct&gt; &lt;int&gt;
+## 1 Adelie  Torgersen           39.1          18.7               181        3750 male   2007</code></pre>
+<p>…gives you row 1. Similarly,</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>penguins_clean[,<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## # A tibble: 342 × 1
+##    species
+##    &lt;fct&gt;  
+##  1 Adelie 
+##  2 Adelie 
+##  3 Adelie 
+##  4 Adelie 
+##  5 Adelie 
+##  6 Adelie 
+##  7 Adelie 
+##  8 Adelie 
+##  9 Adelie 
+## 10 Adelie 
+## # ℹ 332 more rows</code></pre>
+<p>…gives you column one. And,</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>penguins_clean[<span class="dv">1</span>,<span class="dv">1</span>]</span></code></pre></div>
+<pre><code>## # A tibble: 1 × 1
+##   species
+##   &lt;fct&gt;  
+## 1 Adelie</code></pre>
+<p>…gives you the cell found at row 1, column 1. You can use more
+complicated arguments to extract multiple values using an array argument
+<code>:</code> for concurrent data or <code>c()</code> for
+non-concurrent data. If that sounds like complete gibberish:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>penguins_clean[,<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>]</span></code></pre></div>
+<pre><code>## # A tibble: 342 × 4
+##    island    bill_length_mm bill_depth_mm flipper_length_mm
+##    &lt;fct&gt;              &lt;dbl&gt;         &lt;dbl&gt;             &lt;int&gt;
+##  1 Torgersen           39.1          18.7               181
+##  2 Torgersen           39.5          17.4               186
+##  3 Torgersen           40.3          18                 195
+##  4 Torgersen           36.7          19.3               193
+##  5 Torgersen           39.3          20.6               190
+##  6 Torgersen           38.9          17.8               181
+##  7 Torgersen           39.2          19.6               195
+##  8 Torgersen           34.1          18.1               193
+##  9 Torgersen           42            20.2               190
+## 10 Torgersen           37.8          17.1               186
+## # ℹ 332 more rows</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>penguins_clean[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>)]</span></code></pre></div>
+<pre><code>## # A tibble: 342 × 2
+##    island    flipper_length_mm
+##    &lt;fct&gt;                 &lt;int&gt;
+##  1 Torgersen               181
+##  2 Torgersen               186
+##  3 Torgersen               195
+##  4 Torgersen               193
+##  5 Torgersen               190
+##  6 Torgersen               181
+##  7 Torgersen               195
+##  8 Torgersen               193
+##  9 Torgersen               190
+## 10 Torgersen               186
+## # ℹ 332 more rows</code></pre>
+<p>The first argument returns all of columns 1 to 5. The second only
+returns columns 2 and 5.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>penguins_clean <span class="ot">&lt;-</span> penguins[<span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>bill_length_mm) <span class="sc">&amp;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                            <span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>species) <span class="sc">&amp;</span></span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                            <span class="sc">!</span><span class="fu">is.na</span>(penguins<span class="sc">$</span>body_mass_g), ]</span></code></pre></div>
+<p>So here we’re looking within <code>penguins</code> and excluding rows
+(using <code>!is.na()</code>) where there are NAs in the columns
+<code>bill_length_mm</code>, ‘species’, and ’body_mass_g`. We are
+<em>not</em> selecting so are including them all.</p>
+<hr />
+<h3 id="measures-of-central-tendency">Measures of central tendency</h3>
+<p><strong>Mean</strong> — the “typical” value</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(penguins_clean<span class="sc">$</span>bill_length_mm)</span></code></pre></div>
+<pre><code>## [1] 43.92193</code></pre>
+<p>The mean is the foundation for most statistical tests like t-tests
+and regression. It has mathematical properties that make differences and
+variation easy to compute. Later, we’ll build everything from this
+anchor.</p>
+<p><strong>Median</strong> — the middle value</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">median</span>(penguins_clean<span class="sc">$</span>bill_length_mm)</span></code></pre></div>
+<pre><code>## [1] 44.45</code></pre>
+<p>The median is the value in the middle of the sorted data. Unlike the
+mean, it’s robust to extreme values.</p>
+<hr />
+<h3 id="spread--how-much-the-data-varies">Spread — how much the data
+varies</h3>
+<p><strong>Standard deviation (SD)</strong></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">sd</span>(penguins_clean<span class="sc">$</span>bill_length_mm)</span></code></pre></div>
+<pre><code>## [1] 5.459584</code></pre>
+<p>The Standard Deviation: * Shows the typical distance of a given data
+point from the mean (i.e., the spread of the data) * Small SD = tightly
+clustered; large SD = spread out.</p>
+<p><strong>Standard error (SE)</strong></p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>se <span class="ot">&lt;-</span> <span class="fu">sd</span>(penguins_clean<span class="sc">$</span>bill_length_mm) <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(penguins_clean<span class="sc">$</span>bill_length_mm))</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>se</span></code></pre></div>
+<pre><code>## [1] 0.2952205</code></pre>
+<p>The Standard Error is computed by dividing the SD by the square root
+of the number of measurements in the sample. It shows us how accurately
+we can estimate the true average of the whole population based on our
+sample. * Smaller SE = more confidence in the mean (i.e., our sample
+mean is close(r) to the population mean)</p>
+<p><strong>95% confidence interval (CI)</strong></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>mean_val <span class="ot">&lt;-</span> <span class="fu">mean</span>(penguins_clean<span class="sc">$</span>bill_length_mm)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_val <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_val <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se</span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="fu">c</span>(ci_lower, ci_upper)</span></code></pre></div>
+<pre><code>## [1] 43.34330 44.50056</code></pre>
+<p>The CI gives a plausible range for the true population mean. We
+typically use the 95% threshold as this corresponds with our statistical
+probability threshold of p = 0.05. It basically indicates that if we
+repeated the study many times, around 95% of all calculated intervals
+would contain the true mean.</p>
+<hr />
+<h3 id="when-to-use-sd-se-ci">When to use SD, SE, CI</h3>
+<table>
+<thead>
+<tr>
+<th>Measure</th>
+<th>What it tells you</th>
+<th>When to use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SD</td>
+<td>Spread of raw data</td>
+<td>Understanding variability</td>
+</tr>
+<tr>
+<td>SE</td>
+<td>Precision of the mean</td>
+<td>Comparing sample means</td>
+</tr>
+<tr>
+<td>95% CI</td>
+<td>Range of true mean</td>
+<td>Reporting uncertainty</td>
+</tr>
+</tbody>
+</table>
+<h3 id="visual-comparison">Visual comparison</h3>
+<p>The code below may seem daunting but we’ll cover <code>ggplot</code>
+in more detail later. For now, just notice the way in which plots can be
+built in this system by adding elements and using consistent
+language.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">30</span>, <span class="at">mean =</span> <span class="dv">40</span>, <span class="at">sd =</span> <span class="dv">5</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a></span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a>mean_x <span class="ot">&lt;-</span> <span class="fu">mean</span>(penguins_clean<span class="sc">$</span>body_mass_g)</span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a>sd_x <span class="ot">&lt;-</span> <span class="fu">sd</span>(penguins_clean<span class="sc">$</span>body_mass_g)</span>
+<span id="cb23-6"><a href="#cb23-6" tabindex="-1"></a>se_x <span class="ot">&lt;-</span> sd_x <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="fu">length</span>(penguins_clean<span class="sc">$</span>body_mass_g))</span>
+<span id="cb23-7"><a href="#cb23-7" tabindex="-1"></a>ci_x <span class="ot">&lt;-</span> <span class="fu">c</span>(mean_x <span class="sc">-</span> <span class="fl">1.96</span><span class="sc">*</span>se_x, mean_x <span class="sc">+</span> <span class="fl">1.96</span><span class="sc">*</span>se_x)</span>
+<span id="cb23-8"><a href="#cb23-8" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" tabindex="-1"></a><span class="co"># Create a data frame for plotting whiskers</span></span>
+<span id="cb23-11"><a href="#cb23-11" tabindex="-1"></a>plot_df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb23-12"><a href="#cb23-12" tabindex="-1"></a>  <span class="at">measure =</span> <span class="fu">c</span>(<span class="st">&quot;SD&quot;</span>, <span class="st">&quot;SE&quot;</span>, <span class="st">&quot;95% CI&quot;</span>),</span>
+<span id="cb23-13"><a href="#cb23-13" tabindex="-1"></a>  <span class="at">lower =</span> <span class="fu">c</span>(mean_x <span class="sc">-</span> sd_x, mean_x <span class="sc">-</span> se_x, ci_x[<span class="dv">1</span>]),</span>
+<span id="cb23-14"><a href="#cb23-14" tabindex="-1"></a>  <span class="at">upper =</span> <span class="fu">c</span>(mean_x <span class="sc">+</span> sd_x, mean_x <span class="sc">+</span> se_x, ci_x[<span class="dv">2</span>])</span>
+<span id="cb23-15"><a href="#cb23-15" tabindex="-1"></a>)</span>
+<span id="cb23-16"><a href="#cb23-16" tabindex="-1"></a></span>
+<span id="cb23-17"><a href="#cb23-17" tabindex="-1"></a><span class="co"># Plot</span></span>
+<span id="cb23-18"><a href="#cb23-18" tabindex="-1"></a><span class="fu">ggplot</span>(plot_df, <span class="fu">aes</span>(<span class="at">x =</span> measure)) <span class="sc">+</span></span>
+<span id="cb23-19"><a href="#cb23-19" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">y =</span> mean_x), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span>          <span class="co"># Mean as point</span></span>
+<span id="cb23-20"><a href="#cb23-20" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> lower, <span class="at">ymax =</span> upper), <span class="at">width =</span> <span class="fl">0.2</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-21"><a href="#cb23-21" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Mean with SD, SE, and 95% CI Whiskers&quot;</span>,</span>
+<span id="cb23-22"><a href="#cb23-22" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Body mass (g)&quot;</span>, <span class="at">x =</span> <span class="st">&quot;Measure&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-23"><a href="#cb23-23" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb23-24"><a href="#cb23-24" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> mean_x, <span class="at">linetype =</span> <span class="st">&quot;dashed&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb23-25"><a href="#cb23-25" tabindex="-1"></a>    <span class="co"># Annotations</span></span>
+<span id="cb23-26"><a href="#cb23-26" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">2.3</span>, <span class="at">y =</span> mean_x[<span class="dv">1</span>], </span>
+<span id="cb23-27"><a href="#cb23-27" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;SD = data spread </span><span class="sc">\n</span><span class="st"> around mean&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb23-28"><a href="#cb23-28" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">3.4</span>, <span class="at">y =</span> mean_x[<span class="dv">1</span>], </span>
+<span id="cb23-29"><a href="#cb23-29" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;SE = accuracy </span><span class="sc">\n</span><span class="st"> of mean </span><span class="sc">\n</span><span class="st"> estimate&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb23-30"><a href="#cb23-30" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">1.4</span>, <span class="at">y =</span> mean_x[<span class="dv">1</span>], </span>
+<span id="cb23-31"><a href="#cb23-31" tabindex="-1"></a>           <span class="at">label =</span> <span class="st">&quot;95% CI = likely </span><span class="sc">\n</span><span class="st"> range for true mean&quot;</span>, <span class="at">color =</span> <span class="st">&quot;black&quot;</span>, <span class="at">size =</span> <span class="fl">3.5</span>, <span class="at">hjust =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb23-32"><a href="#cb23-32" tabindex="-1"></a>  </span>
+<span id="cb23-33"><a href="#cb23-33" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="st">&quot;text&quot;</span>, <span class="at">x =</span> <span class="fl">0.5</span>, <span class="at">y =</span> mean_x <span class="sc">+</span> <span class="dv">50</span>, <span class="at">label =</span> <span class="st">&quot;Mean&quot;</span>, <span class="at">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="at">hjust =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>You’ll notice that these estimates are for all penguins. This might
+be an issue…</p>
+<h3 id="summarising-by-species">Summarising by species</h3>
+<p>Before we start comparing penguins’ measurements statistically, it
+helps to look at each group separately. Why? Because treating all
+penguins as one giant lump ignores the fact that there may be important
+differences between species.</p>
+<p>Summarising by group lets us see patterns and differences visually
+and numerically, which is exactly what statisticians do before running
+formal tests.</p>
+<p>Let’s calculate the mean bill length for each species:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">tapply</span>(penguins_clean<span class="sc">$</span>bill_length_mm,</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>       penguins_clean<span class="sc">$</span>species,</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a>       <span class="cf">function</span>(x) <span class="fu">mean</span>(x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))</span></code></pre></div>
+<pre><code>##    Adelie Chinstrap    Gentoo 
+##  38.79139  48.83382  47.50488</code></pre>
+<p>What’s happening here: 1. <code>tapply()</code> splits the data into
+groups — here, by species. 2. The anonymous function
+<code>function(x) mean(x, na.rm = TRUE)</code> calculates the mean of
+each group, ignoring missing values. 3. The result is a small summary
+table showing average bill length per species.</p>
+<p>You can also summarise multiple statistics at once:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">aggregate</span>(bill_length_mm <span class="sc">~</span> species, <span class="at">data =</span> penguins_clean, </span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a>          <span class="at">FUN =</span> <span class="cf">function</span>(x) <span class="fu">c</span>(<span class="at">mean =</span> <span class="fu">mean</span>(x), <span class="at">sd =</span> <span class="fu">sd</span>(x), <span class="at">n =</span> <span class="fu">length</span>(x)))</span></code></pre></div>
+<pre><code>##     species bill_length_mm.mean bill_length_mm.sd bill_length_mm.n
+## 1    Adelie           38.791391          2.663405       151.000000
+## 2 Chinstrap           48.833824          3.339256        68.000000
+## 3    Gentoo           47.504878          3.081857       123.000000</code></pre>
+<p>Now we get the mean and SD for bill length and sample size per
+species in one glance. This gives a preview of what later t-tests or
+ANOVAs will formally test.</p>
+<p>Let’s adjust that plot from earlier…</p>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<h3 id="intuition-check">Intuition check:</h3>
+<ul>
+<li>Compare the means across species: are they very different?</li>
+<li>Look at the SDs: which species’ measurements are more variable?</li>
+<li>Notice the sample size: smaller groups give less precise estimates
+(we’ll see this in SE and CI).</li>
+</ul>
+<p>By summarising by species, we’re building a clear picture of the data
+landscape. Later, when we run statistical tests, we’ll already have a
+solid understanding of our data.</p>
+<h3 id="lessons-learned">Lessons learned</h3>
+<ul>
+<li>Mean is central for later tests</li>
+<li>Median shows the middle value</li>
+<li>SD measures spread of data</li>
+<li>SE measures precision of the mean</li>
+<li>95% CI gives a plausible range for the true mean</li>
+<li>Plotting these together helps visualize differences</li>
+<li>Always summarise groups separately before testing</li>
+</ul>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+
+<p><a href="/r_for_nervous_humans/intro_stats/module-3/" style="padding: 0.6rem 1.2rem; 
+background-color: var(--theme-accent); 
+color: var(--theme-fg); 
+text-decoration: none; 
+border-radius: 6px;"> ← Previous </a></p>
+<p><a href="/r_for_nervous_humans/intro_stats/module-5/" style="padding: 0.6rem 1.2rem; 
+background-color: var(--theme-accent); 
+color: var(--theme-fg); 
+text-decoration: none; 
+border-radius: 6px;"> Next → </a></p>
+</div>
+
+</body>
+</html>

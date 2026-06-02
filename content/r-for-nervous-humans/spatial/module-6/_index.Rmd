@@ -1,0 +1,261 @@
+---
+title: "Module 6: Working with environmental data"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(terra)
+library(geodata)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+world  <- ne_countries(scale = "medium", returnclass = "sf")
+region <- world[world$name == "Costa Rica", ]
+region_vect <- vect(region)
+region_bbox <- st_bbox(region)
+
+geodata_path(".")
+elev  <- elevation_global(res = 10)
+elev_cr <- crop(elev, region_vect)
+elev_cr <- mask(elev_cr, region_vect)
+
+clim <- worldclim_global(var = 'bio', res = 10, download = FALSE, path = 'data')
+names(clim) <- c(paste0('bio0', 1:9), paste0('bio', 10:19))
+clim_cr <- crop(clim, region_vect)
+clim_cr <- mask(clim_cr, region_vect)
+```
+
+# Working with environmental data
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `terra`
+- `geodata`
+- `rnaturalearth`
+- `rnaturalearthdata`
+
+In Module 5 we asked whether the patterns in our howler monkey data reflect real ecology or sampling effort. To start answering that — and to eventually build a species distribution model — we need environmental data describing what conditions actually exist across the landscape.
+
+This module covers downloading, inspecting, and preparing the environmental layers we'll use throughout the rest of the course. By the end, you'll have a multi-layer raster stack covering Costa Rica that's ready for analysis.
+
+# Why environmental data?
+
+The dominant theory in species distribution modelling is **Hutchinson's n-dimensional hypervolume** — the idea that a species can persist anywhere that its full set of environmental requirements are met (Hutchinson 1957). In practice this is simplified considerably, but the core logic holds: species are found where their environment suits them. To predict where a species might occur, we need to know both where it has been recorded *and* what the environment looks like everywhere else.
+
+The two most commonly used environmental data sources in SDM work are elevation and climate — particularly the **WorldClim** bioclimatic variables, which we'll use here.
+
+# Loading packages and defining the study region
+
+```{r eval = FALSE}
+library(sf)
+library(terra)
+library(geodata)
+library(rnaturalearth)
+library(rnaturalearthdata)
+```
+
+```{r}
+world       <- ne_countries(scale = "medium", returnclass = "sf")
+region      <- world[world$name == "Costa Rica", ]
+region_vect <- vect(region)       # terra needs SpatVector, not sf
+region_bbox <- st_bbox(region)    # bounding box for cropping
+```
+
+# Elevation
+
+We already met elevation in Module 4. Let's download it properly and prepare it for use alongside climate data.
+
+```{r}
+geodata_path(".")
+
+elev    <- elevation_global(res = 10)
+elev_cr <- crop(elev, region_vect)
+elev_cr <- mask(elev_cr, region_vect)
+
+plot(elev_cr, main = "Elevation — Costa Rica (m)")
+```
+
+```{r}
+# Quick summary of elevation values
+summary(values(elev_cr), na.rm = TRUE)
+```
+
+Costa Rica ranges from sea level to over 3,800 m at Cerro Chirripó. That's a remarkable range for a country roughly the size of West Virginia, and it's a large part of why Costa Rica is so biodiverse — it compresses multiple elevational zones and climate regimes into a small area (Janzen 1983).
+
+# WorldClim bioclimatic variables
+
+**WorldClim** provides 19 bioclimatic variables derived from monthly temperature and precipitation data, interpolated from global weather station networks (Fick & Hijmans 2017). They were designed specifically for species distribution modelling and are now one of the most widely used environmental datasets in ecology. The 19 variables cover things like:
+
+- **bio01**: Mean annual temperature
+- **bio04**: Temperature seasonality (standard deviation × 100)
+- **bio12**: Annual precipitation
+- **bio15**: Precipitation seasonality (coefficient of variation)
+- **bio17**: Precipitation of the driest quarter
+
+A full description of all 19 variables is at [worldclim.org/data/bioclim.html](https://www.worldclim.org/data/bioclim.html).
+
+Note that temperature variables are stored in °C × 10 — so a value of 245 means 24.5°C. This is a legacy convention from when integer storage saved meaningful disk space. Divide by 10 to get degrees Celsius.
+
+```{r}
+# Set download = TRUE the first time, then FALSE to use cached files
+clim <- worldclim_global(var = 'bio', res = 10, download = FALSE, path = 'data')
+
+# Rename to cleaner labels
+names(clim) <- c(paste0('bio0', 1:9), paste0('bio', 10:19))
+
+# Crop and mask to Costa Rica
+clim_cr <- crop(clim, region_vect)
+clim_cr <- mask(clim_cr, region_vect)
+
+clim_cr
+```
+
+Let's plot a few variables to get a feel for the data.
+
+```{r}
+# Mean annual temperature (divide by 10 for °C)
+plot(clim_cr[['bio01']] / 10,
+     main = "Mean annual temperature (°C)")
+
+# Annual precipitation (mm)
+plot(clim_cr[['bio12']],
+     main = "Annual precipitation (mm)")
+
+# Precipitation seasonality
+plot(clim_cr[['bio15']],
+     main = "Precipitation seasonality")
+```
+
+Notice how different variables tell different stories about the landscape. Temperature broadly tracks elevation — cooler highlands, warmer coasts. Precipitation is patchier, reflecting the complex rain shadow effects of the central mountains, which create a drier Pacific slope and a wetter Caribbean side.
+
+# Checking that layers align
+
+Before stacking and combining layers, we need to confirm that they share the same resolution, extent, and CRS. Layers that don't align can't be combined without error.
+
+```{r}
+# Resolution
+res(elev_cr)
+res(clim_cr)
+
+# CRS
+crs(elev_cr, describe = TRUE)
+crs(clim_cr, describe = TRUE)
+```
+
+The resolutions should both be approximately 0.167° (10 arc-minutes). If they differ, we need to resample. Here we resample elevation to exactly match the climate grid, which ensures perfect alignment.
+
+```{r}
+elev_resamp <- terra::resample(elev_cr, clim_cr, method = 'bilinear')
+
+# Confirm match
+res(elev_resamp)
+res(clim_cr)
+```
+
+Now we can stack them.
+
+```{r}
+env_stack <- c(clim_cr, elev_resamp)
+names(env_stack)[20] <- 'elev'
+
+nlyr(env_stack)   # should be 20
+names(env_stack)
+```
+
+# Extracting values at points
+
+To check everything's working, let's extract environmental values at a few howler monkey locations.
+
+```{r}
+library(rgbif)
+
+species <- occ_search(
+  scientificName = "Alouatta palliata",
+  country = "CR",
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  species$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+howler_vect <- vect(howler_sf)
+
+# Extract at first 5 locations
+terra::extract(env_stack, howler_vect[1:5, ])
+```
+
+Each row is an occurrence point; each column is an environmental variable at that location. This is the foundation of species distribution modelling — the numerical pairing of "where was the species?" with "what was the environment there?"
+
+# Save your work
+
+We'll use these objects in every subsequent module.
+
+```{r}
+terra::writeRaster(env_stack, 'data/env_stack.tif', overwrite = TRUE)
+terra::writeRaster(clim_cr,   'data/clim_cr.tif',   overwrite = TRUE)
+# Note: region_vect is a terra SpatVector and cannot be saved with save() —
+# terra's external pointer objects become invalid when serialised.
+# We save region (an sf object) and recreate region_vect with vect() as needed.
+save(region, region_bbox, file = 'data/region.RData')
+```
+
+# Exercise
+
+1. Plot `bio04` (temperature seasonality). Where in Costa Rica is temperature most seasonal? Does this make geographical sense given what you know about the country's climate?
+2. Use `terra::extract()` to get the mean annual temperature (`bio01 / 10`) at all howler locations. What is the range of temperatures where howlers have been recorded? Does this align with what you'd expect for a tropical forest species?
+3. Use `terra::global(clim_cr[['bio12']], fun = 'mean', na.rm = TRUE)` to calculate mean annual precipitation across Costa Rica. Then do the same for `bio15` (precipitation seasonality). Which part of the country do you think is the most challenging environment for a forest-dependent species?
+
+# References
+
+Fick, S.E. & Hijmans, R.J. (2017). WorldClim 2: new 1-km spatial resolution climate surfaces for global land areas. *International Journal of Climatology*, 37, 4302–4315.
+
+Hutchinson, G.E. (1957). Concluding remarks. *Cold Spring Harbor Symposia on Quantitative Biology*, 22, 415–427.
+
+Janzen, D.H. (1983). No park is an island: increase in interference from outside as park size decreases. *Oikos*, 41, 402–410.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r_for_nervous_humans/spatial/module-5/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r_for_nervous_humans/spatial/module-7/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

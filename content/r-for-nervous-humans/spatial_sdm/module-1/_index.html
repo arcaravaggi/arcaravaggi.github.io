@@ -1,0 +1,170 @@
+---
+title: "Module 1: What is spatial data?"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and
+exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates
+and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns
+real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with
+environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a
+species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing
+and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt —
+maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select></p>
+<div id="welcome-to-spatial-ecological-analysis-in-r-for-nervous-humans" class="section level1">
+<h1>Welcome to Spatial Ecological Analysis in R for Nervous Humans</h1>
+<p>If you’ve ever asked something like:</p>
+<ul>
+<li>Why do howler monkeys only occur in certain parts of the
+forest?</li>
+<li>Where do seabirds cluster during breeding season?</li>
+<li>How does tree cover change as you move up a mountain?</li>
+</ul>
+<p>…then you’re already thinking spatially. Congratulations — you’re a
+spatial ecologist. You just didn’t have the R skills to go with it.
+Yet.</p>
+<p>Ecology is full of questions about where things are and why they’re
+there. Spatial data is simply the way we record and interrogate those
+patterns.</p>
+</div>
+<div id="so-what-is-spatial-data" class="section level1">
+<h1>So, what is spatial data?</h1>
+<p>At its simplest, spatial data is information tied to a location. That
+location might be a precise GPS point, a grid cell on a map, or a
+defined area like a forest patch or national park boundary.</p>
+<p>A spatial dataset usually has two parts:</p>
+<ol style="list-style-type: decimal">
+<li><strong>Where</strong> something is (its coordinates or position in
+space)</li>
+<li><strong>What</strong> is there (a measurement, observation, or
+category)</li>
+</ol>
+<p>This could be a GPS fix where you recorded a howler monkey troop, a
+land-cover map across a region, or a grid of values showing temperature
+or elevation. In short, spatial data tells you not just <em>what</em> is
+happening, but <em>where</em> — and that “where” often turns out to be
+the most interesting part.</p>
+</div>
+<div id="why-does-where-matter" class="section level1">
+<h1>Why does “where” matter?</h1>
+<p>Because in ecology, location is rarely random. One of the oldest and
+most robust principles in spatial science is <strong>Tobler’s first law
+of geography</strong>: <em>“Everything is related to everything else,
+but near things are more related than distant things”</em> (Tobler
+1970). Nearby places tend to be more similar environmentally, more
+connected by dispersal, and more ecologically interchangeable than
+distant ones.</p>
+<p>This has real consequences. A forest patch next to a river might
+support a completely different community from one on dry hillside a
+kilometre away. Howler monkeys recorded clustering along a valley floor
+might be tracking food resources, avoiding predators, or simply
+reflecting where field teams walked. Distinguishing between those
+explanations requires spatial thinking.</p>
+<p>If you ignore space, you miss these patterns entirely. Worse, you can
+reach the wrong conclusions. Models that ignore spatial structure can
+produce wildly overconfident results (Dormann et al. 2007), and
+conservation decisions based on spatially biased data have led to
+protected areas that miss the species they were meant to protect (Veloz
+2009). Space is not a nuisance to be discarded; it’s information.</p>
+</div>
+<div id="types-of-spatial-data" class="section level1">
+<h1>Types of spatial data</h1>
+<p>Broadly, spatial data in ecology comes in two forms:</p>
+<p><strong>Vector data</strong>. These are discrete objects in space.
+This includes points (a GPS fix for a monkey sighting), lines (a river
+or transect route), and polygons (a country boundary, a forest patch, a
+protected area). Vector data is precise and efficient for representing
+distinct features.</p>
+<p><strong>Raster data</strong>. These are continuous surfaces across
+space. A raster is a grid of cells, each holding a value: temperature,
+elevation, vegetation density, rainfall. Think of it as a digital
+photograph of the landscape where each pixel encodes an environmental
+measurement. Rasters are the workhorse of landscape-scale environmental
+analysis.</p>
+<p>We’ll encounter both throughout this course.</p>
+</div>
+<div id="what-do-we-actually-do-with-spatial-data" class="section level1">
+<h1>What do we actually do with spatial data?</h1>
+<p>Once you have spatial data, the goal is usually some version of:
+<em>what do we find, where, and why?</em></p>
+<p>That might involve mapping observations to see patterns, comparing
+habitats or regions, testing whether a distribution is more clustered
+than expected by chance, or linking species presence to environmental
+variables to build a predictive model. By the end of this course, you’ll
+be doing all of these things.</p>
+<p>Spatial data can look intimidating at first — coordinate systems,
+projections, raster stacks, and geometry columns are a lot to take in.
+But at its core, it is just a structured way of answering ecological
+questions you already understand.</p>
+</div>
+<div id="our-species-the-mantled-howler-monkey" class="section level1">
+<h1>Our species: the mantled howler monkey</h1>
+<p>Throughout this course we’ll use the <strong>mantled howler
+monkey</strong> (<em>Alouatta palliata</em>) as our focal species.
+Howler monkeys are so-called because of their deep, resonant roars,
+produced by a specialised hyoid bone that acts as a resonating chamber,
+that can carry up to 5 km through dense forest. Despite sounding like
+something out of Jurassic Park, they’re herbivorous, leaf-eating
+primates that live in groups of up to 20 individuals across Central
+American tropical forests.</p>
+<p>They are also ecologically important. As folivores and frugivores,
+they are significant seed dispersers, and their population status is a
+useful indicator of forest health (Estrada et al. 2017). They have a
+solid GBIF record base, a well-defined range, and occupy a landscape
+with interesting environmental gradients, which makes them an ideal
+subject for learning spatial analysis. Any patterns we find will be
+real, ecologically meaningful, and interpretable.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Dormann, C.F., McPherson, J.M., Araújo, M.B., Bivand, R., Bolliger,
+J., Carl, G., Davies, R.G., Hirzel, A., Jetz, W., Kissling, W.D., Kühn,
+I., Ohlemüller, R., Peres-Neto, P.R., Reineking, B., Schröder, B.,
+Schurr, F.M. &amp; Wilson, R. (2007). Methods to account for spatial
+autocorrelation in the analysis of species distributional data: a
+review. <em>Ecography</em>, 30, 609–628.</p>
+<p>Estrada, A., Garber, P.A., Rylands, A.B., Roos, C., Fernandez-Duque,
+E., Di Fiore, A., Nekaris, K.A.I., Nijman, V., Heymann, E.W., Lambert,
+J.E., Rovero, F., Barelli, C., Setchell, J.M., Gillespie, T.R.,
+Mittermeier, R.A., Verde Arregoitia, L., de Guinea, M., Gouveia, S.,
+Dobrovolski, R., Shanee, S., Shanee, N., Boyle, S.A., Fuentes, A.,
+MacKinnon, K.C., Amato, K.R., Meyer, A.L.S., Wich, S., Sussman, R.W.,
+Pan, R., Kone, I. &amp; Li, B. (2017). Impending extinction crisis of
+the world’s primates: why primates matter. <em>Science Advances</em>, 3,
+e1600946.</p>
+<p>Tobler, W.R. (1970). A computer movie simulating urban growth in the
+Detroit region. <em>Economic Geography</em>, 46, 234–240.</p>
+<p>Veloz, S.D. (2009). Spatially autocorrelated sampling falsely
+inflates measures of accuracy for presence-only niche models.
+<em>Journal of Biogeography</em>, 36, 2290–2299.</p>
+<div>
+<p><a href="/r-for-nervous-humans/spatial_sdm/module-2/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>

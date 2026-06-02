@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Module 2: Opening and exploring spatial data | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+  Jump to a module...
+  1. What is spatial data?
+  2. Opening and exploring spatial data
+  3. Coordinates and projections
+  4. Points, polygons, and rasters
+  5. Are patterns real?
+  6. Working with environmental data
+  7. Preparing occurrence data for modelling
+  8. Exploring species-environment relationships
+  9. Building a species distribution model
+  10. Assessing and predicting your SDM
+    11. MaxEnt — maximum entropy modelling
+  12. Random forest and ensemble models
+
+Opening and exploring spatial data in R
+For this module, you&rsquo;ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="http://localhost:1313/r-for-nervous-humans/spatial/module-2/_index.knit/">
+<link crossorigin="anonymous" href="http://localhost:1313/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/r-for-nervous-humans/spatial/module-2/_index.knit/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="http://localhost:1313/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="http://localhost:1313/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 2: Opening and exploring spatial data
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content"><!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r_for_nervous_humans/spatial/module-1/">1. What is spatial data?</option>
+  <option value="/r_for_nervous_humans/spatial/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r_for_nervous_humans/spatial/module-3/">3. Coordinates and projections</option>
+  <option value="/r_for_nervous_humans/spatial/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r_for_nervous_humans/spatial/module-5/">5. Are patterns real?</option>
+  <option value="/r_for_nervous_humans/spatial/module-6/">6. Working with environmental data</option>
+  <option value="/r_for_nervous_humans/spatial/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r_for_nervous_humans/spatial/module-9/">9. Building a species distribution model</option>
+  <option value="/r_for_nervous_humans/spatial/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r_for_nervous_humans/spatial/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r_for_nervous_humans/spatial/module-12/">12. Random forest and ensemble models</option>
+</select>
+<h1 id="opening-and-exploring-spatial-data-in-r">Opening and exploring spatial data in R<a hidden class="anchor" aria-hidden="true" href="#opening-and-exploring-spatial-data-in-r">#</a></h1>
+<p>For this module, you&rsquo;ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>rgbif</code></li>
+</ul>
+<p>So far, we&rsquo;ve talked about what spatial data is and why it matters. Now comes the hands-on part — actually getting it into R and having a look around.</p>
+<p>When you load spatial data into R, it doesn&rsquo;t appear as a neat table like a spreadsheet. Instead, it&rsquo;s stored in special objects that keep track of both the <strong>data</strong> (species names, counts, measurements) and the <strong>geometry</strong> (where those things are). Think of it as a spreadsheet with a built-in map attached — which is essentially what it is.</p>
+<p>If we had data from a primate survey, it might look like this:</p>
+<table>
+  <thead>
+      <tr>
+          <th>Site ID</th>
+          <th>Species seen</th>
+          <th>Temperature</th>
+          <th>Location</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>Yes</td>
+          <td>27.4°C</td>
+          <td>(x₁, y₁)</td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>No</td>
+          <td>24.1°C</td>
+          <td>(x₂, y₂)</td>
+      </tr>
+  </tbody>
+</table>
+<p>The <strong>Location</strong> column isn&rsquo;t plain text — it&rsquo;s geometry. It contains the coordinates that allow R to map and spatially analyse those data. This is the fundamental structure of a <strong>simple features</strong> object, which is what the <code>sf</code> package works with (Pebesma 2018). The &ldquo;simple features&rdquo; standard is an international specification for how geographic vector data should be represented, and <code>sf</code> is its R implementation.</p>
+<h1 id="where-does-our-species-data-come-from">Where does our species data come from?<a hidden class="anchor" aria-hidden="true" href="#where-does-our-species-data-come-from">#</a></h1>
+<p>We&rsquo;ll use the <strong>Global Biodiversity Information Facility</strong> (GBIF) — a huge open-access database of biodiversity observations compiled from museum collections, citizen science platforms, research surveys, and automated monitoring. It currently holds over 2 billion occurrence records and is one of the primary data sources in contemporary macroecology and conservation biology (Chamberlain &amp; Boettiger 2017). The <code>rgbif</code> package lets us query it directly from R, which means we can pull real data, from a real database, and work with it immediately.</p>
+<p>That said, GBIF data comes with important caveats. Records are contributed by many sources with wildly varying standards of accuracy and completeness. Coordinates can be imprecise, duplicated, or wrong. Sampling effort is deeply uneven — well-studied areas near roads and research stations are heavily over-represented. We will deal with all of this carefully in Module 7. For now, we load and explore.</p>
+<h1 id="loading-packages">Loading packages<a hidden class="anchor" aria-hidden="true" href="#loading-packages">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># install.packages(c(&#34;sf&#34;, &#34;rgbif&#34;))  # only run once</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(sf)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(rgbif)
+</span></span></code></pre></div><h1 id="downloading-howler-monkey-records">Downloading howler monkey records<a hidden class="anchor" aria-hidden="true" href="#downloading-howler-monkey-records">#</a></h1>
+<p>Let&rsquo;s download occurrence records for the mantled howler monkey (<em>Alouatta palliata</em>). We&rsquo;ll keep the download modest to start (just 300 records) to keep things quick. We&rsquo;ll work with a fuller, geographically filtered dataset from Module 4 onwards.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>howler <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">occ_search</span>(
+</span></span><span style="display:flex;"><span>  scientificName <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Alouatta palliata&#34;</span>,
+</span></span><span style="display:flex;"><span>  limit <span style="color:#f92672">=</span> <span style="color:#ae81ff">300</span>,
+</span></span><span style="display:flex;"><span>  hasCoordinate <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>  <span style="color:#75715e"># only return records with usable coordinates</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h1 id="turning-it-into-spatial-data">Turning it into spatial data<a hidden class="anchor" aria-hidden="true" href="#turning-it-into-spatial-data">#</a></h1>
+<p>Right now <code>howler$data</code> is a plain data frame — rows and columns, nothing spatial. We tell R which columns contain the coordinates and what coordinate system they use. We&rsquo;ll discuss coordinate systems properly in Module 3; for now, <code>crs = 4326</code> refers to WGS84, the standard global system used by GPS receivers and GBIF.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>howler_sf <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">st_as_sf</span>(
+</span></span><span style="display:flex;"><span>  howler<span style="color:#f92672">$</span>data,
+</span></span><span style="display:flex;"><span>  coords <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;decimalLongitude&#34;</span>, <span style="color:#e6db74">&#34;decimalLatitude&#34;</span>),
+</span></span><span style="display:flex;"><span>  crs <span style="color:#f92672">=</span> <span style="color:#ae81ff">4326</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>howler_sf
+</span></span></code></pre></div><pre tabindex="0"><code>## Simple feature collection with 300 features and 105 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -94.50629 ymin: -3.743768 xmax: -77.36822 ymax: 18.37124
+## Geodetic CRS:  WGS 84
+## # A tibble: 300 × 106
+##    key        scientificName  issues datasetKey publishingOrgKey installationKey
+##  * &lt;chr&gt;      &lt;chr&gt;           &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;            &lt;chr&gt;          
+##  1 5938036987 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  2 5938118541 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  3 5938193003 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  4 5938235647 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  5 5938269984 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  6 5938276988 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  7 5938279221 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  8 5938302462 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+##  9 5938375614 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+## 10 5938407216 Alouatta palli… cdc,c… 50c9509d-… 28eb1a3f-1c15-4… 997448a8-f762-…
+## # ℹ 290 more rows
+## # ℹ 100 more variables: hostingOrganizationKey &lt;chr&gt;, publishingCountry &lt;chr&gt;,
+## #   protocol &lt;chr&gt;, lastCrawled &lt;chr&gt;, lastParsed &lt;chr&gt;, crawlId &lt;int&gt;,
+## #   basisOfRecord &lt;chr&gt;, occurrenceStatus &lt;chr&gt;, taxonKey &lt;int&gt;,
+## #   kingdomKey &lt;int&gt;, phylumKey &lt;int&gt;, classKey &lt;int&gt;, orderKey &lt;int&gt;,
+## #   familyKey &lt;int&gt;, genusKey &lt;int&gt;, speciesKey &lt;int&gt;, acceptedTaxonKey &lt;int&gt;,
+## #   acceptedScientificName &lt;chr&gt;, kingdom &lt;chr&gt;, phylum &lt;chr&gt;, order &lt;chr&gt;, …
+</code></pre><p>You&rsquo;ll see rows of observations, columns like <code>country</code>, <code>stateProvince</code>, and <code>eventDate</code>, and, crucially, a <code>geometry</code> column of type POINT. That geometry column is what makes this a spatial object. Everything else in the <code>sf</code> package flows from it.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">summary</span>(howler_sf)
+</span></span></code></pre></div><pre tabindex="0"><code>##      key            scientificName        issues           datasetKey       
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##  publishingOrgKey   installationKey    hostingOrganizationKey
+##  Length:300         Length:300         Length:300            
+##  Class :character   Class :character   Class :character      
+##  Mode  :character   Mode  :character   Mode  :character      
+##                                                              
+##                                                              
+##                                                              
+##                                                              
+##  publishingCountry    protocol         lastCrawled         lastParsed       
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##     crawlId      basisOfRecord      occurrenceStatus      taxonKey      
+##  Min.   :196.0   Length:300         Length:300         Min.   :2436649  
+##  1st Qu.:594.0   Class :character   Class :character   1st Qu.:2436649  
+##  Median :594.0   Mode  :character   Mode  :character   Median :2436649  
+##  Mean   :579.2                                         Mean   :2830703  
+##  3rd Qu.:594.0                                         3rd Qu.:2436649  
+##  Max.   :594.0                                         Max.   :7342629  
+##                                                                         
+##    kingdomKey   phylumKey     classKey      orderKey     familyKey      
+##  Min.   :1    Min.   :44   Min.   :359   Min.   :798   Min.   :3239607  
+##  1st Qu.:1    1st Qu.:44   1st Qu.:359   1st Qu.:798   1st Qu.:3239607  
+##  Median :1    Median :44   Median :359   Median :798   Median :3239607  
+##  Mean   :1    Mean   :44   Mean   :359   Mean   :798   Mean   :3239607  
+##  3rd Qu.:1    3rd Qu.:44   3rd Qu.:359   3rd Qu.:798   3rd Qu.:3239607  
+##  Max.   :1    Max.   :44   Max.   :359   Max.   :798   Max.   :3239607  
+##                                                                         
+##     genusKey         speciesKey      acceptedTaxonKey  acceptedScientificName
+##  Min.   :2436647   Min.   :2436649   Min.   :2436649   Length:300            
+##  1st Qu.:2436647   1st Qu.:2436649   1st Qu.:2436649   Class :character      
+##  Median :2436647   Median :2436649   Median :2436649   Mode  :character      
+##  Mean   :2436647   Mean   :2436649   Mean   :2830703                         
+##  3rd Qu.:2436647   3rd Qu.:2436649   3rd Qu.:2436649                         
+##  Max.   :2436647   Max.   :2436649   Max.   :7342629                         
+##                                                                              
+##    kingdom             phylum             order              family         
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##     genus             species          genericName        specificEpithet   
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##   taxonRank         taxonomicStatus    iucnRedListCategory dateIdentified    
+##  Length:300         Length:300         Length:300          Length:300        
+##  Class :character   Class :character   Class :character    Class :character  
+##  Mode  :character   Mode  :character   Mode  :character    Mode  :character  
+##                                                                              
+##                                                                              
+##                                                                              
+##                                                                              
+##  coordinateUncertaintyInMeters  continent         stateProvince     
+##  Min.   :     1.0              Length:300         Length:300        
+##  1st Qu.:     8.0              Class :character   Class :character  
+##  Median :    39.5              Mode  :character   Mode  :character  
+##  Mean   :  5498.2                                                   
+##  3rd Qu.:   724.0                                                   
+##  Max.   :125919.0                                                   
+##  NA&#39;s   :50                                                         
+##       year          month            day         eventDate        
+##  Min.   :2026   Min.   :1.000   Min.   : 1.00   Length:300        
+##  1st Qu.:2026   1st Qu.:1.000   1st Qu.: 6.75   Class :character  
+##  Median :2026   Median :1.000   Median :12.50   Mode  :character  
+##  Mean   :2026   Mean   :1.277   Mean   :13.83                     
+##  3rd Qu.:2026   3rd Qu.:2.000   3rd Qu.:22.00                     
+##  Max.   :2026   Max.   :2.000   Max.   :31.00                     
+##                                                                   
+##  startDayOfYear   endDayOfYear     modified         lastInterpreted   
+##  Min.   : 1.00   Min.   : 1.00   Length:300         Length:300        
+##  1st Qu.:10.00   1st Qu.:10.00   Class :character   Class :character  
+##  Median :23.00   Median :23.00   Mode  :character   Mode  :character  
+##  Mean   :22.41   Mean   :22.41                                        
+##  3rd Qu.:32.00   3rd Qu.:32.00                                        
+##  Max.   :54.00   Max.   :54.00                                        
+##                                                                       
+##   references          license          isSequenced      identifier       
+##  Length:300         Length:300         Mode :logical   Length:300        
+##  Class :character   Class :character   FALSE:300       Class :character  
+##  Mode  :character   Mode  :character                   Mode  :character  
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##     facts            relations         isInCluster     datasetName       
+##  Length:300         Length:300         Mode :logical   Length:300        
+##  Class :character   Class :character   FALSE:300       Class :character  
+##  Mode  :character   Mode  :character                   Mode  :character  
+##                                                                          
+##                                                                          
+##                                                                          
+##                                                                          
+##   recordedBy        identifiedBy       nucleotideSequence geodeticDatum     
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##     class           countryCode        recordedByIDs      identifiedByIDs   
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##   gbifRegion          country          publishedByGbifRegion rightsHolder      
+##  Length:300         Length:300         Length:300            Length:300        
+##  Class :character   Class :character   Class :character      Class :character  
+##  Mode  :character   Mode  :character   Mode  :character      Mode  :character  
+##                                                                                
+##                                                                                
+##                                                                                
+##                                                                                
+##  identifier.1       http...unknown.org.nick verbatimEventDate 
+##  Length:300         Length:300              Length:300        
+##  Class :character   Class :character        Class :character  
+##  Mode  :character   Mode  :character        Mode  :character  
+##                                                               
+##                                                               
+##                                                               
+##                                                               
+##  http...unknown.org.crawl_attempt http...unknown.org.status verbatimLocality  
+##  Length:300                       Length:300                Length:300        
+##  Class :character                 Class :character          Class :character  
+##  Mode  :character                 Mode  :character          Mode  :character  
+##                                                                               
+##                                                                               
+##                                                                               
+##                                                                               
+##     gbifID          collectionCode     occurrenceID         taxonID         
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##  http...unknown.org.captive_cultivated catalogNumber      institutionCode   
+##  Length:300                            Length:300         Length:300        
+##  Class :character                      Class :character   Class :character  
+##  Mode  :character                      Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##   eventTime         identificationID       name           informationWithheld
+##  Length:300         Length:300         Length:300         Length:300         
+##  Class :character   Class :character   Class :character   Class :character   
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   
+##                                                                              
+##                                                                              
+##                                                                              
+##                                                                              
+##   projectId         recordedByIDs.type recordedByIDs.value occurrenceRemarks 
+##  Length:300         Length:300         Length:300          Length:300        
+##  Class :character   Class :character   Class :character    Class :character  
+##  Mode  :character   Mode  :character   Mode  :character    Mode  :character  
+##                                                                              
+##                                                                              
+##                                                                              
+##                                                                              
+##      gadm               sex             lifeStage         dynamicProperties 
+##  Length:300         Length:300         Length:300         Length:300        
+##  Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                             
+##                                                                             
+##                                                                             
+##                                                                             
+##    vitality         identifiedByIDs.type identifiedByIDs.value
+##  Length:300         Length:300           Length:300           
+##  Class :character   Class :character     Class :character     
+##  Mode  :character   Mode  :character     Mode  :character     
+##                                                               
+##                                                               
+##                                                               
+##                                                               
+##  infraspecificEpithet individualCount samplingProtocol     habitat         
+##  Length:300           Min.   :1.000   Length:300         Length:300        
+##  Class :character     1st Qu.:1.000   Class :character   Class :character  
+##  Mode  :character     Median :1.000   Mode  :character   Mode  :character  
+##                       Mean   :2.667                                        
+##                       3rd Qu.:5.000                                        
+##                       Max.   :7.000                                        
+##                       NA&#39;s   :291                                          
+##    locality         http...unknown.org.griddedDataset
+##  Length:300         Length:300                       
+##  Class :character   Class :character                 
+##  Mode  :character   Mode  :character                 
+##                                                      
+##                                                      
+##                                                      
+##                                                      
+##  identificationVerificationStatus vernacularName    
+##  Length:300                       Length:300        
+##  Class :character                 Class :character  
+##  Mode  :character                 Mode  :character  
+##                                                     
+##                                                     
+##                                                     
+##                                                     
+##  http...unknown.org.omitFromScheduledCrawl http...unknown.org.declaredCount
+##  Length:300                                Length:300                      
+##  Class :character                          Class :character                
+##  Mode  :character                          Mode  :character                
+##                                                                            
+##                                                                            
+##                                                                            
+##                                                                            
+##           geometry  
+##  POINT        :300  
+##  epsg:4326    :  0  
+##  +proj=long...:  0  
+##                     
+##                     
+##                     
+## 
+</code></pre><h1 id="a-first-map">A first map<a hidden class="anchor" aria-hidden="true" href="#a-first-map">#</a></h1>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">plot</span>(<span style="color:#a6e22e">st_geometry</span>(howler_sf),
+</span></span><span style="display:flex;"><span>     main <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Mantled howler monkey — GBIF occurrences&#34;</span>,
+</span></span><span style="display:flex;"><span>     pch <span style="color:#f92672">=</span> <span style="color:#ae81ff">19</span>, cex <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>, col <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;tomato&#34;</span>)
+</span></span></code></pre></div><img src="_index_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<p>Note that we use <code>st_geometry()</code> here rather than just <code>plot(howler_sf)</code>. The latter would attempt to produce a separate map for every column in the data frame — which is technically valid R but not what we want right now.</p>
+<p>Even this basic map is informative. Records cluster in certain areas, and large parts of the species&rsquo; potential range look empty. This could reflect genuine habitat preferences. For example, howlers are forest-dependent and associate strongly with lowland and mid-elevation tropical forest (Fedigan &amp; Jack 2001). But it could equally reflect where researchers happened to work, or where road access made surveys feasible.</p>
+<p>This ambiguity (signal versus sampling) is one of the central challenges of biodiversity informatics, and we&rsquo;ll address it directly in Module 5.</p>
+<h1 id="exploring-the-data">Exploring the data<a hidden class="anchor" aria-hidden="true" href="#exploring-the-data">#</a></h1>
+<p>Let&rsquo;s look at a few useful fields to get a feel for what we&rsquo;re working with.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Which countries do records come from?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">table</span>(howler_sf<span style="color:#f92672">$</span>countryCode)
+</span></span></code></pre></div><pre tabindex="0"><code>## 
+##  CR  EC  HN  MX  NI  PA 
+## 239   5   3   4  12  37
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># Date range of records</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">range</span>(howler_sf<span style="color:#f92672">$</span>eventDate, na.rm <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] &#34;2026-01-01T08:34:35&#34; &#34;2026-02-23T06:09:37&#34;
+</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># How many records lack a date?</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">sum</span>(<span style="color:#a6e22e">is.na</span>(howler_sf<span style="color:#f92672">$</span>eventDate))
+</span></span></code></pre></div><pre tabindex="0"><code>## [1] 0
+</code></pre><p>Records span multiple decades and countries, a reminder that GBIF aggregates historical museum specimens alongside recent field surveys. A specimen collected in 1952 and a camera trap photo from last year sit in the same dataset, treated equivalently unless you filter by date or some other criteria. For modelling present-day distributions, this is worth keeping in mind.</p>
+<h1 id="a-note-on-data-quality">A note on data quality<a hidden class="anchor" aria-hidden="true" href="#a-note-on-data-quality">#</a></h1>
+<p>It&rsquo;s tempting to treat downloaded data as ready to use. It isn&rsquo;t, at least not yet. GBIF records have been shown to contain substantial proportions of coordinate errors, including points placed in the ocean, at country centroids (a common georeferencing shortcut), and at 0°, 0° in the Gulf of Guinea (Maldonado et al. 2015). These are not rare edge cases; they&rsquo;re common enough to meaningfully bias analyses if left unchecked.</p>
+<p>For now, we&rsquo;re just getting familiar with how spatial data looks and behaves in R. Cleaning and quality control come in Module 7.</p>
+<h1 id="references">References<a hidden class="anchor" aria-hidden="true" href="#references">#</a></h1>
+<p>Chamberlain, S. &amp; Boettiger, C. (2017). R Python, and Ruby clients for the GBIF species occurrence API. <em>PeerJ Preprints</em>, 5, e3304v1.</p>
+<p>Fedigan, L.M. &amp; Jack, K. (2001). Neotropical primates in a regenerating Costa Rican dry forest: a comparison of howler and capuchin population patterns. <em>International Journal of Primatology</em>, 22, 689–713.</p>
+<p>Maldonado, C., Molina, C.I., Zizka, A., Persson, C., Taylor, C.M., Albán, J., Chilquillo, E., Rønsted, N. &amp; Antonelli, A. (2015). Estimating species diversity and distribution in the era of Big Data. <em>Global Ecology and Biogeography</em>, 24, 1305–1317.</p>
+<p>Pebesma, E. (2018). Simple features for R: standardized support for spatial vector data. <em>The R Journal</em>, 10, 439–446.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="http://localhost:1313/r_for_nervous_humans/spatial/module-1/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="http://localhost:1313/r_for_nervous_humans/spatial/module-3/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="http://localhost:1313/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

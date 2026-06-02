@@ -1,0 +1,283 @@
+---
+title: "Module 7: Preparing occurrence data for modelling"
+draft: false
+layout: "single"
+type: "page"
+disableNewSection: true
+---
+
+<!-- Dropdown -->
+<select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+  <option value="">Jump to a module...</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is spatial data?</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and exploring spatial data</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates and projections</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points, polygons, and rasters</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns real?</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with environmental data</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing occurrence data for modelling</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring species-environment relationships</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a species distribution model</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing and predicting your SDM</option>
+    <option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt — maximum entropy modelling</option>
+  <option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random forest and ensemble models</option>
+</select>
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+library(sf)
+library(terra)
+library(dplyr)
+library(rgbif)
+library(rnaturalearth)
+library(rnaturalearthdata)
+
+load('data/region.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+
+species <- occ_search(
+  scientificName = "Alouatta palliata",
+  country = "CR",
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  species$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+```
+
+# Preparing occurrence data for modelling
+
+For this module, you'll need the following packages:
+
+- `sf`
+- `terra`
+- `dplyr`
+- `rgbif`
+- `rnaturalearth`
+- `rnaturalearthdata`
+
+In Module 5 we established that GBIF data is a mix of ecological signal and observation effort. In Module 6 we assembled our environmental layers. Now we need to bridge the two: prepare the occurrence data so that it's clean, spatially appropriate, and paired with environmental values — ready to feed into a statistical model.
+
+This step is often glossed over in tutorials. That's a mistake. As the saying goes in data science: garbage in, garbage out. An SDM built on uncleaned data can perform well statistically while being ecologically meaningless (Hijmans & Elith 2019).
+
+# Load the data
+
+```{r eval = FALSE}
+library(sf)
+library(terra)
+library(dplyr)
+```
+
+```{r}
+load('data/region.RData')
+env_stack <- terra::rast('data/env_stack.tif')
+```
+
+And re-download the howler monkey records if they're not already in your environment:
+
+```{r eval = FALSE}
+library(rgbif)
+
+species <- occ_search(
+  scientificName = "Alouatta palliata",
+  country = "CR",
+  limit = 2000,
+  hasCoordinate = TRUE
+)
+
+howler_sf <- st_as_sf(
+  species$data,
+  coords = c("decimalLongitude", "decimalLatitude"),
+  crs = 4326
+)
+```
+
+```{r}
+nrow(howler_sf)
+```
+
+# Step 1: Remove duplicate records
+
+GBIF aggregates records from many sources, and the same observation can appear multiple times — submitted by different institutions, transcribed from the same museum specimen, or simply repeated. Duplicates inflate the apparent importance of heavily recorded locations.
+
+We'll round coordinates to three decimal places (roughly 100 m resolution) and remove any records that share identical rounded positions.
+
+```{r}
+howler_sf <- howler_sf %>%
+  mutate(
+    lon_round = round(st_coordinates(.)[, 1], 3),
+    lat_round = round(st_coordinates(.)[, 2], 3)
+  ) %>%
+  distinct(lon_round, lat_round, .keep_all = TRUE)
+
+nrow(howler_sf)
+```
+
+# Step 2: Remove records with imprecise coordinates
+
+Some GBIF records have whole-number coordinates — e.g. exactly 9.0°N, 84.0°W. These often represent rough centroids or poorly georeferenced historical specimens rather than real GPS locations. We'll flag and remove them.
+
+```{r}
+coords <- as.data.frame(st_coordinates(howler_sf))
+names(coords) <- c("lon", "lat")
+
+# Flag records where both coordinates are whole numbers
+imprecise <- coords$lon == round(coords$lon) & coords$lat == round(coords$lat)
+cat(sum(imprecise), "records with whole-number coordinates removed\n")
+
+howler_sf <- howler_sf[!imprecise, ]
+
+# Also remove any records at exactly 0, 0 — a classic georeferencing error
+zero_coords <- coords$lon == 0 & coords$lat == 0
+howler_sf   <- howler_sf[!zero_coords, ]
+
+nrow(howler_sf)
+```
+
+# Step 3: Clip to the study region
+
+Although we filtered by `country = "CR"` when downloading, GBIF coordinates are not always precise enough to guarantee every point actually falls inside the country polygon. Some records sit just offshore, straddle a border, or have coordinates that place them in a neighbouring country due to georeferencing error. Before doing anything spatial, we should remove these.
+
+```{r}
+# Keep only points that fall within the Costa Rica polygon
+howler_sf <- howler_sf[st_within(howler_sf, region, sparse = FALSE)[, 1], ]
+
+nrow(howler_sf)
+```
+
+`st_within()` returns TRUE only for points that fall strictly inside the polygon. Any points on the coast, in the ocean, or across the border are silently removed. Always do this before thinning — there's no point thinning data you'd discard anyway.
+
+# Step 4: Spatial thinning
+
+Even after removing duplicates, GBIF data is spatially uneven. Decades of research near La Selva Biological Station and Corcovado National Park mean those areas are far more densely sampled than remote highland zones. If we feed this directly into a model, the model will effectively learn "this species is associated with areas that ecologists like to visit" — not what we're after.
+
+**Spatial thinning** addresses this by keeping at most one record per raster grid cell. It's worth being clear about why this is appropriate here, and when it might not be.
+
+The rasters we're using are at **10-minute resolution** — each cell covers roughly 18 × 18 km at the equator. Two occurrence points falling in the same cell will always receive *identical* environmental predictor values when we extract from those rasters, because they occupy the same pixel. Keeping both adds nothing to the model: it's the same information twice, just inflating the sample size and the apparent weight of heavily sampled locations. One record per cell is therefore not discarding ecological information — it's discarding redundancy.
+
+If you were working with higher-resolution rasters (1 km WorldClim, LiDAR-derived canopy height, etc.), finer-scale thinning would be appropriate. If you were using very coarse rasters (0.5° or lower), thinning to one point per cell would be extremely aggressive and genuinely wasteful. The right thinning resolution is the raster resolution.
+
+```{r}
+ref_grid <- env_stack[[1]]
+
+# Find which raster cell each presence point falls in
+howler_vect    <- vect(howler_sf)
+cells          <- terra::cellFromXY(ref_grid, geom(howler_vect)[, c('x', 'y')])
+howler_sf$cell <- cells
+
+# Keep one record per cell
+howler_thinned <- howler_sf %>%
+  group_by(cell) %>%
+  slice(1) %>%
+  ungroup() %>%
+  select(-cell)
+
+nrow(howler_thinned)
+
+# Visualise before and after
+par(mfrow = c(1, 2))
+plot(st_geometry(region), main = paste("Before thinning\n(n =", nrow(howler_sf), ")"))
+plot(st_geometry(howler_sf), add = TRUE, col = "tomato", pch = 19, cex = 0.4)
+
+plot(st_geometry(region), main = paste("After thinning\n(n =", nrow(howler_thinned), ")"))
+plot(st_geometry(howler_thinned), add = TRUE, col = "tomato", pch = 19, cex = 0.4)
+par(mfrow = c(1, 1))
+```
+
+The thinned dataset should look less bunched. We've traded record volume for spatial representativeness, and because the raster resolution sets the limit on what environmental information is recoverable anyway, we haven't actually lost anything the model could have used (Boria et al. 2014).
+
+# Step 4: Generate background points
+
+Our model needs a reference: what does "not specifically selected by the species" look like environmentally? For this, we generate **background points** — random locations across the study region.
+
+Background points are sometimes called pseudo-absences. They're not true absences (we don't know the species is absent there), but they represent the range of environmental conditions available across the landscape. Without them, a model has no baseline to compare presence conditions against.
+
+We sample from within the `region` polygon — the same approach we used in Module 5 to generate random points.
+
+```{r}
+set.seed(42)
+n_bg  <- nrow(howler_thinned) * 5   # 5x presences is a common rule of thumb
+bg_sf <- st_sample(region, size = n_bg)
+bg_sf <- st_sf(geometry = bg_sf)
+
+plot(st_geometry(region), main = "Presence (red) and background (grey) points")
+plot(st_geometry(bg_sf), add = TRUE, col = adjustcolor("grey50", 0.4), pch = 19, cex = 0.3)
+plot(st_geometry(howler_thinned), add = TRUE, col = "tomato", pch = 19, cex = 0.5)
+legend("bottomleft", legend = c("Presence", "Background"),
+       col = c("tomato", "grey50"), pch = 19, bty = "n")
+```
+
+The 5× ratio is a reasonable starting point; some studies use 10× or more. The key is that background points sample broadly from available environmental space, not just areas near presences (Phillips et al. 2009).
+
+# Step 5: Extract environmental values
+
+Now we extract environmental values at both presences and background points, creating the data frame that the model will actually learn from.
+
+```{r}
+# Presence points
+pres_vect   <- vect(howler_thinned)
+pres_env    <- terra::extract(env_stack, pres_vect)
+pres_coords <- as.data.frame(st_coordinates(howler_thinned))
+names(pres_coords) <- c("x", "y")
+pres_df <- data.frame(pres_coords, occ = 1, pres_env[, -1])
+
+# Background points
+bg_vect   <- vect(bg_sf)
+bg_env    <- terra::extract(env_stack, bg_vect)
+bg_coords <- as.data.frame(st_coordinates(bg_sf))
+names(bg_coords) <- c("x", "y")
+bg_df <- data.frame(bg_coords, occ = 0, bg_env[, -1])
+
+# Combine and clean
+howler_sdm <- rbind(pres_df, bg_df)
+howler_sdm <- na.omit(howler_sdm)
+
+nrow(howler_sdm)
+table(howler_sdm$occ)
+head(howler_sdm)
+```
+
+The `occ` column is what our model will predict: 1 = presence, 0 = background. Every other column is an environmental predictor.
+
+# Save your work
+
+```{r}
+save(howler_thinned, bg_sf, howler_sdm, file = 'data/module7_occdata.RData')
+```
+
+# Exercise
+
+1. How many records were lost at each cleaning step — duplicates, imprecise coordinates, clipping to polygon, spatial thinning? Which step had the largest effect?
+2. Try running the clipping step (`st_within`) *before* the duplicate removal step. Does the order matter? Why or why not?
+3. Plot the thinned presence points on top of the `bio12` (annual precipitation) raster. Do howler records appear to cluster in wetter areas, drier areas, or show no obvious pattern?
+4. Change `n_bg` to 10× the number of thinned presences. How does `table(howler_sdm$occ)` change? Why might a very high ratio of background to presence points cause problems for a statistical model?
+
+# References
+
+Boria, R.A., Olson, L.E., Goodman, S.M. & Anderson, R.P. (2014). Spatial filtering to reduce sampling bias can improve the performance of ecological niche models. *Ecological Modelling*, 275, 73–77.
+
+Hijmans, R.J. & Elith, J. (2019). *Species Distribution Modeling with R*. CRAN vignette. Available at: https://rspatial.org/sdm/
+
+Phillips, S.J., Dudík, M., Elith, J., Graham, C.H., Lehmann, A., Leathwick, J. & Ferrier, S. (2009). Sample selection bias and presence-only distribution models: implications for background and pseudo-absence data. *Ecological Applications*, 19, 181–197.
+
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+  <a href="/r-for-nervous-humans/spatial_sdm/module-6/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    ← Previous
+  </a>
+  <a href="/r-for-nervous-humans/spatial_sdm/module-8/"
+     style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;">
+    Next →
+  </a>
+</div>

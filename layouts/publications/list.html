@@ -1,0 +1,43 @@
+{{ define "main" }}
+
+<h1>Publications</h1>
+
+{{ range sort .RegularPages "Params.year" "desc" }}
+  {{ $page := . }} <!-- ensure we have a Page object -->
+
+  <div style="margin-bottom:1.5rem;">
+
+    <!-- Citation -->
+    <p>
+      
+        {{ range $i, $a := $page.Params.authors }}
+          {{ if in $a "Caravaggi" }}<strong>{{ $a }}</strong>{{ else }}{{ $a }}{{ end }}
+          {{ if lt $i (sub (len $page.Params.authors) 1) }}, {{ end }}
+        {{ end }}
+      
+      ({{ $page.Params.year }}).
+      <a href="{{ $page.RelPermalink }}"><strong>{{ $page.Title }}</strong></a>.
+      {{ with $page.Params.journal }}<em>{{ . }}</em>{{ end }}
+      {{ with $page.Params.pages }}, {{ . }}{{ end }}.
+    </p>
+
+    <!-- Optional links -->
+    {{ $links := slice }}
+
+    {{ with $page.Params.pdf }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>PDF</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.url }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>Source</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.data }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>Data & Code</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.audio }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>Audio</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.video }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>Video</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.news }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>News</a>" .) }}{{ end }}{{ end }}
+    {{ with $page.Params.infographic }}{{ if ne . "" }}{{ $links = $links | append (printf "<a href='%s'>Infographic</a>" .) }}{{ end }}{{ end }}
+
+    {{ if gt (len $links) 0 }}
+      <p>{{ delimit $links " | " | safeHTML }}</p>
+    {{ end }}
+
+  </div>
+
+{{ end }}
+
+{{ end }}
