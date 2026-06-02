@@ -1,6 +1,6 @@
 baseURL = "https://arcaravaggi.github.io/"
 languageCode = "en-us"
-theme = "papermod"
+theme = "PaperMod"
 
 
 relativeURLs = false
