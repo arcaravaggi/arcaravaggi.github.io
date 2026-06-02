@@ -1,0 +1,2273 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Analysing Respondent Attitudes from Surveys in R | </title>
+<meta name="keywords" content="social science, R, questionnaire">
+<meta name="description" content="Wildlife management decisions are rarely settled by ecological data
+alone. They live or die in the messy human world of competing values.
+Understanding what people think and why is as much a scientific skill as
+counting animals in a field. This tutorial walks you through
+quantitative analysis of a real attitude survey, using R.
+
+
+Background and Learning Objectives
+
+The ecological context
+The Irish hare (Lepus timidus hibernicus) is a subspecies
+endemic to Ireland — found nowhere else on Earth. It has been present
+since before the last Ice Age, making it one of the island’s oldest
+residents and a genuine conservation priority.">
+<meta name="author" content="Anthony Caravaggi">
+<link rel="canonical" href="https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/">
+  <meta property="og:title" content="Analysing Respondent Attitudes from Surveys in R">
+  <meta property="og:description" content="Wildlife management decisions are rarely settled by ecological dataalone. They live or die in the messy human world of competing values.Understanding what people think and why is as much a scientific skill ascounting animals in a field. This tutorial walks you throughquantitative analysis of a real attitude survey, using R.
+Background and Learning ObjectivesThe ecological contextThe Irish hare (Lepus timidus hibernicus) is a subspeciesendemic to Ireland — found nowhere else on Earth. It has been presentsince before the last Ice Age, making it one of the island’s oldestresidents and a genuine conservation priority.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-05-29T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-05-29T00:00:00+00:00">
+    <meta property="article:tag" content="Social Science">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Questionnaire">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Analysing Respondent Attitudes from Surveys in R">
+  <meta name="twitter:description" content="Wildlife management decisions are rarely settled by ecological dataalone. They live or die in the messy human world of competing values.Understanding what people think and why is as much a scientific skill ascounting animals in a field. This tutorial walks you throughquantitative analysis of a real attitude survey, using R.
+Background and Learning ObjectivesThe ecological contextThe Irish hare (Lepus timidus hibernicus) is a subspeciesendemic to Ireland — found nowhere else on Earth. It has been presentsince before the last Ice Age, making it one of the island’s oldestresidents and a genuine conservation priority.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://arcaravaggi.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Analysing Respondent Attitudes from Surveys in R",
+      "item": "https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Analysing Respondent Attitudes from Surveys in R",
+  "name": "Analysing Respondent Attitudes from Surveys in R",
+  "description": "Wildlife management decisions are rarely settled by ecological data\ralone. They live or die in the messy human world of competing values.\rUnderstanding what people think and why is as much a scientific skill as\rcounting animals in a field. This tutorial walks you through\rquantitative analysis of a real attitude survey, using R.\nBackground and Learning Objectives\rThe ecological context\rThe Irish hare (Lepus timidus hibernicus) is a subspecies\rendemic to Ireland — found nowhere else on Earth. It has been present\rsince before the last Ice Age, making it one of the island’s oldest\rresidents and a genuine conservation priority.\n",
+  "keywords": [
+    "social science", "R", "questionnaire"
+  ],
+  "articleBody": "\rWildlife management decisions are rarely settled by ecological data\ralone. They live or die in the messy human world of competing values.\rUnderstanding what people think and why is as much a scientific skill as\rcounting animals in a field. This tutorial walks you through\rquantitative analysis of a real attitude survey, using R.\nBackground and Learning Objectives\rThe ecological context\rThe Irish hare (Lepus timidus hibernicus) is a subspecies\rendemic to Ireland — found nowhere else on Earth. It has been present\rsince before the last Ice Age, making it one of the island’s oldest\rresidents and a genuine conservation priority.\nThe European (brown) hare (Lepus europaeus), by contrast, is\ran invasive species in Northern Ireland, introduced sometime in the 19th\rcentury, probably, like so many ecological misfortunes, by people who\rthought it was a good idea at the time. L. europaeus poses a\rthreat to L. t. hibernicus through competition and\rhybridisation, and its management has been actively debated.\nThe question is not only can we cull brown hares, but should we and,\rcritically, will people support it? That last consideration is where\rsocial science enters the room, takes off its coat, and starts asking\runcomfortable questions.\nLearning objectives\rBy the end of this tutorial you will be able to:\nLoad, clean, and recode a real-world survey dataset using\rtidyverse\rCompute descriptive statistics\rApply chi-square tests and Fisher’s exact test with appropriate\rmultiple-comparison corrections\rCompute pairwise phi coefficients and visualise response linkages as\rnetworks\rFit and interpret a binary logistic regression model\rPerform quantitative thematic analysis of multi-select\rresponses\rIdentify respondent classes and interpret them in meaningful\rways\rThe study\rThis tutorial uses data from:\nCaravaggi A, Montgomery WI, Reid N (2017). Management and control of\rinvasive brown hares (Lepus europaeus): contrasting attitudes\rof selected environmental stakeholders and the wider rural community.\rBiology and Environment: Proceedings of the Royal Irish\rAcademy, 117B, 53–63. https://doi.org/10.3318/bioe.2017.08\nThe study surveyed two groups:\nCAI: Members of Countryside Alliance Ireland — an organisation\rrepresenting rural and field sports interests\rPublic: The wider rural community (non-members)\rGetting started\rPackages\r# Install any missing packages by uncommenting the line below\r# install.packages(c(\"tidyverse\",\"vcd\",\"ca\",\"igraph\",\"ggraph\",\r# \"corrplot\",\"broom\",\"scales\",\"patchwork\",\"janitor\",\"ggrepel\", \"polCA\"))\rlibrary(vcd) # Visualising categorical data (mosaic plots, association stats)\rlibrary(ca) # Correspondence analysis\rlibrary(igraph) # Network/graph objects\rlibrary(ggraph) # ggplot2-style network visualisation\rlibrary(corrplot) # Correlation/association matrix heatmaps\rlibrary(broom) # Converts messy model output into tidy data frames\rlibrary(scales) # Axis label formatting helpers\rlibrary(patchwork) # Combine multiple ggplots into one figure\rlibrary(janitor) # Data cleaning utilities (clean_names, tabyl, etc.)\rlibrary(ggrepel) # Non-overlapping text labels on plots\rlibrary(poLCA) # Latent Class Analysis\rlibrary(tidyverse) # The Swiss Army knife: dplyr, ggplot2, tidyr, readr, etc.\rset.seed(42) # Reproducibility: ensures any randomness gives the same result\r# 42 chosen for reasons that will be obvious to anyone who has\r# read the right books.\rLoading the data\rDownload https://zenodo.org/records/891251\rand place it in your working directory. The dataset is published under a\rCC BY 4.0 licence, meaning you can use it freely as long as you cite\rit.\n# Load the raw data\r# Adjust the path if your file is in a subfolder, e.g. \"data/Hare_data.csv\"\rhare_raw \u003c- read.csv(\"data.csv\",\rstringsAsFactors = FALSE,\rna.strings = c(\"\", \"NA\"))\r# clean_names() from {janitor} converts column names to consistent snake_case:\r# \"Own/rent land?\" becomes \"own_rent_land\", \"L. europaeus\" becomes \"l_europaeus\", etc.\r# This saves enormous amounts of grief when typing column names.\rhare_raw \u003c- clean_names(hare_raw)\rdim(hare_raw)\r## [1] 341 44\rThe survey questions\rBefore we analyse anything, we should understand what was actually\rasked. Here are the 20 questions from the Caravaggi et al.\r(2017) questionnaire, mapped to the column names we will use in R.\nQ#\rQuestion (abbreviated)\rColumn(s)\rType\r1a\rOwn or rent land?\rown_rent_land\rBinary (Y/N)\r1b\rPurpose (agriculture, game, conservation, recreation)\rpurpose\rMulti-select\r1c\rApproximate area (ha)\rsize\rNumeric (free text)\r2a\rActive farmer?\rfarmer\rBinary (Y/N)\r2b\rMain farm focus\rfocus\rMulti-select\r3\rConservation concern\rconservation_concern\rCategorical (N/C)\r4a\rSeen hares in NI?\rseen_hares\rBinary (Y/N)\r4b\rMost recent sighting\rwhen\rCategorical (0/1–5/5+ years)\r5\rConsider hares pests?\rconsider_hares_pests\rBinary (Y/N)\r6\rImpression of hare numbers (last 50 yrs)\rhare_numbers_50\rCategorical (I/D/S)\r7\rImpression of hare numbers (last 5 yrs)\rhare_numbers_5\rCategorical\r8\rAware two hare species in NI?\raware_of_2_sp_in_ni\rBinary (Y/N)\r9a\rEver seen L. europaeus in NI?\rseen_l_europaeus\rBinary (Y/N)\r10a\rSeen L. europaeus on own land?\rseen_l_europaeus_on_own_land\rBinary (Y/N)\r10c\rMost recent sighting on own land\rmost_recent\rCategorical\r11\rIs the threat of L. europaeus important?\ris_threat_of_l_europaeus_important\rBinary (Y/N)\r12\rSupport management of L. europaeus?\rsupport_management_of_l_europaeus\rBinary (Y/N)\r13a\rSupport non-lethal habitat management?\rhabitat_management_for_l_t_hibernicus\rBinary (Y/N)\r13b\rSupport lethal culling?\rlethal_culling\rBinary (Y/N)\r13c\rWhich culling methods?\rshooting, netting,\rtrapping\rMulti-select\r14\rSign a petition for action?\rsupport_management_via_petition\rBinary (Y/N)\r15a\rAllow land to be surveyed?\rlandowner_permission_to_survey\rBinary (Y/N)\r15b\rPermit culling by shooting?\rallow_cull_on_own_land\rBinary (Y/N)\r16\rMember of non-shooting conservation org?\rmember_of_conservation_org\rBinary (Y/N)\r17a\rHunt/shoot?\rhunt\rBinary (Y/N)\r17b\rWhat? (game birds, rabbits, wildfowl, etc.)\rgame_birds, rabbits,\rwildfowl, fishing_angling\rMulti-select\r18\rActively participate in coordinated shooting?\rsupport_cull_with_direct_involvement\rBinary (Y/N)\r19\rAllow cull on land (if not participating)?\rallow_cull_on_land\rBinary (Y/N)\r20\rSupport a government-planned/supported cull?\rsupport_gov_t_cull_decision\rBinary (Y/N)\rNotice that Q20 — support for a government-led cull — is our main\routcome variable for the regression analysis later. Why might government\rbacking matter to respondents? Consider how authority, legitimacy, and\rrisk-sharing might influence someone’s stated support.\nCoding conventions in this dataset: - Y\r/ N = Yes / No\n- C = Concerned (conservation concern variable)\n- D = “Don’t know” (hare number trend variables)\n- I / D / S = Increasing /\rDecreasing / Stable (perception of hare numbers) - Dataset codes:\rC = CAI member, P = Public (wider rural\rcommunity) - Zone codes: CORE, Periphery,\rWIDER NI\nData Cleaning\rMissing values, inconsistent coding, and columns that mean multiple\rthings all need attention before we can do anything useful.\n# Define the column groups — we will use these throughout\rbinary_cols \u003c- c(\r\"own_rent_land\", \"farmer\", \"seen_hares\", \"consider_hares_pests\",\r\"aware_of_2_sp_in_ni\", \"seen_l_europaeus\", \"seen_l_europaeus_on_own_land\",\r\"is_threat_of_l_europaeus_important\", \"support_management_of_l_europaeus\",\r\"habitat_management_for_l_t_hibernicus\", \"lethal_culling\",\r\"shooting\", \"netting\", \"trapping\",\r\"support_management_via_petition\", \"landowner_permission_to_survey\",\r\"allow_cull_on_own_land\", \"member_of_conservation_org\",\r\"hunt\", \"game_birds\", \"rabbits\", \"wildfowl\", \"fishing_angling\",\r\"support_cull_with_direct_involvement\", \"allow_cull_on_land\",\r\"support_gov_t_cull_decision\"\r)\rmgmt_cols \u003c- c(\r\"support_management_of_l_europaeus\", \"habitat_management_for_l_t_hibernicus\",\r\"lethal_culling\", \"support_management_via_petition\", \"support_cull_with_direct_involvement\",\r\"allow_cull_on_land\", \"support_gov_t_cull_decision\"\r)\raware_cols \u003c- c(\"seen_hares\", \"seen_l_europaeus\",\r\"aware_of_2_sp_in_ni\", \"is_threat_of_l_europaeus_important\")\ractivity_cols \u003c- c(\"hunt\", \"game_birds\", \"rabbits\", \"wildfowl\", \"fishing_angling\")\rcull_methods \u003c- c(\"shooting\", \"netting\", \"trapping\")\r# Recode and clean\rhare \u003c- hare_raw |\u003e\rmutate(\r# --- Binary columns: \"Y\" -\u003e TRUE, \"N\" -\u003e FALSE, anything else -\u003e NA ---\racross(all_of(binary_cols),\r~ case_when(.x == \"Y\" ~ TRUE,\r.x == \"N\" ~ FALSE,\rTRUE ~ NA)),\r# --- Hare number trends: replace \"D\" (don't know) with NA ---\rhare_numbers_50 = if_else(hare_numbers_50 == \"D\", NA_character_, hare_numbers_50),\rhare_numbers_5 = if_else(hare_numbers_5 == \"D\", NA_character_, hare_numbers_5),\r# --- Conservation concern: factor with meaningful labels ---\rconservation_concern = factor(conservation_concern,\rlevels = c(\"N\", \"C\"),\rlabels = c(\"Not concerned\", \"Concerned\")),\r# --- Respondent group: this is the key grouping variable ---\rgroup = factor(dataset,\rlevels = c(\"C\", \"P\"),\rlabels = c(\"CAI\", \"Public\")),\r# --- Geographic zone: ordered from core range outward ---\rzone = factor(zone, levels = c(\"CORE\", \"PERIPHERY\", \"WIDER NI\")),\r# --- Landholding size: strip text (\"25a\", \"200ha\") and convert to numeric ---\rsize_ha = suppressWarnings(parse_number(size)),\r# --- Survey date ---\rsurvey_date = dmy(date)\r)\r# Quick sanity check\rglimpse(hare)\r## Rows: 341\r## Columns: 47\r## $ reference \"HP00514\", \"HP00714\", \"HP00914\",…\r## $ dataset \"P\", \"P\", \"P\", \"P\", \"P\", \"P\", \"P…\r## $ zone CORE, CORE, CORE, CORE, CORE, CO…\r## $ date \"13/08/2014\", \"13/08/2014\", \"30/…\r## $ own_rent_land TRUE, TRUE, TRUE, TRUE, TRUE, TR…\r## $ purpose \"A\", \"A\", NA, \"A\", \"A\", NA, NA, …\r## $ purpose_1 NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ size \"180a\", \"50ha\", \"3a\", \"8ha\", \"14…\r## $ farmer TRUE, TRUE, FALSE, TRUE, TRUE, F…\r## $ focus \"D\", \"B\", NA, \"B\", \"S\", NA, NA, …\r## $ focus_1 NA, NA, NA, \"S\", NA, NA, NA, NA,…\r## $ focus_2 NA, NA, NA, \"A\", NA, NA, NA, NA,…\r## $ conservation_concern Concerned, Not concerned, Concer…\r## $ seen_hares TRUE, TRUE, TRUE, TRUE, TRUE, TR…\r## $ when 0, 0, 1, 0, 6, 0, 2, 0, 1, 1, 0,…\r## $ consider_hares_pests FALSE, TRUE, TRUE, FALSE, FALSE,…\r## $ hare_numbers_50 \"I\", \"I\", NA, NA, NA, \"N\", NA, \"…\r## $ hare_numbers_5 \"N\", \"I\", NA, NA, \"N\", \"N\", NA, …\r## $ aware_of_2_sp_in_ni FALSE, TRUE, FALSE, FALSE, FALSE…\r## $ seen_l_europaeus FALSE, FALSE, FALSE, FALSE, FALS…\r## $ seen_l_europaeus_on_own_land FALSE, TRUE, FALSE, FALSE, FALSE…\r## $ most_recent NA, 0, NA, NA, NA, NA, NA, NA, N…\r## $ is_threat_of_l_europaeus_important TRUE, TRUE, TRUE, FALSE, TRUE, T…\r## $ support_management_of_l_europaeus TRUE, TRUE, TRUE, TRUE, TRUE, TR…\r## $ habitat_management_for_l_t_hibernicus TRUE, TRUE, FALSE, TRUE, TRUE, T…\r## $ lethal_culling TRUE, TRUE, FALSE, FALSE, FALSE,…\r## $ shooting TRUE, NA, NA, NA, NA, NA, NA, TR…\r## $ netting NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ trapping NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ other NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ support_management_via_petition TRUE, TRUE, FALSE, FALSE, TRUE, …\r## $ landowner_permission_to_survey TRUE, TRUE, TRUE, TRUE, TRUE, NA…\r## $ allow_cull_on_own_land TRUE, TRUE, FALSE, FALSE, TRUE, …\r## $ member_of_conservation_org FALSE, TRUE, FALSE, FALSE, FALSE…\r## $ hunt TRUE, TRUE, FALSE, FALSE, FALSE,…\r## $ game_birds TRUE, NA, NA, NA, NA, NA, NA, TR…\r## $ rabbits TRUE, NA, NA, NA, NA, NA, NA, TR…\r## $ wildfowl TRUE, NA, NA, NA, NA, NA, NA, TR…\r## $ fishing_angling NA, NA, NA, NA, NA, NA, NA, TRUE…\r## $ other_1 NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ other_2 NA, NA, NA, NA, NA, NA, NA, NA, …\r## $ support_cull_with_direct_involvement TRUE, TRUE, FALSE, FALSE, TRUE, …\r## $ allow_cull_on_land NA, TRUE, FALSE, FALSE, TRUE, TR…\r## $ support_gov_t_cull_decision TRUE, TRUE, FALSE, FALSE, TRUE, …\r## $ group Public, Public, Public, Public, …\r## $ size_ha 180, 50, 3, 8, 14, NA, NA, 2, 27…\r## $ survey_date 2014-08-13, 2014-08-13, 2014-08…\r# Respondents by group\rhare |\u003e count(group) |\u003e mutate(pct = round(n / sum(n) * 100, 1))\r## group n pct\r## 1 CAI 139 40.8\r## 2 Public 202 59.2\r# Respondents by zone\rhare |\u003e count(zone) |\u003e mutate(pct = round(n / sum(n) * 100, 1))\r## zone n pct\r## 1 CORE 119 34.9\r## 2 PERIPHERY 112 32.8\r## 3 WIDER NI 110 32.3\rWhy TRUE/FALSE and not\r1/0? Storing binary variables as\rlogicals helps us: sum(seen_hares, na.rm = TRUE)\rautomatically counts the TRUE values (i.e., the “Yes”\rresponses), and mean(seen_hares, na.rm = TRUE) gives the\rproportion. It also makes the code read more easily, which matters when\ryou’re debugging at 11pm the night before a deadline.\nWho Responded? Descriptive Statistics\rBefore asking what people think, we need to understand who answered.\rA survey result is only interpretable in the context of the sample it\rcame from. A finding that “80% support culling” means something quite\rdifferent if your respondents are exclusively members of a field sports\rorganisation versus a random sample of the public.\n# Landowner and farmer profile\rhare |\u003e\rsummarise(\rn_own_land = sum(own_rent_land, na.rm = TRUE),\rpct_own = round(mean(own_rent_land, na.rm = TRUE) * 100, 1),\rn_farmer = sum(farmer, na.rm = TRUE),\rpct_farmer = round(mean(farmer, na.rm = TRUE) * 100, 1),\rn_consorg = sum(member_of_conservation_org, na.rm = TRUE),\rpct_consorg = round(mean(member_of_conservation_org, na.rm = TRUE) * 100, 1)\r)\r## n_own_land pct_own n_farmer pct_farmer n_consorg pct_consorg\r## 1 225 66 116 34 26 7.8\r# Hare awareness\rhare |\u003e\rsummarise(\rpct_seen_hares = round(mean(seen_hares, na.rm = TRUE) * 100, 1),\rpct_seen_leu = round(mean(seen_l_europaeus, na.rm = TRUE) * 100, 1),\rpct_aware_2sp = round(mean(aware_of_2_sp_in_ni, na.rm = TRUE) * 100, 1),\rpct_pests = round(mean(consider_hares_pests, na.rm = TRUE) * 100, 1),\rpct_threat_import = round(mean(is_threat_of_l_europaeus_important,\rna.rm = TRUE) * 100, 1)\r)\r## pct_seen_hares pct_seen_leu pct_aware_2sp pct_pests pct_threat_import\r## 1 93.8 32.1 42.1 14.1 64.9\r# Management support (overall)\rhare |\u003e\rdplyr::select(all_of(mgmt_cols)) |\u003e\rsummarise(across(everything(),\rlist(n_yes = ~sum(., na.rm = TRUE),\rn_tot = ~sum(!is.na(.)),\rpct = ~round(mean(., na.rm = TRUE) * 100, 1)))) |\u003e\rpivot_longer(everything(),\rnames_to = c(\"variable\", \".value\"),\rnames_sep = \"_(?=[^_]+$)\") |\u003e\rarrange(desc(pct))\r## # A tibble: 14 × 4\r## variable yes tot pct\r## ## 1 habitat_management_for_l_t_hibernicus NA NA 79.5\r## 2 support_management_of_l_europaeus NA NA 78 ## 3 support_gov_t_cull_decision NA NA 58.9\r## 4 lethal_culling NA NA 51.6\r## 5 support_management_via_petition NA NA 47 ## 6 allow_cull_on_land NA NA 42.9\r## 7 support_cull_with_direct_involvement NA NA 35.3\r## 8 support_management_of_l_europaeus_n 259 332 NA ## 9 habitat_management_for_l_t_hibernicus_n 213 268 NA ## 10 lethal_culling_n 166 322 NA ## 11 support_management_via_petition_n 154 328 NA ## 12 support_cull_with_direct_involvement_n 110 312 NA ## 13 allow_cull_on_land_n 85 198 NA ## 14 support_gov_t_cull_decision_n 189 321 NA\r# Rural activities (multi-select)\rhare |\u003e\rdplyr::select(all_of(activity_cols)) |\u003e\rsummarise(across(everything(),\rlist(n = ~sum(., na.rm = TRUE),\rpct = ~round(mean(., na.rm = TRUE) * 100, 1)))) |\u003e\rpivot_longer(everything(),\rnames_to = c(\"activity\", \".value\"),\rnames_sep = \"_(?=[^_]+$)\")\r## # A tibble: 5 × 3\r## activity n pct\r## ## 1 hunt 163 50.6\r## 2 game_birds 109 100 ## 3 rabbits 88 100 ## 4 wildfowl 88 100 ## 5 fishing_angling 71 100\rVisualisation\rAwareness by geographic zone\rOne of the central ecological questions in this study is whether\rproximity to established L. europaeus populations affects\rawareness. Respondents from the CORE zone live alongside the invasive\rspecies; those in WIDER NI may never have encountered one. Do their\rperceptions differ?\naware_labels \u003c- c(\rseen_hares = \"Seen Irish hares\",\rseen_l_europaeus = \"Seen European hares\",\raware_of_2_sp_in_ni = \"Aware of 2 species in NI\",\ris_threat_of_l_europaeus_important = \"Considers European hare threat important\"\r)\rhare |\u003e\rdplyr::select(zone, all_of(aware_cols)) |\u003e\rpivot_longer(-zone) |\u003e\rgroup_by(zone, name) |\u003e\rsummarise(pct = mean(value, na.rm = TRUE) * 100, .groups = \"drop\") |\u003e\rmutate(name = factor(name, levels = names(aware_labels), labels = aware_labels)) |\u003e\rggplot(aes(x = zone, y = pct, fill = name)) +\rgeom_col(position = \"dodge\") +\rgeom_hline(yintercept = 50, linetype = \"dashed\", colour = \"grey50\", linewidth = 0.5) +\rscale_fill_brewer(palette = \"Set2\") +\rscale_y_continuous(labels = percent_format(scale = 1), limits = c(0, 105)) +\rlabs(title = \"Hare awareness by geographic zone\",\rsubtitle = \"Dashed line = 50%\",\rx = \"Zone\", y = \"% respondents answering Yes\", fill = NULL) +\rtheme_minimal(base_size = 12) +\rtheme(legend.position = \"bottom\",\rlegend.text = element_text(size = 9))\rConservation concern: a mosaic plot\rA mosaic plot is the multivariate extension of a stacked bar chart.\rThe width of each column represents the proportion of respondents in\rthat group; the height of each cell within the column represents the\rproportion choosing each response. Colour shading (Pearson residuals)\rshows which cells deviate from what you would expect if group membership\rand conservation concern were independent.\n# Compute residuals\rtbl \u003c- table(Group = hare$group,\rConcern = hare$conservation_concern) |\u003e\r(\\(t) t[rowSums(t) \u003e 0, colSums(t) \u003e 0])()\rres_df \u003c- chisq.test(tbl)$residuals |\u003e\ras.data.frame() |\u003e\rrename(group = Group, concern = Concern, residual = Freq)\r# Compute proportions for tile sizing\rprop_df \u003c- as.data.frame(prop.table(tbl, margin = 1)) |\u003e\rrename(group = Group, concern = Concern, prop = Freq)\rplot_df \u003c- left_join(res_df, prop_df, by = c(\"group\", \"concern\"))\rggplot(plot_df, aes(x = concern, y = group, fill = residual)) +\rgeom_tile(colour = \"white\", linewidth = 3) +\rgeom_text(aes(label = round(residual, 2)),\rsize = 4.5, fontface = \"bold\",\rcolour = \"white\") +\rscale_fill_gradient2(\rlow = \"#d73027\",\rmid = \"white\",\rhigh = \"#2166ac\",\rmidpoint = 0,\rname = \"Pearson\\nresidual\"\r) +\rlabs(\rtitle = \"Conservation concern by respondent group\",\rsubtitle = \"Cell colour = Pearson residual.Blue = more than expected. Red = fewer\",\rx = \"Conservation concern\",\ry = NULL\r) +\rtheme_minimal(base_size = 13) +\rtheme(panel.grid = element_blank())\rThe shading uses Pearson residuals — the difference between observed\rand expected cell counts, standardised by the square root of the\rexpected count. A residual greater than ±2 is conventionally considered\rnoteworthy. Which cells, if any, show strong deviations? What might\rexplain them?\nManagement support: bar chart and heatmap\rWe want to see not just overall support levels, but how much the two\rgroups differ. A bar chart gives the absolute picture; a heatmap lets\rthe eye quickly spot patterns across many variables simultaneously.\nmgmt_labels \u003c- c(\rsupport_management_of_l_europaeus = \"General management\\nsupport\",\rhabitat_management_for_l_t_hibernicus = \"Habitat management\\n(non-lethal)\",\rlethal_culling = \"Lethal culling (any)\",\rsupport_management_via_petition = \"Sign a petition\",\rsupport_cull_with_direct_involvement = \"Direct involvement\\nin cull\",\rallow_cull_on_land = \"Allow cull on land\",\rsupport_gov_t_cull_decision = \"Support\\nGovernment cull\"\r)\rplot_df \u003c- hare |\u003e\rdplyr::select(group, all_of(mgmt_cols)) |\u003e\rpivot_longer(-group) |\u003e\rgroup_by(group, name) |\u003e\rsummarise(pct = mean(value, na.rm = TRUE) * 100, .groups = \"drop\") |\u003e\rmutate(name = factor(name, levels = names(mgmt_labels), labels = mgmt_labels))\rp_bar \u003c- ggplot(plot_df, aes(x = pct, y = fct_rev(name), fill = group)) +\rgeom_col(position = position_dodge(0.7), width = 0.6) +\rgeom_text(aes(label = paste0(round(pct), \"%\")),\rposition = position_dodge(0.7), hjust = -0.1, size = 3) +\rscale_fill_manual(values = c(\"CAI\" = \"#2166ac\", \"Public\" = \"#d73027\")) +\rscale_x_continuous(limits = c(0, 115), labels = percent_format(scale = 1)) +\rlabs(title = \"Support for European hare management strategies\",\rsubtitle = \"By respondent group\",\rx = \"% respondents\", y = NULL, fill = NULL) +\rtheme_minimal(base_size = 11) +\rtheme(legend.position = \"top\")\rprint(p_bar)\rggplot(plot_df, aes(x = name, y = group, fill = pct)) +\rgeom_tile(colour = \"white\", linewidth = 0.8) +\rgeom_text(aes(label = paste0(round(pct), \"%\")),\rsize = 3.5, colour = \"grey20\") +\rscale_fill_gradient2(\rlow = \"#d73027\",\rmid = \"white\",\rhigh = \"#2166ac\",\rmidpoint = 50,\rlimits = c(0, 100),\rname = \"% Yes\"\r) +\rlabs(title = \"Management support patterns\",\rsubtitle = \"Heatmap view — each cell shows % respondents answering Yes\",\rx = NULL, y = NULL) +\rtheme_minimal(base_size = 11) +\rtheme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9))\rThe bar chart is better for reading exact values and comparing groups\rside-by-side. The heatmap is better for spotting patterns across many\rvariables at once. Neither is objectively superior — it depends on what\rquestion you are trying to answer. In a real report, you would probably\ruse one or the other, not both.\nGroup comparisons: Chi-square and Fisher’s exact tests\rTheory\rThe chi-square test asks a simple question: is there a statistically\rsignificant association between two categorical variables? It does so by\rcomparing the counts of actual observations to the counts you would\rexpect if the variables were completely independent.\nWhen any expected cell count falls below 5, the chi approximation\rbecomes unreliable. Fisher’s exact test calculates the exact probability\rrather than an approximation so is always valid.\nA chi-square test does not tell Whether the association is large or\rsmall, however. A statistically significant result only means that the\reffect is probably not zero and not that it is meaningful. To explore\rmeaning we need a measure of effect size.\nCramér’s V: measuring effect size\rCramér’s V scales the \\(\\chi^2\\)\rstatistic to a 0–1 range, correcting for sample size and table\rdimensions. Typically we interpret V as ~0.1 = small, ~0.3 = medium,\r~0.5 = large.\nApplying to our data\rWe test each management variable against group membership (CAI vs\rPublic). In plain terms we’re asking whether each group answers\rdifferently on this issue. We’re asking this of 10 variables\rand if you test things many times then the likelihood of false positives\rincreases considerably. To mitigate this we also apply a Bonferroni\rcorrection that divides our usual cutoff for ‘significant’ by the number\rof tests. We have 10 tests so our P threshold is now 0.005.\n# A function that runs the appropriate test for a single variable\rcompare_groups \u003c- function(var, data = hare) {\rtbl \u003c- table(data$group, data[[var]])\r# Suppress warnings about small expected values (we check manually)\rexp_ct \u003c- suppressWarnings(chisq.test(tbl)$expected)\rif (any(exp_ct \u003c 5, na.rm = TRUE)) {\rtest \u003c- fisher.test(tbl)\rmethod \u003c- \"Fisher\"\rstat \u003c- NA_real_\rp \u003c- test$p.value\rOR \u003c- as.numeric(test$estimate)\r} else {\rtest \u003c- suppressWarnings(chisq.test(tbl))\rmethod \u003c- \"Chi-sq\"\rstat \u003c- as.numeric(test$statistic)\rp \u003c- test$p.value\r# Cramér's V for chi-square\rn_obs \u003c- sum(tbl)\rOR \u003c- sqrt(stat / (n_obs * (min(dim(tbl)) - 1))) # repurpose column for V\r}\rtibble(\rvariable = var,\rmethod = method,\rstatistic = round(stat, 3),\rp_value = round(p, 4),\rcramers_V_or_OR = round(OR, 3),\reffect_note = if_else(method == \"Chi-sq\", \"Cramer's V\", \"Odds ratio\"),\rsig = case_when(p \u003c 0.001 ~ \"***\",\rp \u003c 0.01 ~ \"**\",\rp \u003c 0.05 ~ \"*\",\rTRUE ~ \"\")\r)\r}\rcomparison_table \u003c- map_dfr(mgmt_cols, compare_groups) |\u003e\rarrange(p_value) |\u003e\rmutate(\rp_bonferroni = p.adjust(p_value, method = \"bonferroni\"),\rsig_bonf = case_when(p_bonferroni \u003c 0.001 ~ \"***\",\rp_bonferroni \u003c 0.01 ~ \"**\",\rp_bonferroni \u003c 0.05 ~ \"*\",\rTRUE ~ \"ns\")\r)\rcomparison_table |\u003e\rdplyr::select(variable, method, statistic, p_value, cramers_V_or_OR,\reffect_note, sig, sig_bonf) |\u003e\rknitr::kable(\rcaption = \"Table 2. Statistical comparisons of management support between CAI members and Public respondents. Sig. = before Bonferroni correction; Sig. (Bonf.) = after correction.\",\rcol.names = c(\"Variable\",\"Test\",\"Statistic\",\"p-value\",\r\"Effect size\",\"Measure\",\"Sig.\",\"Sig. (Bonf.)\")\r)\rVariable\rTest\rStatistic\rp-value\rEffect size\rMeasure\rSig.\rSig. (Bonf.)\rlethal_culling\rChi-sq\r21.041\r0.0000\r0.256\rCramer’s V\r***\r***\rsupport_management_via_petition\rChi-sq\r18.508\r0.0000\r0.238\rCramer’s V\r***\r***\rsupport_cull_with_direct_involvement\rChi-sq\r28.094\r0.0000\r0.300\rCramer’s V\r***\r***\rsupport_gov_t_cull_decision\rChi-sq\r3.571\r0.0588\r0.105\rCramer’s V\rns\rsupport_management_of_l_europaeus\rChi-sq\r1.191\r0.2751\r0.060\rCramer’s V\rns\rallow_cull_on_land\rChi-sq\r0.752\r0.3857\r0.062\rCramer’s V\rns\rhabitat_management_for_l_t_hibernicus\rChi-sq\r0.000\r1.0000\r0.000\rCramer’s V\rns\rDoes species awareness predict management support?\rAn ecologically interesting sub-question: do respondents who know\rthere are two hare species in Northern Ireland show different levels of\rsupport for management?\nhare |\u003e\rfilter(!is.na(aware_of_2_sp_in_ni),\r!is.na(support_management_of_l_europaeus)) |\u003e\rcount(aware_of_2_sp_in_ni, support_management_of_l_europaeus) |\u003e\rmutate(\raware_of_2_sp_in_ni = if_else(aware_of_2_sp_in_ni, \"Aware\", \"Not aware\"),\rsupport_management_of_l_europaeus = if_else(support_management_of_l_europaeus,\r\"Supports\", \"Opposes\")\r) |\u003e\rknitr::kable(caption = \"Table 3. Species awareness vs management support crosstab.\")\raware_of_2_sp_in_ni\rsupport_management_of_l_europaeus\rn\rNot aware\rOpposes\r39\rNot aware\rSupports\r151\rAware\rOpposes\r33\rAware\rSupports\r108\rfisher.test(table(hare$aware_of_2_sp_in_ni,\rhare$support_management_of_l_europaeus))\r## ## Fisher's Exact Test for Count Data\r## ## data: table(hare$aware_of_2_sp_in_ni, hare$support_management_of_l_europaeus)\r## p-value = 0.5904\r## alternative hypothesis: true odds ratio is not equal to 1\r## 95 percent confidence interval:\r## 0.4839208 1.4835166\r## sample estimates:\r## odds ratio ## 0.8457105\rIf people who are more aware of the species distinction are less\rlikely to support management, what might this suggest? Could ecological\rknowledge cut both ways - increasing concern for the Irish hare but also\rincreasing reluctance to sanction lethal control of the other? This is a\rgenuinely interesting question that has real implications for how\rconservation communication should be framed.\nResponse linkage: association analysis\rTheory: phi coefficients for binary data\rSo far we have been looking at one variable at a time, or comparing\rone variable against group membership. But survey responses are not\rindependent of each other. Someone who says they would sign a petition\rmay also be likely to allow a cull on their land. Mapping these internal\rassociations reveals the structure of opinion.\nFor two binary (Y/N) variables, the appropriate correlation\rcoefficient is phi (\\(\\phi\\)), which is conceptually identical to\rPearson’s \\(r\\) applied to 0/1-coded\rdata.\nComputing the phi matrix\rall_binary_cols \u003c- c(aware_cols, mgmt_cols, \"member_of_conservation_org\", activity_cols)\rbinary_mat \u003c- hare |\u003e\rdplyr::select(all_of(all_binary_cols)) |\u003e\rmutate(across(everything(), as.integer))\rphi_mat \u003c- cor(binary_mat, use = \"pairwise.complete.obs\")\r## Warning in cor(binary_mat, use = \"pairwise.complete.obs\"): the standard\r## deviation is zero\rphi_mat[is.na(phi_mat)] \u003c- 0 # replace NA correlations with 0\r# Readable labels\rnice_names \u003c- c(\rseen_hares = \"Seen Irish hare\",\rseen_l_europaeus = \"Seen Eur. hare\",\raware_of_2_sp_in_ni = \"Aware 2 spp\",\ris_threat_of_l_europaeus_important = \"Threat important\",\rsupport_management_of_l_europaeus = \"Support mgmt\",\rhabitat_management_for_l_t_hibernicus= \"Habitat mgmt\",\rlethal_culling = \"Lethal cull\",\rsupport_management_via_petition = \"Petition\",\rsupport_cull_with_direct_involvement = \"Direct involve\",\rallow_cull_on_land = \"Allow cull\",\rsupport_gov_t_cull_decision = \"Govt cull\",\rmember_of_conservation_org = \"Consv org\",\rhunt = \"Hunt\",\rgame_birds = \"Game birds\",\rrabbits = \"Rabbits\",\rwildfowl = \"Wildfowl\",\rfishing_angling = \"Fishing\"\r)\rrownames(phi_mat) \u003c- colnames(phi_mat) \u003c- nice_names[colnames(phi_mat)]\rHeatmap of phi coefficients\r# Make the plot device tall and wide before calling corrplot\rpar(oma = c(0, 0, 2, 0)) # outer margin for title\rcorrplot(\rphi_mat,\rmethod = \"color\",\rtype = \"lower\", # full matrix reads better at this size\rorder = \"hclust\", # group correlated variables together\rhclust.method = \"ward.D2\", # matches your clustering analysis\rtl.cex = 0.85, # larger labels\rtl.col = \"black\",\rtl.srt = 45, # angled top labels, less cramped\raddCoef.col = \"black\",\rnumber.cex = 0.65,\rnumber.digits = 1, # 1 decimal place keeps cells readable\rcol = colorRampPalette(c(\"#d73027\", \"white\", \"#2166ac\"))(200),\rmar = c(0, 0, 1, 0),\rdiag = FALSE # hide the diagonal 1s\r)\rtitle(\"Phi coefficients: binary response associations\",\router = TRUE, cex.main = 1.1)\rHierarchical clustering: what clusters with what?\rHierarchical clustering groups variables by similarity. Here we treat\r\\(1 - |\\phi|\\) as a distance (so highly\rassociated variables, whether positively or negatively, are close\rtogether), and use Ward’s D2 linkage to merge groups.\ndist_mat \u003c- as.dist(1 - abs(phi_mat))\rhclust_res \u003c- hclust(dist_mat, method = \"ward.D2\")\rplot(hclust_res,\rmain = \"Hierarchical clustering of questionnaire responses\",\rsub = \"Distance = 1 - |φ| (Ward's D2 linkage)\",\rxlab = \"Response variable\",\rylab = \"Distance\",\rcex = 0.85)\rrect.hclust(hclust_res, k = 4,\rborder = c(\"#e41a1c\", \"#377eb8\", \"#4daf4a\", \"#984ea3\"))\rVariables that merge at a low height are closely associated.\rVariables that only merge near the top of the tree are weakly\rassociated. The coloured rectangles suggest a four-cluster partition but\rselecting \\(k\\) is a judgement call,\rnot an algorithm output. Try k = 3 and k = 5\rand see how the interpretation changes.\nAssociation network\rWe can go one step further and visualise the associations as a\rnetwork where variables are nodes, and we draw an edge between two nodes\rif their \\(|\\phi| \u003e 0.3\\) (a\rconventional threshold for a “meaningful” binary association). Edge\rthickness and colour encode the strength and direction of the\rassociation.\nphi_long \u003c- as_tibble(phi_mat, rownames = \"from\") |\u003e\rpivot_longer(-from, names_to = \"to\", values_to = \"phi\") |\u003e\rfilter(from \u003c to, # lower triangle only — avoid duplicate edges\rabs(phi) \u003e 0.3,\r!is.na(phi))\rif (nrow(phi_long) \u003e 0) {\rg \u003c- graph_from_data_frame(\rd = phi_long |\u003e mutate(weight = abs(phi)),\rdirected = FALSE,\rvertices = tibble(name = colnames(phi_mat))\r)\rE(g)$sign \u003c- ifelse(phi_long$phi \u003e 0, \"positive\", \"negative\")\rset.seed(42)\rggraph(g, layout = \"fr\") +\rgeom_edge_link(aes(width = weight, colour = sign), alpha = 0.8) +\rgeom_node_point(size = 7, colour = \"#444444\", fill = \"#dddddd\",\rshape = 21, stroke = 1) +\rgeom_node_text(aes(label = name), size = 2.8, repel = TRUE,\rmax.overlaps = 20) +\rscale_edge_width(range = c(0.5, 3.5), name = \"|φ|\") +\rscale_edge_colour_manual(\rvalues = c(positive = \"#2166ac\", negative = \"#d73027\"),\rname = \"Direction\"\r) +\rlabs(\rtitle = \"Association network: questionnaire responses\",\rsubtitle = \"Edges where |φ| \u003e 0.3 · blue = positive · red = negative\"\r) +\rtheme_graph(base_family = \"sans\") +\rtheme(legend.position = \"right\")\r} else {\rcat(\"No pairs with |phi| \u003e 0.3 in this sample. Try lowering the threshold.\\n\")\r}\rIn a well-designed attitude survey, you often see two major clusters:\rone for knowledge/awareness items and one for action/support items. Do\rthese emerge here? What does it mean if awareness and support cluster\rtogether — or separately?\nLogistic Regression: Predicting Support for a Government Cull\rWe have established that the groups differ. Now we want to know what\rpredicts support for the most politically significant outcome: a\rgovernment-planned cull (Q20). Our outcome is binary — it can only be 0\ror 1. Ordinary linear regression can predict values outside this range,\rwhich is nonsensical. Logistic regression models the log-odds of the\routcome, guaranteeing that predicted probabilities stay between 0 and\r1.\nFitting the model\rhare_mod \u003c- hare |\u003e\rmutate(\rgroup = relevel(group, ref = \"Public\"),\rconservation_concern = relevel(conservation_concern, ref = \"Not concerned\")\r) |\u003e\rfilter(!is.na(support_gov_t_cull_decision))\rglm_fit \u003c- glm(\rsupport_gov_t_cull_decision ~\rgroup + zone + own_rent_land + conservation_concern +\raware_of_2_sp_in_ni + consider_hares_pests +\ris_threat_of_l_europaeus_important + hunt,\rdata = hare_mod,\rfamily = binomial(link = \"logit\")\r)\rsummary(glm_fit)\r## ## Call:\r## glm(formula = support_gov_t_cull_decision ~ group + zone + own_rent_land + ## conservation_concern + aware_of_2_sp_in_ni + consider_hares_pests + ## is_threat_of_l_europaeus_important + hunt, family = binomial(link = \"logit\"), ## data = hare_mod)\r## ## Coefficients:\r## Estimate Std. Error z value Pr(\u003e|z|) ## (Intercept) -0.25476 0.51240 -0.497 0.6191 ## groupCAI 0.06835 0.46442 0.147 0.8830 ## zonePERIPHERY 0.24281 0.37854 0.641 0.5212 ## zoneWIDER NI 0.09899 0.38234 0.259 0.7957 ## own_rent_landTRUE -0.28734 0.35088 -0.819 0.4128 ## conservation_concernConcerned 0.25992 0.39922 0.651 0.5150 ## aware_of_2_sp_in_niTRUE -0.76739 0.38291 -2.004 0.0451 *\r## consider_hares_pestsTRUE -0.20057 0.41016 -0.489 0.6248 ## is_threat_of_l_europaeus_importantTRUE 0.82124 0.32678 2.513 0.0120 *\r## huntTRUE 1.20848 0.48102 2.512 0.0120 *\r## ---\r## Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1\r## ## (Dispersion parameter for binomial family taken to be 1)\r## ## Null deviance: 262.50 on 199 degrees of freedom\r## Residual deviance: 241.55 on 190 degrees of freedom\r## (121 observations deleted due to missingness)\r## AIC: 261.55\r## ## Number of Fisher Scoring iterations: 4\rOdds ratios and confidence intervals\rWe calculate odds ratios in logistic regression to express how much\rthe odds of an outcome change when a predictor increases or differs\rbetween groups. They make results easier to interpret by turning model\rcoefficients into a clear “how many times more or less likely”\rcomparison.\nglm_tidy \u003c- tidy(glm_fit, conf.int = TRUE, exponentiate = TRUE) |\u003e\rfilter(term != \"(Intercept)\") |\u003e\rmutate(\rsig = case_when(p.value \u003c 0.001 ~ \"***\",\rp.value \u003c 0.01 ~ \"**\",\rp.value \u003c 0.05 ~ \"*\",\rTRUE ~ \"\")\r)\rglm_tidy |\u003e\rdplyr::select(term, estimate, conf.low, conf.high, p.value, sig) |\u003e\rknitr::kable(\rdigits = 3,\rcaption = \"Table 4. Logistic regression results. Odds ratios (ORs) with 95% confidence intervals and p-values. Reference group: Public respondents; Not concerned about conservation.\",\rcol.names = c(\"Predictor\", \"OR\", \"95% CI lower\", \"95% CI upper\", \"p-value\", \"Sig.\")\r)\rPredictor\rOR\r95% CI lower\r95% CI upper\rp-value\rSig.\rgroupCAI\r1.071\r0.424\r2.654\r0.883\rzonePERIPHERY\r1.275\r0.609\r2.701\r0.521\rzoneWIDER NI\r1.104\r0.523\r2.353\r0.796\rown_rent_landTRUE\r0.750\r0.374\r1.487\r0.413\rconservation_concernConcerned\r1.297\r0.587\r2.832\r0.515\raware_of_2_sp_in_niTRUE\r0.464\r0.215\r0.970\r0.045\r*\rconsider_hares_pestsTRUE\r0.818\r0.367\r1.851\r0.625\ris_threat_of_l_europaeus_importantTRUE\r2.273\r1.203\r4.349\r0.012\r*\rhuntTRUE\r3.348\r1.342\r8.956\r0.012\r*\rggplot(glm_tidy, aes(x = estimate, y = reorder(term, estimate))) +\rgeom_point(size = 3.5, colour = \"#2166ac\") +\rgeom_errorbarh(aes(xmin = conf.low, xmax = conf.high),\rheight = 0.3, colour = \"#2166ac\", linewidth = 0.8) +\rgeom_vline(xintercept = 1, linetype = \"dashed\", colour = \"#e74c3c\",\rlinewidth = 0.8) +\rscale_x_log10() +\rlabs(\rtitle = \"Predictors of government cull support\",\rsubtitle = \"Odds ratios with 95% CI (log scale)\",\rx = \"Odds ratio\", y = NULL\r) +\rtheme_minimal(base_size = 12)\r## Warning: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.\r## ℹ Please use the `orientation` argument of `geom_errorbar()` instead.\r## This warning is displayed once every 8 hours.\r## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was\r## generated.\r## `height` was translated to `width`.\r\u003c\nModel fit\rcat(\"AIC:\", round(AIC(glm_fit), 1), \"\\n\")\r## AIC: 261.6\rcat(\"Null deviance:\", round(glm_fit$null.deviance, 1),\r\"on\", glm_fit$df.null, \"df\\n\")\r## Null deviance: 262.5 on 199 df\rcat(\"Residual deviance:\", round(glm_fit$deviance, 1),\r\"on\", glm_fit$df.residual, \"df\\n\")\r## Residual deviance: 241.6 on 190 df\rcat(\"McFadden pseudo-R:\",\rround(1 - glm_fit$deviance / glm_fit$null.deviance, 3), \"\\n\")\r## McFadden pseudo-R: 0.08\rUnlike the usual R^2 in linear regression, McFadden’s pseudo-R^2 does\rnot tell you how much of the outcome is “explained” by the model.\rInstead, it tells you how much better your model fits the data compared\rto a baseline model with only an intercept. Values around 0.2–0.4 are\roften considered quite good in social science, but it should be\rinterpreted cautiously rather than taken as a strict measure of model\rquality.\nWhich predictors have ORs substantially different from 1.0? Are the\rconfidence intervals narrow (precise estimates) or wide (high\runcertainty)? How might you improve the model? What would an interaction\rbetween group and aware_of_2_sp_in_ni mean\rconceptually?\nThematic analysis of multi-select responses\rTheory\rSome questions in the survey were multi-select, i.e., respondents\rcould tick all that applied. These cannot be treated as simple binary\rvariables as the combination of choices carries meaning.\nIn this section we’ll use a qualitative thematic approach. We\ridentify the “themes” (choice profiles) present in the data and examine\rwhich groups favour which themes. This allows us to be fully\rquantitative and use pattern analysis on binary data.\nCulling method profiles\rcull_mat \u003c- hare |\u003e\rdplyr::select(group, all_of(cull_methods)) |\u003e\rfilter(!is.na(shooting) | !is.na(netting) | !is.na(trapping)) |\u003e\rmutate(across(all_of(cull_methods), ~replace_na(as.integer(.), 0L))) |\u003e\rmutate(\rn_methods = shooting + netting + trapping,\rprofile = case_when(\rn_methods == 0 ~ \"None selected\",\rshooting \u0026 !netting \u0026 !trapping ~ \"Shooting only\",\r!shooting \u0026 netting \u0026 !trapping ~ \"Netting only\",\r!shooting \u0026 !netting \u0026 trapping ~ \"Trapping only\",\rshooting \u0026 netting \u0026 !trapping ~ \"Shooting + Netting\",\rshooting \u0026 !netting \u0026 trapping ~ \"Shooting + Trapping\",\r!shooting \u0026 netting \u0026 trapping ~ \"Netting + Trapping\",\rTRUE ~ \"All three\"\r)\r)\rcount(cull_mat, group, profile) |\u003e arrange(group, desc(n))\r## group profile n\r## 1 CAI Shooting only 34\r## 2 CAI All three 29\r## 3 CAI Netting only 21\r## 4 CAI Shooting + Netting 7\r## 5 CAI Netting + Trapping 5\r## 6 CAI Trapping only 4\r## 7 CAI Shooting + Trapping 2\r## 8 Public Shooting only 33\r## 9 Public Netting only 27\r## 10 Public All three 13\r## 11 Public Netting + Trapping 10\r## 12 Public Trapping only 9\r## 13 Public Shooting + Netting 2\rcull_mat |\u003e\rcount(group, profile) |\u003e\rgroup_by(group) |\u003e\rmutate(pct = n / sum(n) * 100) |\u003e\rggplot(aes(x = pct, y = reorder(profile, pct), fill = group)) +\rgeom_col(position = position_dodge(0.7), width = 0.65) +\rgeom_text(aes(label = paste0(round(pct), \"%\")),\rposition = position_dodge(0.7), hjust = -0.15, size = 3) +\rscale_fill_manual(values = c(\"CAI\" = \"#2166ac\", \"Public\" = \"#d73027\")) +\rscale_x_continuous(limits = c(0, 75), labels = percent_format(scale = 1)) +\rlabs(title = \"Preferred culling method combinations\",\rsubtitle = \"Multi-select question: tick all that apply\",\rx = \"% respondents\", y = NULL, fill = NULL) +\rtheme_minimal(base_size = 12) +\rtheme(legend.position = \"top\")\rLinking themes to attitudes\rWe can use chi-square to quantitatively test whether culling method\rpreference differs between groups.\nprofile_tbl \u003c- table(cull_mat$group, cull_mat$profile)\rchisq.test(profile_tbl)\r## Warning in stats::chisq.test(x, y, ...): Chi-squared approximation may be\r## incorrect\r## ## Pearson's Chi-squared test\r## ## data: profile_tbl\r## X-squared = 14.926, df = 6, p-value = 0.02084\rActivity co-occurrence: the Jaccard index\rFor the rural activities question, we want to know which activities\rtend to co-occur, i.e., which activities are commonly practised\rtogether. We use the Jaccard similarity index, which measures the\roverlap between two sets. A Jaccard of 1 means the two activities always\roccur together; 0 means they never do.\nact_mat \u003c- hare |\u003e\rdplyr::select(all_of(activity_cols)) |\u003e\rmutate(across(everything(), ~replace_na(as.integer(.), 0L))) |\u003e\ras.matrix()\rco_occur \u003c- t(act_mat) %*% act_mat # n(i AND j) for all pairs\rdiag(co_occur) \u003c- 0\rn_each \u003c- colSums(act_mat)\rjaccard_mat \u003c- matrix(NA_real_, nrow = ncol(act_mat), ncol = ncol(act_mat),\rdimnames = list(activity_cols, activity_cols))\rfor (i in seq_len(ncol(act_mat))) {\rfor (j in seq_len(ncol(act_mat))) {\runion_ij \u003c- n_each[i] + n_each[j] - co_occur[i, j]\rjaccard_mat[i, j] \u003c- if (union_ij \u003e 0) co_occur[i, j] / union_ij else 0\r}\r}\rround(jaccard_mat, 2)\r## hunt game_birds rabbits wildfowl fishing_angling\r## hunt 0.00 0.66 0.54 0.54 0.44\r## game_birds 0.66 0.00 0.56 0.71 0.53\r## rabbits 0.54 0.56 0.00 0.54 0.38\r## wildfowl 0.54 0.71 0.54 0.00 0.53\r## fishing_angling 0.44 0.53 0.38 0.53 0.00\rg_act \u003c- graph_from_adjacency_matrix(\rjaccard_mat, mode = \"undirected\", weighted = TRUE, diag = FALSE\r)\rset.seed(7)\rggraph(g_act, layout = \"circle\") +\rgeom_edge_link(aes(width = weight, alpha = weight), colour = \"#27ae60\") +\rgeom_node_point(size = 14, colour = \"#1a7837\", fill = \"#a8ddb5\",\rshape = 21, stroke = 1.5) +\rgeom_node_text(aes(label = name), size = 3.2, colour = \"black\") +\rscale_edge_width(range = c(0.3, 5), name = \"Jaccard\") +\rscale_edge_alpha(range = c(0.2, 1), guide = \"none\") +\rlabs(title = \"Co-occurrence of rural activities\",\rsubtitle = \"Edge width proportional to Jaccard similarity\") +\rtheme_graph(base_family = \"sans\")\rRespondent typology\rFinally, we create a simple classification by combining two measures:\rawareness (how much a respondent knows) and support (how strongly they\rsupport active management). This is similar to stakeholder mapping,\rwhere people are grouped based on their knowledge and attitudes to help\rguide conservation decisions.\nhare \u003c- hare |\u003e\rmutate(\rawareness_index = as.integer(seen_hares) +\ras.integer(aware_of_2_sp_in_ni) +\ras.integer(is_threat_of_l_europaeus_important),\rsupport_index = as.integer(support_management_of_l_europaeus) +\ras.integer(lethal_culling) +\ras.integer(support_management_via_petition) +\ras.integer(support_cull_with_direct_involvement) +\ras.integer(allow_cull_on_land) +\ras.integer(support_gov_t_cull_decision),\ractivity_breadth = as.integer(hunt) + as.integer(game_birds) +\ras.integer(rabbits) + as.integer(wildfowl) +\ras.integer(fishing_angling),\rtypology = case_when(\rsupport_index \u003e= 4 \u0026 awareness_index \u003e= 2 ~ \"Informed advocate\",\rsupport_index \u003e= 4 \u0026 awareness_index \u003c 2 ~ \"Pragmatic advocate\",\rsupport_index \u003c 2 \u0026 awareness_index \u003e= 2 ~ \"Aware but opposed\",\rsupport_index \u003c 1 \u0026 awareness_index \u003c 1 ~ \"Disengaged\",\rTRUE ~ \"Ambivalent\"\r),\rtypology = factor(typology,\rlevels = c(\"Informed advocate\", \"Pragmatic advocate\",\r\"Ambivalent\", \"Aware but opposed\", \"Disengaged\"))\r)\rcount(hare, group, typology) |\u003e arrange(group, typology)\r## group typology n\r## 1 CAI Informed advocate 27\r## 2 CAI Pragmatic advocate 6\r## 3 CAI Ambivalent 83\r## 4 CAI Aware but opposed 23\r## 5 Public Informed advocate 32\r## 6 Public Pragmatic advocate 8\r## 7 Public Ambivalent 130\r## 8 Public Aware but opposed 31\r## 9 Public Disengaged 1\rIt’s important to note that the thresholds used to define these\rcategories are based on subjective judgement rather than fixed rules.\rThis means that different reasonable cut-offs could change how\rindividuals are grouped, so the typology should be interpreted as a\ruseful simplification rather than a precise classification. Where\rpossible, these thresholds should be checked against empirical evidence\ror validated with expert judgement to ensure they are meaningful and\rrobust.\nhare |\u003e\rfilter(!is.na(typology)) |\u003e\rcount(group, typology) |\u003e\rgroup_by(group) |\u003e\rmutate(pct = n / sum(n) * 100) |\u003e\rggplot(aes(x = pct, y = fct_rev(typology), fill = group)) +\rgeom_col(position = position_dodge(0.7), width = 0.65) +\rgeom_text(aes(label = paste0(round(pct), \"%\")),\rposition = position_dodge(0.7), hjust = -0.1, size = 3.2) +\rscale_fill_manual(values = c(\"CAI\" = \"#2166ac\", \"Public\" = \"#d73027\")) +\rscale_x_continuous(limits = c(0, 75), labels = percent_format(scale = 1)) +\rlabs(\rtitle = \"Respondent typology by group\",\rsubtitle = \"Based on awareness index (0–4) and support index (0–6)\",\rx = \"% respondents\", y = NULL, fill = NULL\r) +\rtheme_minimal(base_size = 12) +\rtheme(legend.position = \"top\")\rHow would you use these typologies in conservation practice? The\r“informed advocate” already knows and supports so do you need to spend\rresources on them? The “pragmatic advocate” supports but doesn’t really\rknow why; are they a potential liability if the evidence changes? The\r“aware but opposed” understand the issue and still say no. What would it\rtake to change their mind, and should you try?\nLatent Class Analysis (LCA)\rImagine you have given 341 people a survey with 11 yes/no questions.\rYou now have 341 rows of 1s and 0s. LCA asks whether, beneath all the\rvariation, are there a small number of distinct types of respondent and\rif so, how many, and what defines each type?\nA latent variable is one you cannot observe directly, one that is\rhidden in the data. In this case, the latent variable is respondent type\r- the underlying attitude profile that caused a particular person to\ranswer the way they did. LCA tries to recover that hidden structure from\rthe pattern of observed responses.\nPreviously we created a typology by applying rules designed by us.\rThat is perfectly reasonable, but the thresholds and dimensions are our\rchoices. LCA makes no such assumptions. Instead, it finds the grouping\rthat best explains the observed pattern of responses statistically\rwithout requiring us to decide in advance what the groups should look\rlike or how many there should be. The two approaches should broadly\ragree if your hand-coded typology is capturing something real but where\rthey diverge is informative.\nLCA assumes that each respondent belongs to one of K unobserved\rclasses. Within each class, responses to individual questions are\rassumed to be independent of each other (local independence assumption).\rThis might run counter to your own understanding of the data. You might\rexpect, for example, “supports lethal culling” and “supports a\rgovernment cull” to be correlated. But LCA suggests that they are only\rcorrelated because they are both influenced by the same underlying class\rmembership. Once you know which class someone belongs to, knowing their\ranswer to one question tells you nothing extra about their answer to\ranother. The class explains the correlation.\nThe model estimates:\nClass proportions. I.e., what fraction of the population belongs to\reach class. If K = 3, you might get classes of 45%, 35%, and 20%.\rItem response probabilities. I.e., for each class and each question,\rthe probability that a member of that class answers “Yes”. A class with\rP(lethal culling = Yes) = 0.92 is very different from one with P(lethal\rculling = Yes) = 0.18.\r# poLCA requires indicators coded as positive integers starting at 1.\r# Our binary columns are TRUE/FALSE — add 1L to make them 1/2.\rlca_vars \u003c- c(\r\"seen_l_europaeus\", \"aware_of_2_sp_in_ni\",\r\"is_threat_of_l_europaeus_important\", \"consider_hares_pests\",\r\"support_management_of_l_europaeus\", \"habitat_management_for_l_t_hibernicus\",\r\"lethal_culling\", \"support_management_via_petition\",\r\"support_cull_with_direct_involvement\", \"allow_cull_on_land\",\r\"support_gov_t_cull_decision\"\r)\rlca_df \u003c- hare |\u003e\rdplyr::select(all_of(lca_vars)) |\u003e\rmutate(across(everything(), ~ as.integer(.) + 1L)) |\u003e # FALSE→1, TRUE→2\rdrop_na()\r# poLCA needs a formula listing all indicators\rlca_formula \u003c- as.formula(\rpaste(\"cbind(\", paste(lca_vars, collapse = \",\"), \") ~ 1\")\r)\r# Choose the number of classes # Fit models with 2–5 classes and compare AIC / BIC.\r# BIC tends to favour more parsimonious solutions; AIC can overfit slightly.\rfit_lca \u003c- function(k) {\rpoLCA(lca_formula, data = lca_df, nclass = k,\rmaxiter = 3000, tol = 1e-6,\rverbose = FALSE, nrep = 10) # nrep: 10 random starts, keeps best\r}\rset.seed(42)\rmodels \u003c- map(2:5, fit_lca)\r# Model fit table\rfit_table \u003c- tibble(\rK = 2:5,\rlogLik = map_dbl(models, ~ .x$llik),\rAIC = map_dbl(models, ~ .x$aic),\rBIC = map_dbl(models, ~ .x$bic),\rdf = map_int(models, ~ .x$resid.df)\r)\rprint(fit_table)\r## # A tibble: 4 × 5\r## K logLik AIC BIC df\r## ## 1 2 -839. 1724. 1794. 127\r## 2 3 -812. 1694. 1800. 115\r## 3 4 -789. 1672. 1813. 103\r## 4 5 -772. 1662. 1840. 91\r# Scree-style plot of BIC\rggplot(fit_table, aes(x = K, y = BIC)) +\rgeom_line(linewidth = 1, colour = \"#2166ac\") +\rgeom_point(size = 3, colour = \"#2166ac\") +\rgeom_line(aes(y = AIC), linewidth = 1, colour = \"#d73027\", linetype = \"dashed\") +\rgeom_point(aes(y = AIC), size = 3, colour = \"#d73027\") +\rlabs(title = \"LCA model selection\",\rsubtitle = \"Lower BIC (blue)/ AIC(red) = better fit; look for the elbow\",\rx = \"Number of latent classes (K)\", y = \"Information criterion\") +\rtheme_minimal(base_size = 12)\r# Select and label the best model\rbest_model \u003c- models[[2]] # models[[1]] = K=2, models[[2]] = K=3, etc.\rK \u003c- length(unique(best_model$predclass))\rcat(\"Using K =\", K, \"classes\\n\")\r## Using K = 3 classes\rFor this example we manually select K = 3 to illustrate\rinterpretation. In practice, K should be chosen empirically based on the\rBIC/AIC and the point at which adding another class produces diminishing\rreturns in fit.\nTo use the empirically best model instead, replace the line above\rwith:\nbest_model \u003c- models[[which.min(map_dbl(models, ~ .x$bic)) ]]\rK \u003c- length(unique(best_model$predclass))\rcat(\"Best K by BIC:\", K, \"\\n\")\r# Extract item response probabilities\r# probs[[item]][class, response] — we want response = 2 (TRUE)\rprobs_df \u003c- imap_dfr(best_model$probs, function(mat, item) {\rtibble(\ritem = item,\rclass = paste0(\"Class \", seq_len(nrow(mat))),\rprob = mat[, 2] # probability of YES (response = 2)\r)\r})\r# Readable item labels\ritem_labels \u003c- c(\rseen_l_europaeus = \"Seen European hare\",\raware_of_2_sp_in_ni = \"Aware of 2 species\",\ris_threat_of_l_europaeus_important = \"Threat important\",\rconsider_hares_pests = \"Hares are pests\",\rsupport_management_of_l_europaeus = \"Support management\",\rhabitat_management_for_l_t_hibernicus = \"Habitat management\",\rlethal_culling = \"Lethal culling\",\rsupport_management_via_petition = \"Sign petition\",\rsupport_cull_with_direct_involvement = \"Direct involvement\",\rallow_cull_on_land = \"Allow cull on land\",\rsupport_gov_t_cull_decision = \"Support govt cull\"\r)\rprobs_df \u003c- probs_df |\u003e\rmutate(item = factor(item_labels[item], levels = rev(item_labels)))\r# ── Step 4: item probability plot ────────────────────────────────────────────\rggplot(probs_df, aes(x = prob, y = item, colour = class)) +\rgeom_point(size = 3.5, alpha = 0.9) +\rgeom_line(aes(group = class), linewidth = 0.8, alpha = 0.6,\rorientation = \"y\") +\rgeom_vline(xintercept = 0.5, linetype = \"dashed\", colour = \"grey50\") +\rscale_x_continuous(labels = percent_format(), limits = c(0, 1)) +\rscale_colour_brewer(palette = \"Set1\") +\rlabs(title = \"LCA item response probabilities by class\",\rsubtitle = \"Each point = P(Yes) for that item in that class · dashed = 50%\",\rx = \"Probability of Yes response\", y = NULL, colour = NULL) +\rfacet_wrap(~ class, nrow = 1) +\rtheme_minimal(base_size = 12) +\rtheme(legend.position = \"none\",\rpanel.spacing = unit(1.2, \"lines\"))\rThis is the most important output. Each panel is one latent class.\rEach point is one survey question. The x-axis shows P(Yes) for that\rquestion within that class. What we are looking for:\nThe dashed line at 50% is a natural reference: above it means the\rclass is more likely than not to say Yes; below means more likely to say\rNo\rClasses that separate cleanly on the management questions represent\rgenuinely different attitude profiles.\rA class with high awareness but low management support is the “Aware\rbut opposed” group found without any prior assumptions. If this matches\rour hand-coded typology, that is a form of validation\rQuestions where all classes overlap near 0.5 are not driving the\rclass structure. They are not discriminating between types and you could\rconsider removing them in a revised model.\rOnce the model is fitted, each respondent gets a posterior\rprobability of belonging to each class. We can then cross-tabulate class\rmembership against external variables such as group (CAI vs Public),\rzone, or cull support that were not used in the LCA itself. This is how\rwe validate the classes. If Class 1 turns out to be 89% CAI members,\rthat is not a finding we forced on the data, it is something the\ranalysis revealed.\n# Posterior probabilities\rK \u003c- length(unique(best_model$predclass)) hare_lca \u003c- hare |\u003e\rdrop_na(all_of(lca_vars)) |\u003e\rmutate(\rpred_class = factor(best_model$predclass,\rlabels = paste0(\"Class \", 1:K)),\rentropy = -rowSums(best_model$posterior *\rlog(best_model$posterior + 1e-10))\r)\r# Table helper\r# Produces a tidy row/column % table for any grouping variable\rcross_tab \u003c- function(var, label) {\rhare_lca |\u003e\rfilter(!is.na(.data[[var]])) |\u003e\rcount(pred_class, .data[[var]]) |\u003e\rgroup_by(pred_class) |\u003e\rmutate(row_pct = round(n / sum(n) * 100, 1)) |\u003e\rungroup() |\u003e\rrename(category = 2) |\u003e\rmutate(variable = label)\r}\r# Class sizes and assignment certainty\rtibble(\rclass = paste0(\"Class \", 1:K),\rn = tabulate(best_model$predclass),\rpct = round(tabulate(best_model$predclass) /\rnrow(hare_lca) * 100, 1),\rmean_post = round(map_dbl(1:K, ~\rmean(best_model$posterior[best_model$predclass == .x, .x])),\r3),\rmean_entropy = round(map_dbl(1:K, ~\rmean(hare_lca$entropy[best_model$predclass == .x])),\r3)\r)|\u003e print()\r## # A tibble: 3 × 5\r## class n pct mean_post mean_entropy\r## ## 1 Class 1 49 32.7 0.988 0.032\r## 2 Class 2 19 12.7 0.905 0.241\r## 3 Class 3 82 54.7 0.989 0.029\r# mean_post close to 1.0 = respondents clearly belong to that class\r# mean_entropy close to 0 = low ambiguity in assignment\rMean posterior probability is how we report assignment quality. A\rvalue of 0.91 means that, on average, respondents assigned to that class\rhad a 91% posterior probability of belonging to it — high certainty.\rValues below 0.70 suggest the class boundaries are fuzzy and K may be\rtoo large.\n# Class × respondent group\rtable(hare_lca$pred_class, hare_lca$group) |\u003e\rprop.table(margin = 1) |\u003e\rround(2) |\u003e\rprint()\r## ## CAI Public\r## Class 1 0.43 0.57\r## Class 2 0.11 0.89\r## Class 3 0.34 0.66\r# Class × government cull support\rtable(hare_lca$pred_class, hare_lca$support_gov_t_cull_decision) |\u003e\rprop.table(margin = 1) |\u003e\rround(2) |\u003e\rprint()\r## ## FALSE TRUE\r## Class 1 0.02 0.98\r## Class 2 0.00 1.00\r## Class 3 0.96 0.04\r# Class × conservation concern\rtable(hare_lca$pred_class, hare_lca$conservation_concern) |\u003e\rprop.table(margin = 1) |\u003e\rround(2) |\u003e\rprint()\r## ## Not concerned Concerned\r## Class 1 0.10 0.90\r## Class 2 0.44 0.56\r## Class 3 0.20 0.80\r# Class × typology (validates against hand-coded types)\rtable(hare_lca$pred_class, hare_lca$typology) |\u003e\rprop.table(margin = 1) |\u003e\rround(2) |\u003e\rprint()\r## ## Informed advocate Pragmatic advocate Ambivalent Aware but opposed\r## Class 1 0.71 0.12 0.16 0.00\r## Class 2 0.16 0.32 0.53 0.00\r## Class 3 0.00 0.00 0.35 0.65\r## ## Disengaged\r## Class 1 0.00\r## Class 2 0.00\r## Class 3 0.00\r# Are class differences statistically significant\r# Chi-square tests: class × external variables ===\\n\")\rext_vars \u003c- c(\"group\", \"zone\", \"conservation_concern\",\r\"support_gov_t_cull_decision\")\rmap_dfr(ext_vars, function(v) {\rtbl \u003c- table(hare_lca$pred_class, hare_lca[[v]])\rtest \u003c- chisq.test(tbl)\rtibble(\rvariable = v,\rchi_sq = round(test$statistic, 2),\rdf = test$parameter,\rp_value = round(test$p.value, 4),\rsig = case_when(test$p.value \u003c 0.001 ~ \"***\",\rtest$p.value \u003c 0.01 ~ \"**\",\rtest$p.value \u003c 0.05 ~ \"*\",\rTRUE ~ \"ns\")\r)\r}) |\u003e print()\r## # A tibble: 4 × 5\r## variable chi_sq df p_value sig ## ## 1 group 6.38 2 0.0412 * ## 2 zone 1.68 4 0.795 ns ## 3 conservation_concern 8.13 2 0.0172 * ## 4 support_gov_t_cull_decision 134. 2 0 ***\r# Visualise all cross-tabulations in one panel plot\rplot_cross \u003c- function(var, label, data = hare_lca) {\rdata |\u003e\rfilter(!is.na(.data[[var]])) |\u003e\rmutate(category = as.character(.data[[var]])) |\u003e\rcount(pred_class, category) |\u003e\rgroup_by(pred_class) |\u003e\rmutate(pct = n / sum(n) * 100) |\u003e\rggplot(aes(x = pct, y = pred_class, fill = category)) +\rgeom_col(width = 0.6) +\rscale_x_continuous(labels = percent_format(scale = 1)) +\rscale_fill_brewer(palette = \"Set2\") +\rlabs(title = label, x = NULL, y = NULL, fill = NULL) +\rtheme_minimal(base_size = 11) +\rtheme(legend.position = \"bottom\",\rlegend.text = element_text(size = 8),\rplot.title = element_text(size = 11, face = \"bold\"))\r}\rp1 \u003c- plot_cross(\"group\", \"Respondent group\")\rp2 \u003c- plot_cross(\"zone\", \"Geographic zone\")\rp3 \u003c- plot_cross(\"conservation_concern\", \"Conservation concern\")\rp4 \u003c- plot_cross(\"support_gov_t_cull_decision\", \"Supports government cull\")\r(p1 + p2) / (p3 + p4) +\rplot_annotation(\rtitle = \"Latent class composition: external variable cross-tabulations\",\rsubtitle = \"Variables not used in the LCA — patterns here are data-driven, not assumed\",\rtheme = theme(plot.title = element_text(size = 13, face = \"bold\"),\rplot.subtitle = element_text(size = 10, colour = \"grey40\"))\r)\rFrom these metrics and the plot we get a ‘portrait’ of each\rclass.\nClass 1 is split is relatively even (43% CAI, 57% Public), so this\rclass is not defined by organisational membership. What defines it is\rattitude: 98% support the government cull, and 90% are concerned about\rconservation. The typology table confirms this — 71% fall into our\rhand-coded “Informed advocate” category. These are people who know about\rthe issue, care about it, and back action. They are distributed across\rboth groups, which suggests that genuine ecological concern, rather than\rfield sports culture, is the driver.\rClass 2 is overwhelmingly Public respondents (89%) and every single\rone of them supports the government cull (100% TRUE), yet they are the\rleast conservationally engaged (44%), and 53% fall into our “Ambivalent”\rtypology category with another 32% as “Pragmatic advocates.” This is the\rgroup that supports culling but perhaps not for conservation reasons.\rThis is an important finding as it means a sizeable share of public\rsupport for culls is rather like a shallow lake: wide enough to look\rimpressive on the map, but only ankle-deep once you step into it.\rClass 3 is 96% opposed to the government cull. It is mostly Public\rrespondents (66%) and 65% map onto our “Aware but opposed” typology,\rwith the remaining 35% ambivalent. Crucially, 80% are still concerned\rabout conservation, so this is not indifference. These are people who\rcare about wildlife but do not support this particular management\rintervention. They are not the disengaged public; they are the sceptical\rpublic. Persuading them would require engaging with their specific\robjections to lethal control, not simply raising awareness of the\rproblem.\rBear in mind that class labels are arbitrary. Class\r1 in one run might be Class 3 in another. The profiles are stable; the\rnumbers are not. Always describe classes by their characteristics, not\rtheir numbers.\nSummary\rDescriptive statistics established that the CAI and Public samples\rhave quite different activity profiles and conservation awareness\rlevels, setting up the need for group-level comparisons.\rChi-square tests and Fisher’s exact test revealed statistically\rsignificant group differences on most management variables, which\rsurvived Bonferroni correction.\rPhi coefficients and the association network showed that management\rsupport variables cluster tightly together, and that awareness variables\rare somewhat distinct, suggesting that “knowing” and “supporting” are\rnot the same thing.\rLogistic regression identified which predictors independently\rpredict support for a government cull, controlling for all other factors\rin the model.\rThematic coding showed that shooting alone is the most common\rsingle-method prefered for lethal control, but the combination of\rmethods differs between groups.\rLCA showed that while support for a cull is numerically strong, any\rmanagement communication strategy that treats all supporters as\requivalent, or all opponents as simply uninformed, is misreading the\rdata and may be doomed to fail.\rTutorial based on data from Caravaggi A, Montgomery WI, Reid N\r(2017), Biology \u0026 Environment 117B:53–63, https://doi.org/10.3318/bioe.2017.08. Dataset: https://zenodo.org/records/891251 (CC BY 4.0).\n",
+  "wordCount" : "8756",
+  "inLanguage": "en",
+  "datePublished": "2026-05-29T00:00:00Z",
+  "dateModified": "2026-05-29T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Anthony Caravaggi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://arcaravaggi.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Analysing Respondent Attitudes from Surveys in R
+    </h1>
+    <div class="post-meta"><span title='2026-05-29 00:00:00 +0000 UTC'>May 29, 2026</span>&nbsp;·&nbsp;<span>Anthony Caravaggi</span>
+
+</div>
+  </header> 
+  <div class="post-content">
+
+<p>Wildlife management decisions are rarely settled by ecological data
+alone. They live or die in the messy human world of competing values.
+Understanding what people think and why is as much a scientific skill as
+counting animals in a field. This tutorial walks you through
+quantitative analysis of a real attitude survey, using R.</p>
+<hr />
+<div id="background" class="section level1">
+<h1>Background and Learning Objectives</h1>
+<div id="the-ecological-context" class="section level2">
+<h2>The ecological context</h2>
+<p>The Irish hare (<em>Lepus timidus hibernicus</em>) is a subspecies
+endemic to Ireland — found nowhere else on Earth. It has been present
+since before the last Ice Age, making it one of the island’s oldest
+residents and a genuine conservation priority.</p>
+<p>The European (brown) hare (<em>Lepus europaeus</em>), by contrast, is
+an invasive species in Northern Ireland, introduced sometime in the 19th
+century, probably, like so many ecological misfortunes, by people who
+thought it was a good idea at the time. <em>L. europaeus</em> poses a
+threat to <em>L. t. hibernicus</em> through competition and
+hybridisation, and its management has been actively debated.</p>
+<p>The question is not only can we cull brown hares, but should we and,
+critically, will people support it? That last consideration is where
+social science enters the room, takes off its coat, and starts asking
+uncomfortable questions.</p>
+</div>
+<div id="learning-objectives" class="section level2">
+<h2>Learning objectives</h2>
+<p>By the end of this tutorial you will be able to:</p>
+<ol style="list-style-type: decimal">
+<li>Load, clean, and recode a real-world survey dataset using
+<code>tidyverse</code></li>
+<li>Compute descriptive statistics</li>
+<li>Apply chi-square tests and Fisher’s exact test with appropriate
+multiple-comparison corrections</li>
+<li>Compute pairwise phi coefficients and visualise response linkages as
+networks</li>
+<li>Fit and interpret a binary logistic regression model</li>
+<li>Perform quantitative thematic analysis of multi-select
+responses</li>
+<li>Identify respondent classes and interpret them in meaningful
+ways</li>
+</ol>
+</div>
+<div id="the-study" class="section level2">
+<h2>The study</h2>
+<p>This tutorial uses data from:</p>
+<blockquote>
+<p>Caravaggi A, Montgomery WI, Reid N (2017). Management and control of
+invasive brown hares (<em>Lepus europaeus</em>): contrasting attitudes
+of selected environmental stakeholders and the wider rural community.
+<em>Biology and Environment: Proceedings of the Royal Irish
+Academy</em>, <strong>117B</strong>, 53–63. <a href="https://doi.org/10.3318/bioe.2017.08" class="uri">https://doi.org/10.3318/bioe.2017.08</a></p>
+</blockquote>
+<p>The study surveyed two groups:</p>
+<ul>
+<li>CAI: Members of Countryside Alliance Ireland — an organisation
+representing rural and field sports interests</li>
+<li>Public: The wider rural community (non-members)</li>
+</ul>
+<hr />
+</div>
+</div>
+<div id="getting-started" class="section level1">
+<h1>Getting started</h1>
+<div id="packages" class="section level2">
+<h2>Packages</h2>
+<pre class="r"><code># Install any missing packages by uncommenting the line below
+# install.packages(c(&quot;tidyverse&quot;,&quot;vcd&quot;,&quot;ca&quot;,&quot;igraph&quot;,&quot;ggraph&quot;,
+#                    &quot;corrplot&quot;,&quot;broom&quot;,&quot;scales&quot;,&quot;patchwork&quot;,&quot;janitor&quot;,&quot;ggrepel&quot;, &quot;polCA&quot;))
+
+library(vcd)         # Visualising categorical data (mosaic plots, association stats)
+library(ca)          # Correspondence analysis
+library(igraph)      # Network/graph objects
+library(ggraph)      # ggplot2-style network visualisation
+library(corrplot)    # Correlation/association matrix heatmaps
+library(broom)       # Converts messy model output into tidy data frames
+library(scales)      # Axis label formatting helpers
+library(patchwork)   # Combine multiple ggplots into one figure
+library(janitor)     # Data cleaning utilities (clean_names, tabyl, etc.)
+library(ggrepel)     # Non-overlapping text labels on plots
+library(poLCA)       # Latent Class Analysis
+library(tidyverse)   # The Swiss Army knife: dplyr, ggplot2, tidyr, readr, etc.
+
+set.seed(42)  # Reproducibility: ensures any randomness gives the same result
+              # 42 chosen for reasons that will be obvious to anyone who has
+              # read the right books.</code></pre>
+</div>
+<div id="loading-the-data" class="section level2">
+<h2>Loading the data</h2>
+<p>Download <a href="https://zenodo.org/records/891251">https://zenodo.org/records/891251</a>
+and place it in your working directory. The dataset is published under a
+CC BY 4.0 licence, meaning you can use it freely as long as you cite
+it.</p>
+<pre class="r"><code># Load the raw data
+# Adjust the path if your file is in a subfolder, e.g. &quot;data/Hare_data.csv&quot;
+hare_raw &lt;- read.csv(&quot;data.csv&quot;,
+                     stringsAsFactors = FALSE,
+                     na.strings        = c(&quot;&quot;, &quot;NA&quot;))
+
+# clean_names() from {janitor} converts column names to consistent snake_case:
+# &quot;Own/rent land?&quot; becomes &quot;own_rent_land&quot;, &quot;L. europaeus&quot; becomes &quot;l_europaeus&quot;, etc.
+# This saves enormous amounts of grief when typing column names.
+hare_raw &lt;- clean_names(hare_raw)
+
+dim(hare_raw)</code></pre>
+<pre><code>## [1] 341  44</code></pre>
+<hr />
+</div>
+</div>
+<div id="the-survey-questions" class="section level1">
+<h1>The survey questions</h1>
+<p>Before we analyse anything, we should understand what was actually
+asked. Here are the 20 questions from the Caravaggi <em>et al</em>.
+(2017) questionnaire, mapped to the column names we will use in R.</p>
+<table>
+<colgroup>
+<col width="8%" />
+<col width="53%" />
+<col width="24%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Q#</th>
+<th>Question (abbreviated)</th>
+<th>Column(s)</th>
+<th>Type</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1a</td>
+<td>Own or rent land?</td>
+<td><code>own_rent_land</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>1b</td>
+<td>Purpose (agriculture, game, conservation, recreation)</td>
+<td><code>purpose</code></td>
+<td>Multi-select</td>
+</tr>
+<tr class="odd">
+<td>1c</td>
+<td>Approximate area (ha)</td>
+<td><code>size</code></td>
+<td>Numeric (free text)</td>
+</tr>
+<tr class="even">
+<td>2a</td>
+<td>Active farmer?</td>
+<td><code>farmer</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>2b</td>
+<td>Main farm focus</td>
+<td><code>focus</code></td>
+<td>Multi-select</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Conservation concern</td>
+<td><code>conservation_concern</code></td>
+<td>Categorical (N/C)</td>
+</tr>
+<tr class="odd">
+<td>4a</td>
+<td>Seen hares in NI?</td>
+<td><code>seen_hares</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>4b</td>
+<td>Most recent sighting</td>
+<td><code>when</code></td>
+<td>Categorical (0/1–5/5+ years)</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Consider hares pests?</td>
+<td><code>consider_hares_pests</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Impression of hare numbers (last 50 yrs)</td>
+<td><code>hare_numbers_50</code></td>
+<td>Categorical (I/D/S)</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Impression of hare numbers (last 5 yrs)</td>
+<td><code>hare_numbers_5</code></td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Aware two hare species in NI?</td>
+<td><code>aware_of_2_sp_in_ni</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>9a</td>
+<td>Ever seen <em>L. europaeus</em> in NI?</td>
+<td><code>seen_l_europaeus</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>10a</td>
+<td>Seen <em>L. europaeus</em> on own land?</td>
+<td><code>seen_l_europaeus_on_own_land</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>10c</td>
+<td>Most recent sighting on own land</td>
+<td><code>most_recent</code></td>
+<td>Categorical</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>Is the threat of <em>L. europaeus</em> important?</td>
+<td><code>is_threat_of_l_europaeus_important</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Support management of <em>L. europaeus</em>?</td>
+<td><code>support_management_of_l_europaeus</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>13a</td>
+<td>Support non-lethal habitat management?</td>
+<td><code>habitat_management_for_l_t_hibernicus</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>13b</td>
+<td>Support lethal culling?</td>
+<td><code>lethal_culling</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>13c</td>
+<td>Which culling methods?</td>
+<td><code>shooting</code>, <code>netting</code>,
+<code>trapping</code></td>
+<td>Multi-select</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>Sign a petition for action?</td>
+<td><code>support_management_via_petition</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>15a</td>
+<td>Allow land to be surveyed?</td>
+<td><code>landowner_permission_to_survey</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>15b</td>
+<td>Permit culling by shooting?</td>
+<td><code>allow_cull_on_own_land</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>Member of non-shooting conservation org?</td>
+<td><code>member_of_conservation_org</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>17a</td>
+<td>Hunt/shoot?</td>
+<td><code>hunt</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>17b</td>
+<td>What? (game birds, rabbits, wildfowl, etc.)</td>
+<td><code>game_birds</code>, <code>rabbits</code>,
+<code>wildfowl</code>, <code>fishing_angling</code></td>
+<td>Multi-select</td>
+</tr>
+<tr class="odd">
+<td>18</td>
+<td>Actively participate in coordinated shooting?</td>
+<td><code>support_cull_with_direct_involvement</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="even">
+<td>19</td>
+<td>Allow cull on land (if not participating)?</td>
+<td><code>allow_cull_on_land</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+<tr class="odd">
+<td>20</td>
+<td>Support a government-planned/supported cull?</td>
+<td><code>support_gov_t_cull_decision</code></td>
+<td>Binary (Y/N)</td>
+</tr>
+</tbody>
+</table>
+<p>Notice that Q20 — support for a government-led cull — is our main
+outcome variable for the regression analysis later. Why might government
+backing matter to respondents? Consider how authority, legitimacy, and
+risk-sharing might influence someone’s stated support.</p>
+<p><strong>Coding conventions in this dataset:</strong> - <code>Y</code>
+/ <code>N</code> = Yes / No<br />
+- <code>C</code> = Concerned (conservation concern variable)<br />
+- <code>D</code> = “Don’t know” (hare number trend variables)<br />
+- <code>I</code> / <code>D</code> / <code>S</code> = Increasing /
+Decreasing / Stable (perception of hare numbers) - Dataset codes:
+<code>C</code> = CAI member, <code>P</code> = Public (wider rural
+community) - Zone codes: <code>CORE</code>, <code>Periphery</code>,
+<code>WIDER NI</code></p>
+<hr />
+</div>
+<div id="data-cleaning" class="section level1">
+<h1>Data Cleaning</h1>
+<p>Missing values, inconsistent coding, and columns that mean multiple
+things all need attention before we can do anything useful.</p>
+<pre class="r"><code># Define the column groups — we will use these throughout
+binary_cols &lt;- c(
+  &quot;own_rent_land&quot;, &quot;farmer&quot;, &quot;seen_hares&quot;, &quot;consider_hares_pests&quot;,
+  &quot;aware_of_2_sp_in_ni&quot;, &quot;seen_l_europaeus&quot;, &quot;seen_l_europaeus_on_own_land&quot;,
+  &quot;is_threat_of_l_europaeus_important&quot;, &quot;support_management_of_l_europaeus&quot;,
+  &quot;habitat_management_for_l_t_hibernicus&quot;, &quot;lethal_culling&quot;,
+  &quot;shooting&quot;, &quot;netting&quot;, &quot;trapping&quot;,
+  &quot;support_management_via_petition&quot;, &quot;landowner_permission_to_survey&quot;,
+  &quot;allow_cull_on_own_land&quot;, &quot;member_of_conservation_org&quot;,
+  &quot;hunt&quot;, &quot;game_birds&quot;, &quot;rabbits&quot;, &quot;wildfowl&quot;, &quot;fishing_angling&quot;,
+  &quot;support_cull_with_direct_involvement&quot;, &quot;allow_cull_on_land&quot;,
+  &quot;support_gov_t_cull_decision&quot;
+)
+
+mgmt_cols &lt;- c(
+  &quot;support_management_of_l_europaeus&quot;, &quot;habitat_management_for_l_t_hibernicus&quot;,
+  &quot;lethal_culling&quot;, &quot;support_management_via_petition&quot;, &quot;support_cull_with_direct_involvement&quot;,
+  &quot;allow_cull_on_land&quot;, &quot;support_gov_t_cull_decision&quot;
+)
+
+aware_cols   &lt;- c(&quot;seen_hares&quot;, &quot;seen_l_europaeus&quot;,
+                  &quot;aware_of_2_sp_in_ni&quot;, &quot;is_threat_of_l_europaeus_important&quot;)
+
+activity_cols &lt;- c(&quot;hunt&quot;, &quot;game_birds&quot;, &quot;rabbits&quot;, &quot;wildfowl&quot;, &quot;fishing_angling&quot;)
+
+cull_methods  &lt;- c(&quot;shooting&quot;, &quot;netting&quot;, &quot;trapping&quot;)
+
+# Recode and clean
+hare &lt;- hare_raw |&gt;
+  mutate(
+    # --- Binary columns: &quot;Y&quot; -&gt; TRUE, &quot;N&quot; -&gt; FALSE, anything else -&gt; NA ---
+    across(all_of(binary_cols),
+           ~ case_when(.x == &quot;Y&quot; ~ TRUE,
+                       .x == &quot;N&quot; ~ FALSE,
+                       TRUE      ~ NA)),
+
+    # --- Hare number trends: replace &quot;D&quot; (don&#39;t know) with NA ---
+    hare_numbers_50 = if_else(hare_numbers_50 == &quot;D&quot;, NA_character_, hare_numbers_50),
+    hare_numbers_5  = if_else(hare_numbers_5  == &quot;D&quot;, NA_character_, hare_numbers_5),
+
+    # --- Conservation concern: factor with meaningful labels ---
+    conservation_concern = factor(conservation_concern,
+                                  levels = c(&quot;N&quot;, &quot;C&quot;),
+                                  labels = c(&quot;Not concerned&quot;, &quot;Concerned&quot;)),
+
+    # --- Respondent group: this is the key grouping variable ---
+    group = factor(dataset,
+                   levels = c(&quot;C&quot;, &quot;P&quot;),
+                   labels = c(&quot;CAI&quot;, &quot;Public&quot;)),
+
+    # --- Geographic zone: ordered from core range outward ---
+    zone = factor(zone, levels = c(&quot;CORE&quot;, &quot;PERIPHERY&quot;, &quot;WIDER NI&quot;)),
+
+    # --- Landholding size: strip text (&quot;25a&quot;, &quot;200ha&quot;) and convert to numeric ---
+    size_ha = suppressWarnings(parse_number(size)),
+
+    # --- Survey date ---
+    survey_date = dmy(date)
+  )
+
+# Quick sanity check
+glimpse(hare)</code></pre>
+<pre><code>## Rows: 341
+## Columns: 47
+## $ reference                             &lt;chr&gt; &quot;HP00514&quot;, &quot;HP00714&quot;, &quot;HP00914&quot;,…
+## $ dataset                               &lt;chr&gt; &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P&quot;, &quot;P…
+## $ zone                                  &lt;fct&gt; CORE, CORE, CORE, CORE, CORE, CO…
+## $ date                                  &lt;chr&gt; &quot;13/08/2014&quot;, &quot;13/08/2014&quot;, &quot;30/…
+## $ own_rent_land                         &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TR…
+## $ purpose                               &lt;chr&gt; &quot;A&quot;, &quot;A&quot;, NA, &quot;A&quot;, &quot;A&quot;, NA, NA, …
+## $ purpose_1                             &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ size                                  &lt;chr&gt; &quot;180a&quot;, &quot;50ha&quot;, &quot;3a&quot;, &quot;8ha&quot;, &quot;14…
+## $ farmer                                &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, F…
+## $ focus                                 &lt;chr&gt; &quot;D&quot;, &quot;B&quot;, NA, &quot;B&quot;, &quot;S&quot;, NA, NA, …
+## $ focus_1                               &lt;chr&gt; NA, NA, NA, &quot;S&quot;, NA, NA, NA, NA,…
+## $ focus_2                               &lt;chr&gt; NA, NA, NA, &quot;A&quot;, NA, NA, NA, NA,…
+## $ conservation_concern                  &lt;fct&gt; Concerned, Not concerned, Concer…
+## $ seen_hares                            &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TR…
+## $ when                                  &lt;int&gt; 0, 0, 1, 0, 6, 0, 2, 0, 1, 1, 0,…
+## $ consider_hares_pests                  &lt;lgl&gt; FALSE, TRUE, TRUE, FALSE, FALSE,…
+## $ hare_numbers_50                       &lt;chr&gt; &quot;I&quot;, &quot;I&quot;, NA, NA, NA, &quot;N&quot;, NA, &quot;…
+## $ hare_numbers_5                        &lt;chr&gt; &quot;N&quot;, &quot;I&quot;, NA, NA, &quot;N&quot;, &quot;N&quot;, NA, …
+## $ aware_of_2_sp_in_ni                   &lt;lgl&gt; FALSE, TRUE, FALSE, FALSE, FALSE…
+## $ seen_l_europaeus                      &lt;lgl&gt; FALSE, FALSE, FALSE, FALSE, FALS…
+## $ seen_l_europaeus_on_own_land          &lt;lgl&gt; FALSE, TRUE, FALSE, FALSE, FALSE…
+## $ most_recent                           &lt;int&gt; NA, 0, NA, NA, NA, NA, NA, NA, N…
+## $ is_threat_of_l_europaeus_important    &lt;lgl&gt; TRUE, TRUE, TRUE, FALSE, TRUE, T…
+## $ support_management_of_l_europaeus     &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TR…
+## $ habitat_management_for_l_t_hibernicus &lt;lgl&gt; TRUE, TRUE, FALSE, TRUE, TRUE, T…
+## $ lethal_culling                        &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE,…
+## $ shooting                              &lt;lgl&gt; TRUE, NA, NA, NA, NA, NA, NA, TR…
+## $ netting                               &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ trapping                              &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ other                                 &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ support_management_via_petition       &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, …
+## $ landowner_permission_to_survey        &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, NA…
+## $ allow_cull_on_own_land                &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, …
+## $ member_of_conservation_org            &lt;lgl&gt; FALSE, TRUE, FALSE, FALSE, FALSE…
+## $ hunt                                  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, FALSE,…
+## $ game_birds                            &lt;lgl&gt; TRUE, NA, NA, NA, NA, NA, NA, TR…
+## $ rabbits                               &lt;lgl&gt; TRUE, NA, NA, NA, NA, NA, NA, TR…
+## $ wildfowl                              &lt;lgl&gt; TRUE, NA, NA, NA, NA, NA, NA, TR…
+## $ fishing_angling                       &lt;lgl&gt; NA, NA, NA, NA, NA, NA, NA, TRUE…
+## $ other_1                               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ other_2                               &lt;chr&gt; NA, NA, NA, NA, NA, NA, NA, NA, …
+## $ support_cull_with_direct_involvement  &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, …
+## $ allow_cull_on_land                    &lt;lgl&gt; NA, TRUE, FALSE, FALSE, TRUE, TR…
+## $ support_gov_t_cull_decision           &lt;lgl&gt; TRUE, TRUE, FALSE, FALSE, TRUE, …
+## $ group                                 &lt;fct&gt; Public, Public, Public, Public, …
+## $ size_ha                               &lt;dbl&gt; 180, 50, 3, 8, 14, NA, NA, 2, 27…
+## $ survey_date                           &lt;date&gt; 2014-08-13, 2014-08-13, 2014-08…</code></pre>
+<pre class="r"><code># Respondents by group
+hare |&gt; count(group) |&gt; mutate(pct = round(n / sum(n) * 100, 1))</code></pre>
+<pre><code>##    group   n  pct
+## 1    CAI 139 40.8
+## 2 Public 202 59.2</code></pre>
+<pre class="r"><code># Respondents by zone
+hare |&gt; count(zone) |&gt; mutate(pct = round(n / sum(n) * 100, 1))</code></pre>
+<pre><code>##        zone   n  pct
+## 1      CORE 119 34.9
+## 2 PERIPHERY 112 32.8
+## 3  WIDER NI 110 32.3</code></pre>
+<p><strong>Why <code>TRUE</code>/<code>FALSE</code> and not
+<code>1</code>/<code>0</code>?</strong> Storing binary variables as
+logicals helps us: <code>sum(seen_hares, na.rm = TRUE)</code>
+automatically counts the <code>TRUE</code> values (i.e., the “Yes”
+responses), and <code>mean(seen_hares, na.rm = TRUE)</code> gives the
+proportion. It also makes the code read more easily, which matters when
+you’re debugging at 11pm the night before a deadline.</p>
+<hr />
+</div>
+<div id="who-responded-descriptive-statistics" class="section level1">
+<h1>Who Responded? Descriptive Statistics</h1>
+<p>Before asking what people think, we need to understand who answered.
+A survey result is only interpretable in the context of the sample it
+came from. A finding that “80% support culling” means something quite
+different if your respondents are exclusively members of a field sports
+organisation versus a random sample of the public.</p>
+<pre class="r"><code># Landowner and farmer profile
+hare |&gt;
+  summarise(
+    n_own_land  = sum(own_rent_land, na.rm = TRUE),
+    pct_own     = round(mean(own_rent_land, na.rm = TRUE) * 100, 1),
+    n_farmer    = sum(farmer, na.rm = TRUE),
+    pct_farmer  = round(mean(farmer, na.rm = TRUE) * 100, 1),
+    n_consorg   = sum(member_of_conservation_org, na.rm = TRUE),
+    pct_consorg = round(mean(member_of_conservation_org, na.rm = TRUE) * 100, 1)
+  )</code></pre>
+<pre><code>##   n_own_land pct_own n_farmer pct_farmer n_consorg pct_consorg
+## 1        225      66      116         34        26         7.8</code></pre>
+<pre class="r"><code># Hare awareness
+hare |&gt;
+  summarise(
+    pct_seen_hares    = round(mean(seen_hares, na.rm = TRUE) * 100, 1),
+    pct_seen_leu      = round(mean(seen_l_europaeus, na.rm = TRUE) * 100, 1),
+    pct_aware_2sp     = round(mean(aware_of_2_sp_in_ni, na.rm = TRUE) * 100, 1),
+    pct_pests         = round(mean(consider_hares_pests, na.rm = TRUE) * 100, 1),
+    pct_threat_import = round(mean(is_threat_of_l_europaeus_important,
+                                   na.rm = TRUE) * 100, 1)
+  )</code></pre>
+<pre><code>##   pct_seen_hares pct_seen_leu pct_aware_2sp pct_pests pct_threat_import
+## 1           93.8         32.1          42.1      14.1              64.9</code></pre>
+<pre class="r"><code># Management support (overall)
+hare |&gt;
+  dplyr::select(all_of(mgmt_cols)) |&gt;
+  summarise(across(everything(),
+                   list(n_yes  = ~sum(., na.rm = TRUE),
+                        n_tot  = ~sum(!is.na(.)),
+                        pct    = ~round(mean(., na.rm = TRUE) * 100, 1)))) |&gt;
+  pivot_longer(everything(),
+               names_to  = c(&quot;variable&quot;, &quot;.value&quot;),
+               names_sep = &quot;_(?=[^_]+$)&quot;) |&gt;
+  arrange(desc(pct))</code></pre>
+<pre><code>## # A tibble: 14 × 4
+##    variable                                  yes   tot   pct
+##    &lt;chr&gt;                                   &lt;int&gt; &lt;int&gt; &lt;dbl&gt;
+##  1 habitat_management_for_l_t_hibernicus      NA    NA  79.5
+##  2 support_management_of_l_europaeus          NA    NA  78  
+##  3 support_gov_t_cull_decision                NA    NA  58.9
+##  4 lethal_culling                             NA    NA  51.6
+##  5 support_management_via_petition            NA    NA  47  
+##  6 allow_cull_on_land                         NA    NA  42.9
+##  7 support_cull_with_direct_involvement       NA    NA  35.3
+##  8 support_management_of_l_europaeus_n       259   332  NA  
+##  9 habitat_management_for_l_t_hibernicus_n   213   268  NA  
+## 10 lethal_culling_n                          166   322  NA  
+## 11 support_management_via_petition_n         154   328  NA  
+## 12 support_cull_with_direct_involvement_n    110   312  NA  
+## 13 allow_cull_on_land_n                       85   198  NA  
+## 14 support_gov_t_cull_decision_n             189   321  NA</code></pre>
+<pre class="r"><code># Rural activities (multi-select)
+hare |&gt;
+  dplyr::select(all_of(activity_cols)) |&gt;
+  summarise(across(everything(),
+                   list(n   = ~sum(., na.rm = TRUE),
+                        pct = ~round(mean(., na.rm = TRUE) * 100, 1)))) |&gt;
+  pivot_longer(everything(),
+               names_to  = c(&quot;activity&quot;, &quot;.value&quot;),
+               names_sep = &quot;_(?=[^_]+$)&quot;)</code></pre>
+<pre><code>## # A tibble: 5 × 3
+##   activity            n   pct
+##   &lt;chr&gt;           &lt;int&gt; &lt;dbl&gt;
+## 1 hunt              163  50.6
+## 2 game_birds        109 100  
+## 3 rabbits            88 100  
+## 4 wildfowl           88 100  
+## 5 fishing_angling    71 100</code></pre>
+<hr />
+</div>
+<div id="visualisation" class="section level1">
+<h1>Visualisation</h1>
+<div id="awareness-by-geographic-zone" class="section level2">
+<h2>Awareness by geographic zone</h2>
+<p>One of the central ecological questions in this study is whether
+proximity to established <em>L. europaeus</em> populations affects
+awareness. Respondents from the CORE zone live alongside the invasive
+species; those in WIDER NI may never have encountered one. Do their
+perceptions differ?</p>
+<pre class="r"><code>aware_labels &lt;- c(
+  seen_hares                           = &quot;Seen Irish hares&quot;,
+  seen_l_europaeus                     = &quot;Seen European hares&quot;,
+  aware_of_2_sp_in_ni                  = &quot;Aware of 2 species in NI&quot;,
+  is_threat_of_l_europaeus_important   = &quot;Considers European hare threat important&quot;
+)
+
+hare |&gt;
+  dplyr::select(zone, all_of(aware_cols)) |&gt;
+  pivot_longer(-zone) |&gt;
+  group_by(zone, name) |&gt;
+  summarise(pct = mean(value, na.rm = TRUE) * 100, .groups = &quot;drop&quot;) |&gt;
+  mutate(name = factor(name, levels = names(aware_labels), labels = aware_labels)) |&gt;
+  ggplot(aes(x = zone, y = pct, fill = name)) +
+  geom_col(position = &quot;dodge&quot;) +
+  geom_hline(yintercept = 50, linetype = &quot;dashed&quot;, colour = &quot;grey50&quot;, linewidth = 0.5) +
+  scale_fill_brewer(palette = &quot;Set2&quot;) +
+  scale_y_continuous(labels = percent_format(scale = 1), limits = c(0, 105)) +
+  labs(title    = &quot;Hare awareness by geographic zone&quot;,
+       subtitle = &quot;Dashed line = 50%&quot;,
+       x = &quot;Zone&quot;, y = &quot;% respondents answering Yes&quot;, fill = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = &quot;bottom&quot;,
+        legend.text = element_text(size = 9))</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/respondents.png" width="70%" /></p>
+</div>
+</div>
+<div id="conservation-concern-a-mosaic-plot" class="section level2">
+<h2>Conservation concern: a mosaic plot</h2>
+<p>A mosaic plot is the multivariate extension of a stacked bar chart.
+The width of each column represents the proportion of respondents in
+that group; the height of each cell within the column represents the
+proportion choosing each response. Colour shading (Pearson residuals)
+shows which cells deviate from what you would expect if group membership
+and conservation concern were independent.</p>
+<pre class="r"><code># Compute residuals
+tbl &lt;- table(Group   = hare$group,
+             Concern = hare$conservation_concern) |&gt;
+  (\(t) t[rowSums(t) &gt; 0, colSums(t) &gt; 0])()
+
+res_df &lt;- chisq.test(tbl)$residuals |&gt;
+  as.data.frame() |&gt;
+  rename(group = Group, concern = Concern, residual = Freq)
+
+# Compute proportions for tile sizing
+prop_df &lt;- as.data.frame(prop.table(tbl, margin = 1)) |&gt;
+  rename(group = Group, concern = Concern, prop = Freq)
+
+plot_df &lt;- left_join(res_df, prop_df, by = c(&quot;group&quot;, &quot;concern&quot;))
+
+ggplot(plot_df, aes(x = concern, y = group, fill = residual)) +
+  geom_tile(colour = &quot;white&quot;, linewidth = 3) +
+  geom_text(aes(label = round(residual, 2)),
+            size = 4.5, fontface = &quot;bold&quot;,
+            colour = &quot;white&quot;) +
+  scale_fill_gradient2(
+    low      = &quot;#d73027&quot;,
+    mid      = &quot;white&quot;,
+    high     = &quot;#2166ac&quot;,
+    midpoint = 0,
+    name     = &quot;Pearson\nresidual&quot;
+  ) +
+  labs(
+    title    = &quot;Conservation concern by respondent group&quot;,
+    subtitle = &quot;Cell colour = Pearson residual.Blue = more than expected. Red = fewer&quot;,
+    x        = &quot;Conservation concern&quot;,
+    y        = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(panel.grid = element_blank())</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-mosaic-1.png" width="70%" /></p>
+</div>
+<p>The shading uses Pearson residuals — the difference between observed
+and expected cell counts, standardised by the square root of the
+expected count. A residual greater than ±2 is conventionally considered
+noteworthy. Which cells, if any, show strong deviations? What might
+explain them?</p>
+</div>
+<div id="management-support-bar-chart-and-heatmap" class="section level2">
+<h2>Management support: bar chart and heatmap</h2>
+<p>We want to see not just overall support levels, but how much the two
+groups differ. A bar chart gives the absolute picture; a heatmap lets
+the eye quickly spot patterns across many variables simultaneously.</p>
+<pre class="r"><code>mgmt_labels &lt;- c(
+  support_management_of_l_europaeus       = &quot;General management\nsupport&quot;,
+  habitat_management_for_l_t_hibernicus   = &quot;Habitat management\n(non-lethal)&quot;,
+  lethal_culling                          = &quot;Lethal culling (any)&quot;,
+  support_management_via_petition         = &quot;Sign a petition&quot;,
+  support_cull_with_direct_involvement    = &quot;Direct involvement\nin cull&quot;,
+  allow_cull_on_land                      = &quot;Allow cull on land&quot;,
+  support_gov_t_cull_decision             = &quot;Support\nGovernment cull&quot;
+)
+
+plot_df &lt;- hare |&gt;
+  dplyr::select(group, all_of(mgmt_cols)) |&gt;
+  pivot_longer(-group) |&gt;
+  group_by(group, name) |&gt;
+  summarise(pct = mean(value, na.rm = TRUE) * 100, .groups = &quot;drop&quot;) |&gt;
+  mutate(name = factor(name, levels = names(mgmt_labels), labels = mgmt_labels))
+
+p_bar &lt;- ggplot(plot_df, aes(x = pct, y = fct_rev(name), fill = group)) +
+  geom_col(position = position_dodge(0.7), width = 0.6) +
+  geom_text(aes(label = paste0(round(pct), &quot;%&quot;)),
+            position = position_dodge(0.7), hjust = -0.1, size = 3) +
+  scale_fill_manual(values = c(&quot;CAI&quot; = &quot;#2166ac&quot;, &quot;Public&quot; = &quot;#d73027&quot;)) +
+  scale_x_continuous(limits = c(0, 115), labels = percent_format(scale = 1)) +
+  labs(title    = &quot;Support for European hare management strategies&quot;,
+       subtitle = &quot;By respondent group&quot;,
+       x = &quot;% respondents&quot;, y = NULL, fill = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(legend.position = &quot;top&quot;)
+
+print(p_bar)</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-support-bar-1.png" width="70%" /></p>
+</div>
+<pre class="r"><code>ggplot(plot_df, aes(x = name, y = group, fill = pct)) +
+  geom_tile(colour = &quot;white&quot;, linewidth = 0.8) +
+  geom_text(aes(label = paste0(round(pct), &quot;%&quot;)),
+            size = 3.5, colour = &quot;grey20&quot;) +
+  scale_fill_gradient2(
+    low      = &quot;#d73027&quot;,
+    mid      = &quot;white&quot;,
+    high     = &quot;#2166ac&quot;,
+    midpoint = 50,
+    limits   = c(0, 100),
+    name     = &quot;% Yes&quot;
+  ) +
+  labs(title = &quot;Management support patterns&quot;,
+       subtitle = &quot;Heatmap view — each cell shows % respondents answering Yes&quot;,
+       x = NULL, y = NULL) +
+  theme_minimal(base_size = 11) +
+  theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9))</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-support-heatmap-1.png" width="70%" /></p>
+</div>
+<p>The bar chart is better for reading exact values and comparing groups
+side-by-side. The heatmap is better for spotting patterns across many
+variables at once. Neither is objectively superior — it depends on what
+question you are trying to answer. In a real report, you would probably
+use one or the other, not both.</p>
+<hr />
+</div>
+</div>
+<div id="group-comparisons-chi-square-and-fishers-exact-tests" class="section level1">
+<h1>Group comparisons: Chi-square and Fisher’s exact tests</h1>
+<div id="theory" class="section level2">
+<h2>Theory</h2>
+<p>The chi-square test asks a simple question: is there a statistically
+significant association between two categorical variables? It does so by
+comparing the counts of actual observations to the counts you would
+expect if the variables were completely independent.</p>
+<p>When any expected cell count falls below 5, the chi approximation
+becomes unreliable. Fisher’s exact test calculates the exact probability
+rather than an approximation so is always valid.</p>
+<p>A chi-square test does not tell Whether the association is large or
+small, however. A statistically significant result only means that the
+effect is probably not zero and not that it is meaningful. To explore
+meaning we need a measure of effect size.</p>
+</div>
+<div id="cramérs-v-measuring-effect-size" class="section level2">
+<h2>Cramér’s V: measuring effect size</h2>
+<p>Cramér’s V scales the <span class="math inline">\(\chi^2\)</span>
+statistic to a 0–1 range, correcting for sample size and table
+dimensions. Typically we interpret V as ~0.1 = small, ~0.3 = medium,
+~0.5 = large.</p>
+</div>
+<div id="applying-to-our-data" class="section level2">
+<h2>Applying to our data</h2>
+<p>We test each management variable against group membership (CAI vs
+Public). In plain terms we’re asking whether each group answers
+differently on <em>this issue</em>. We’re asking this of 10 variables
+and if you test things many times then the likelihood of false positives
+increases considerably. To mitigate this we also apply a Bonferroni
+correction that divides our usual cutoff for ‘significant’ by the number
+of tests. We have 10 tests so our P threshold is now 0.005.</p>
+<pre class="r"><code># A function that runs the appropriate test for a single variable
+compare_groups &lt;- function(var, data = hare) {
+  tbl    &lt;- table(data$group, data[[var]])
+  # Suppress warnings about small expected values (we check manually)
+  exp_ct &lt;- suppressWarnings(chisq.test(tbl)$expected)
+
+  if (any(exp_ct &lt; 5, na.rm = TRUE)) {
+    test   &lt;- fisher.test(tbl)
+    method &lt;- &quot;Fisher&quot;
+    stat   &lt;- NA_real_
+    p      &lt;- test$p.value
+    OR     &lt;- as.numeric(test$estimate)
+  } else {
+    test   &lt;- suppressWarnings(chisq.test(tbl))
+    method &lt;- &quot;Chi-sq&quot;
+    stat   &lt;- as.numeric(test$statistic)
+    p      &lt;- test$p.value
+    # Cramér&#39;s V for chi-square
+    n_obs  &lt;- sum(tbl)
+    OR     &lt;- sqrt(stat / (n_obs * (min(dim(tbl)) - 1)))  # repurpose column for V
+  }
+
+  tibble(
+    variable  = var,
+    method    = method,
+    statistic = round(stat, 3),
+    p_value   = round(p, 4),
+    cramers_V_or_OR = round(OR, 3),
+    effect_note = if_else(method == &quot;Chi-sq&quot;, &quot;Cramer&#39;s V&quot;, &quot;Odds ratio&quot;),
+    sig = case_when(p &lt; 0.001 ~ &quot;***&quot;,
+                    p &lt; 0.01  ~ &quot;**&quot;,
+                    p &lt; 0.05  ~ &quot;*&quot;,
+                    TRUE       ~ &quot;&quot;)
+  )
+}</code></pre>
+<pre class="r"><code>comparison_table &lt;- map_dfr(mgmt_cols, compare_groups) |&gt;
+  arrange(p_value) |&gt;
+  mutate(
+    p_bonferroni = p.adjust(p_value, method = &quot;bonferroni&quot;),
+    sig_bonf     = case_when(p_bonferroni &lt; 0.001 ~ &quot;***&quot;,
+                              p_bonferroni &lt; 0.01  ~ &quot;**&quot;,
+                              p_bonferroni &lt; 0.05  ~ &quot;*&quot;,
+                              TRUE                  ~ &quot;ns&quot;)
+  )
+
+comparison_table |&gt;
+  dplyr::select(variable, method, statistic, p_value, cramers_V_or_OR,
+         effect_note, sig, sig_bonf) |&gt;
+  knitr::kable(
+    caption = &quot;Table 2. Statistical comparisons of management support between CAI members and Public respondents. Sig. = before Bonferroni correction; Sig. (Bonf.) = after correction.&quot;,
+    col.names = c(&quot;Variable&quot;,&quot;Test&quot;,&quot;Statistic&quot;,&quot;p-value&quot;,
+                  &quot;Effect size&quot;,&quot;Measure&quot;,&quot;Sig.&quot;,&quot;Sig. (Bonf.)&quot;)
+  )</code></pre>
+<table>
+<colgroup>
+<col width="36%" />
+<col width="6%" />
+<col width="9%" />
+<col width="7%" />
+<col width="11%" />
+<col width="10%" />
+<col width="4%" />
+<col width="12%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Test</th>
+<th align="right">Statistic</th>
+<th align="right">p-value</th>
+<th align="right">Effect size</th>
+<th align="left">Measure</th>
+<th align="left">Sig.</th>
+<th align="left">Sig. (Bonf.)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">lethal_culling</td>
+<td align="left">Chi-sq</td>
+<td align="right">21.041</td>
+<td align="right">0.0000</td>
+<td align="right">0.256</td>
+<td align="left">Cramer’s V</td>
+<td align="left">***</td>
+<td align="left">***</td>
+</tr>
+<tr class="even">
+<td align="left">support_management_via_petition</td>
+<td align="left">Chi-sq</td>
+<td align="right">18.508</td>
+<td align="right">0.0000</td>
+<td align="right">0.238</td>
+<td align="left">Cramer’s V</td>
+<td align="left">***</td>
+<td align="left">***</td>
+</tr>
+<tr class="odd">
+<td align="left">support_cull_with_direct_involvement</td>
+<td align="left">Chi-sq</td>
+<td align="right">28.094</td>
+<td align="right">0.0000</td>
+<td align="right">0.300</td>
+<td align="left">Cramer’s V</td>
+<td align="left">***</td>
+<td align="left">***</td>
+</tr>
+<tr class="even">
+<td align="left">support_gov_t_cull_decision</td>
+<td align="left">Chi-sq</td>
+<td align="right">3.571</td>
+<td align="right">0.0588</td>
+<td align="right">0.105</td>
+<td align="left">Cramer’s V</td>
+<td align="left"></td>
+<td align="left">ns</td>
+</tr>
+<tr class="odd">
+<td align="left">support_management_of_l_europaeus</td>
+<td align="left">Chi-sq</td>
+<td align="right">1.191</td>
+<td align="right">0.2751</td>
+<td align="right">0.060</td>
+<td align="left">Cramer’s V</td>
+<td align="left"></td>
+<td align="left">ns</td>
+</tr>
+<tr class="even">
+<td align="left">allow_cull_on_land</td>
+<td align="left">Chi-sq</td>
+<td align="right">0.752</td>
+<td align="right">0.3857</td>
+<td align="right">0.062</td>
+<td align="left">Cramer’s V</td>
+<td align="left"></td>
+<td align="left">ns</td>
+</tr>
+<tr class="odd">
+<td align="left">habitat_management_for_l_t_hibernicus</td>
+<td align="left">Chi-sq</td>
+<td align="right">0.000</td>
+<td align="right">1.0000</td>
+<td align="right">0.000</td>
+<td align="left">Cramer’s V</td>
+<td align="left"></td>
+<td align="left">ns</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="does-species-awareness-predict-management-support" class="section level2">
+<h2>Does species awareness predict management support?</h2>
+<p>An ecologically interesting sub-question: do respondents who know
+there are two hare species in Northern Ireland show different levels of
+support for management?</p>
+<pre class="r"><code>hare |&gt;
+  filter(!is.na(aware_of_2_sp_in_ni),
+         !is.na(support_management_of_l_europaeus)) |&gt;
+  count(aware_of_2_sp_in_ni, support_management_of_l_europaeus) |&gt;
+  mutate(
+    aware_of_2_sp_in_ni              = if_else(aware_of_2_sp_in_ni, &quot;Aware&quot;, &quot;Not aware&quot;),
+    support_management_of_l_europaeus = if_else(support_management_of_l_europaeus,
+                                                 &quot;Supports&quot;, &quot;Opposes&quot;)
+  ) |&gt;
+  knitr::kable(caption = &quot;Table 3. Species awareness vs management support crosstab.&quot;)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">aware_of_2_sp_in_ni</th>
+<th align="left">support_management_of_l_europaeus</th>
+<th align="right">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Not aware</td>
+<td align="left">Opposes</td>
+<td align="right">39</td>
+</tr>
+<tr class="even">
+<td align="left">Not aware</td>
+<td align="left">Supports</td>
+<td align="right">151</td>
+</tr>
+<tr class="odd">
+<td align="left">Aware</td>
+<td align="left">Opposes</td>
+<td align="right">33</td>
+</tr>
+<tr class="even">
+<td align="left">Aware</td>
+<td align="left">Supports</td>
+<td align="right">108</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>fisher.test(table(hare$aware_of_2_sp_in_ni,
+                  hare$support_management_of_l_europaeus))</code></pre>
+<pre><code>## 
+##  Fisher&#39;s Exact Test for Count Data
+## 
+## data:  table(hare$aware_of_2_sp_in_ni, hare$support_management_of_l_europaeus)
+## p-value = 0.5904
+## alternative hypothesis: true odds ratio is not equal to 1
+## 95 percent confidence interval:
+##  0.4839208 1.4835166
+## sample estimates:
+## odds ratio 
+##  0.8457105</code></pre>
+<p>If people who are more aware of the species distinction are less
+likely to support management, what might this suggest? Could ecological
+knowledge cut both ways - increasing concern for the Irish hare but also
+increasing reluctance to sanction lethal control of the other? This is a
+genuinely interesting question that has real implications for how
+conservation communication should be framed.</p>
+<hr />
+</div>
+</div>
+<div id="response-linkage-association-analysis" class="section level1">
+<h1>Response linkage: association analysis</h1>
+<div id="theory-phi-coefficients-for-binary-data" class="section level2">
+<h2>Theory: phi coefficients for binary data</h2>
+<p>So far we have been looking at one variable at a time, or comparing
+one variable against group membership. But survey responses are not
+independent of each other. Someone who says they would sign a petition
+may also be likely to allow a cull on their land. Mapping these internal
+associations reveals the structure of opinion.</p>
+<p>For two binary (Y/N) variables, the appropriate correlation
+coefficient is <strong>phi</strong> (<span class="math inline">\(\phi\)</span>), which is conceptually identical to
+Pearson’s <span class="math inline">\(r\)</span> applied to 0/1-coded
+data.</p>
+</div>
+<div id="computing-the-phi-matrix" class="section level2">
+<h2>Computing the phi matrix</h2>
+<pre class="r"><code>all_binary_cols &lt;- c(aware_cols, mgmt_cols, &quot;member_of_conservation_org&quot;, activity_cols)
+
+binary_mat &lt;- hare |&gt;
+  dplyr::select(all_of(all_binary_cols)) |&gt;
+  mutate(across(everything(), as.integer))
+
+phi_mat &lt;- cor(binary_mat, use = &quot;pairwise.complete.obs&quot;)</code></pre>
+<pre><code>## Warning in cor(binary_mat, use = &quot;pairwise.complete.obs&quot;): the standard
+## deviation is zero</code></pre>
+<pre class="r"><code>phi_mat[is.na(phi_mat)] &lt;- 0  # replace NA correlations with 0
+
+# Readable labels
+nice_names &lt;- c(
+  seen_hares                           = &quot;Seen Irish hare&quot;,
+  seen_l_europaeus                     = &quot;Seen Eur. hare&quot;,
+  aware_of_2_sp_in_ni                  = &quot;Aware 2 spp&quot;,
+  is_threat_of_l_europaeus_important   = &quot;Threat important&quot;,
+  support_management_of_l_europaeus    = &quot;Support mgmt&quot;,
+  habitat_management_for_l_t_hibernicus= &quot;Habitat mgmt&quot;,
+  lethal_culling                       = &quot;Lethal cull&quot;,
+  support_management_via_petition      = &quot;Petition&quot;,
+  support_cull_with_direct_involvement = &quot;Direct involve&quot;,
+  allow_cull_on_land                   = &quot;Allow cull&quot;,
+  support_gov_t_cull_decision          = &quot;Govt cull&quot;,
+  member_of_conservation_org           = &quot;Consv org&quot;,
+  hunt                                 = &quot;Hunt&quot;,
+  game_birds                           = &quot;Game birds&quot;,
+  rabbits                              = &quot;Rabbits&quot;,
+  wildfowl                             = &quot;Wildfowl&quot;,
+  fishing_angling                      = &quot;Fishing&quot;
+)
+rownames(phi_mat) &lt;- colnames(phi_mat) &lt;- nice_names[colnames(phi_mat)]</code></pre>
+</div>
+<div id="heatmap-of-phi-coefficients" class="section level2">
+<h2>Heatmap of phi coefficients</h2>
+<pre class="r"><code># Make the plot device tall and wide before calling corrplot
+par(oma = c(0, 0, 2, 0))  # outer margin for title
+
+corrplot(
+  phi_mat,
+  method       = &quot;color&quot;,
+  type         = &quot;lower&quot;,          # full matrix reads better at this size
+  order        = &quot;hclust&quot;,        # group correlated variables together
+  hclust.method = &quot;ward.D2&quot;,      # matches your clustering analysis
+  tl.cex       = 0.85,            # larger labels
+  tl.col       = &quot;black&quot;,
+  tl.srt       = 45,              # angled top labels, less cramped
+  addCoef.col  = &quot;black&quot;,
+  number.cex   = 0.65,
+  number.digits = 1,              # 1 decimal place keeps cells readable
+  col          = colorRampPalette(c(&quot;#d73027&quot;, &quot;white&quot;, &quot;#2166ac&quot;))(200),
+  mar          = c(0, 0, 1, 0),
+  diag         = FALSE            # hide the diagonal 1s
+)
+title(&quot;Phi coefficients: binary response associations&quot;,
+      outer = TRUE, cex.main = 1.1)</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/phi-heatmap-1.png" width="70%" /></p>
+
+</div>
+</div>
+<div id="hierarchical-clustering-what-clusters-with-what" class="section level2">
+<h2>Hierarchical clustering: what clusters with what?</h2>
+<p>Hierarchical clustering groups variables by similarity. Here we treat
+<span class="math inline">\(1 - |\phi|\)</span> as a distance (so highly
+associated variables, whether positively or negatively, are close
+together), and use Ward’s D2 linkage to merge groups.</p>
+<pre class="r"><code>dist_mat   &lt;- as.dist(1 - abs(phi_mat))
+hclust_res &lt;- hclust(dist_mat, method = &quot;ward.D2&quot;)
+
+plot(hclust_res,
+     main  = &quot;Hierarchical clustering of questionnaire responses&quot;,
+     sub   = &quot;Distance = 1 - |φ|  (Ward&#39;s D2 linkage)&quot;,
+     xlab  = &quot;Response variable&quot;,
+     ylab  = &quot;Distance&quot;,
+     cex   = 0.85)
+rect.hclust(hclust_res, k = 4,
+            border = c(&quot;#e41a1c&quot;, &quot;#377eb8&quot;, &quot;#4daf4a&quot;, &quot;#984ea3&quot;))</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/hclust-1.png" width="70%" /></p>
+
+</div>
+<p>Variables that merge at a low height are closely associated.
+Variables that only merge near the top of the tree are weakly
+associated. The coloured rectangles suggest a four-cluster partition but
+selecting <span class="math inline">\(k\)</span> is a judgement call,
+not an algorithm output. Try <code>k = 3</code> and <code>k = 5</code>
+and see how the interpretation changes.</p>
+</div>
+<div id="association-network" class="section level2">
+<h2>Association network</h2>
+<p>We can go one step further and visualise the associations as a
+network where variables are nodes, and we draw an edge between two nodes
+if their <span class="math inline">\(|\phi| &gt; 0.3\)</span> (a
+conventional threshold for a “meaningful” binary association). Edge
+thickness and colour encode the strength and direction of the
+association.</p>
+<pre class="r"><code>phi_long &lt;- as_tibble(phi_mat, rownames = &quot;from&quot;) |&gt;
+  pivot_longer(-from, names_to = &quot;to&quot;, values_to = &quot;phi&quot;) |&gt;
+  filter(from &lt; to,        # lower triangle only — avoid duplicate edges
+         abs(phi) &gt; 0.3,
+         !is.na(phi))
+
+if (nrow(phi_long) &gt; 0) {
+  g &lt;- graph_from_data_frame(
+    d        = phi_long |&gt; mutate(weight = abs(phi)),
+    directed = FALSE,
+    vertices = tibble(name = colnames(phi_mat))
+  )
+  E(g)$sign &lt;- ifelse(phi_long$phi &gt; 0, &quot;positive&quot;, &quot;negative&quot;)
+
+  set.seed(42)
+  ggraph(g, layout = &quot;fr&quot;) +
+    geom_edge_link(aes(width = weight, colour = sign), alpha = 0.8) +
+    geom_node_point(size = 7, colour = &quot;#444444&quot;, fill = &quot;#dddddd&quot;,
+                    shape = 21, stroke = 1) +
+    geom_node_text(aes(label = name), size = 2.8, repel = TRUE,
+                   max.overlaps = 20) +
+    scale_edge_width(range = c(0.5, 3.5), name = &quot;|φ|&quot;) +
+    scale_edge_colour_manual(
+      values = c(positive = &quot;#2166ac&quot;, negative = &quot;#d73027&quot;),
+      name   = &quot;Direction&quot;
+    ) +
+    labs(
+      title    = &quot;Association network: questionnaire responses&quot;,
+      subtitle = &quot;Edges where |φ| &gt; 0.3 · blue = positive · red = negative&quot;
+    ) +
+    theme_graph(base_family = &quot;sans&quot;) +
+    theme(legend.position = &quot;right&quot;)
+} else {
+  cat(&quot;No pairs with |phi| &gt; 0.3 in this sample. Try lowering the threshold.\n&quot;)
+}</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/network-1.png" width="70%" /></p>
+
+</div>
+<p>In a well-designed attitude survey, you often see two major clusters:
+one for knowledge/awareness items and one for action/support items. Do
+these emerge here? What does it mean if awareness and support cluster
+together — or separately?</p>
+<hr />
+</div>
+</div>
+<div id="regression" class="section level1">
+<h1>Logistic Regression: Predicting Support for a Government Cull</h1>
+<p>We have established that the groups differ. Now we want to know what
+predicts support for the most politically significant outcome: a
+government-planned cull (Q20). Our outcome is binary — it can only be 0
+or 1. Ordinary linear regression can predict values outside this range,
+which is nonsensical. Logistic regression models the log-odds of the
+outcome, guaranteeing that predicted probabilities stay between 0 and
+1.</p>
+<div id="fitting-the-model" class="section level2">
+<h2>Fitting the model</h2>
+<pre class="r"><code>hare_mod &lt;- hare |&gt;
+  mutate(
+    group                = relevel(group, ref = &quot;Public&quot;),
+    conservation_concern = relevel(conservation_concern, ref = &quot;Not concerned&quot;)
+  ) |&gt;
+  filter(!is.na(support_gov_t_cull_decision))
+
+glm_fit &lt;- glm(
+  support_gov_t_cull_decision ~
+    group + zone + own_rent_land + conservation_concern +
+    aware_of_2_sp_in_ni + consider_hares_pests +
+    is_threat_of_l_europaeus_important + hunt,
+  data   = hare_mod,
+  family = binomial(link = &quot;logit&quot;)
+)
+
+summary(glm_fit)</code></pre>
+<pre><code>## 
+## Call:
+## glm(formula = support_gov_t_cull_decision ~ group + zone + own_rent_land + 
+##     conservation_concern + aware_of_2_sp_in_ni + consider_hares_pests + 
+##     is_threat_of_l_europaeus_important + hunt, family = binomial(link = &quot;logit&quot;), 
+##     data = hare_mod)
+## 
+## Coefficients:
+##                                        Estimate Std. Error z value Pr(&gt;|z|)  
+## (Intercept)                            -0.25476    0.51240  -0.497   0.6191  
+## groupCAI                                0.06835    0.46442   0.147   0.8830  
+## zonePERIPHERY                           0.24281    0.37854   0.641   0.5212  
+## zoneWIDER NI                            0.09899    0.38234   0.259   0.7957  
+## own_rent_landTRUE                      -0.28734    0.35088  -0.819   0.4128  
+## conservation_concernConcerned           0.25992    0.39922   0.651   0.5150  
+## aware_of_2_sp_in_niTRUE                -0.76739    0.38291  -2.004   0.0451 *
+## consider_hares_pestsTRUE               -0.20057    0.41016  -0.489   0.6248  
+## is_threat_of_l_europaeus_importantTRUE  0.82124    0.32678   2.513   0.0120 *
+## huntTRUE                                1.20848    0.48102   2.512   0.0120 *
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 262.50  on 199  degrees of freedom
+## Residual deviance: 241.55  on 190  degrees of freedom
+##   (121 observations deleted due to missingness)
+## AIC: 261.55
+## 
+## Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+<div id="odds-ratios-and-confidence-intervals" class="section level2">
+<h2>Odds ratios and confidence intervals</h2>
+<p>We calculate odds ratios in logistic regression to express how much
+the odds of an outcome change when a predictor increases or differs
+between groups. They make results easier to interpret by turning model
+coefficients into a clear “how many times more or less likely”
+comparison.</p>
+<pre class="r"><code>glm_tidy &lt;- tidy(glm_fit, conf.int = TRUE, exponentiate = TRUE) |&gt;
+  filter(term != &quot;(Intercept)&quot;) |&gt;
+  mutate(
+    sig = case_when(p.value &lt; 0.001 ~ &quot;***&quot;,
+                    p.value &lt; 0.01  ~ &quot;**&quot;,
+                    p.value &lt; 0.05  ~ &quot;*&quot;,
+                    TRUE             ~ &quot;&quot;)
+  )
+
+glm_tidy |&gt;
+  dplyr::select(term, estimate, conf.low, conf.high, p.value, sig) |&gt;
+  knitr::kable(
+    digits  = 3,
+    caption = &quot;Table 4. Logistic regression results. Odds ratios (ORs) with 95% confidence intervals and p-values. Reference group: Public respondents; Not concerned about conservation.&quot;,
+    col.names = c(&quot;Predictor&quot;, &quot;OR&quot;, &quot;95% CI lower&quot;, &quot;95% CI upper&quot;, &quot;p-value&quot;, &quot;Sig.&quot;)
+  )</code></pre>
+<table>
+<colgroup>
+<col width="46%" />
+<col width="7%" />
+<col width="15%" />
+<col width="15%" />
+<col width="9%" />
+<col width="5%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Predictor</th>
+<th align="right">OR</th>
+<th align="right">95% CI lower</th>
+<th align="right">95% CI upper</th>
+<th align="right">p-value</th>
+<th align="left">Sig.</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">groupCAI</td>
+<td align="right">1.071</td>
+<td align="right">0.424</td>
+<td align="right">2.654</td>
+<td align="right">0.883</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">zonePERIPHERY</td>
+<td align="right">1.275</td>
+<td align="right">0.609</td>
+<td align="right">2.701</td>
+<td align="right">0.521</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">zoneWIDER NI</td>
+<td align="right">1.104</td>
+<td align="right">0.523</td>
+<td align="right">2.353</td>
+<td align="right">0.796</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">own_rent_landTRUE</td>
+<td align="right">0.750</td>
+<td align="right">0.374</td>
+<td align="right">1.487</td>
+<td align="right">0.413</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">conservation_concernConcerned</td>
+<td align="right">1.297</td>
+<td align="right">0.587</td>
+<td align="right">2.832</td>
+<td align="right">0.515</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">aware_of_2_sp_in_niTRUE</td>
+<td align="right">0.464</td>
+<td align="right">0.215</td>
+<td align="right">0.970</td>
+<td align="right">0.045</td>
+<td align="left">*</td>
+</tr>
+<tr class="odd">
+<td align="left">consider_hares_pestsTRUE</td>
+<td align="right">0.818</td>
+<td align="right">0.367</td>
+<td align="right">1.851</td>
+<td align="right">0.625</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">is_threat_of_l_europaeus_importantTRUE</td>
+<td align="right">2.273</td>
+<td align="right">1.203</td>
+<td align="right">4.349</td>
+<td align="right">0.012</td>
+<td align="left">*</td>
+</tr>
+<tr class="odd">
+<td align="left">huntTRUE</td>
+<td align="right">3.348</td>
+<td align="right">1.342</td>
+<td align="right">8.956</td>
+<td align="right">0.012</td>
+<td align="left">*</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>ggplot(glm_tidy, aes(x = estimate, y = reorder(term, estimate))) +
+  geom_point(size = 3.5, colour = &quot;#2166ac&quot;) +
+  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high),
+                 height = 0.3, colour = &quot;#2166ac&quot;, linewidth = 0.8) +
+  geom_vline(xintercept = 1, linetype = &quot;dashed&quot;, colour = &quot;#e74c3c&quot;,
+             linewidth = 0.8) +
+  scale_x_log10() +
+  labs(
+    title    = &quot;Predictors of government cull support&quot;,
+    subtitle = &quot;Odds ratios with 95% CI (log scale)&quot;,
+    x = &quot;Odds ratio&quot;, y = NULL
+  ) +
+  theme_minimal(base_size = 12)</code></pre>
+<pre><code>## Warning: `geom_errorbarh()` was deprecated in ggplot2 4.0.0.
+## ℹ Please use the `orientation` argument of `geom_errorbar()` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.</code></pre>
+<pre><code>## `height` was translated to `width`.</code></pre>
+<div class="figure">
+<<p><img src="https://arcaravaggi.github.io/img/blog_survey/logistic-plot-1.png" width="70%" /></p>
+
+</div>
+</div>
+<div id="model-fit" class="section level2">
+<h2>Model fit</h2>
+<pre class="r"><code>cat(&quot;AIC:&quot;, round(AIC(glm_fit), 1), &quot;\n&quot;)</code></pre>
+<pre><code>## AIC: 261.6</code></pre>
+<pre class="r"><code>cat(&quot;Null deviance:&quot;, round(glm_fit$null.deviance, 1),
+    &quot;on&quot;, glm_fit$df.null, &quot;df\n&quot;)</code></pre>
+<pre><code>## Null deviance: 262.5 on 199 df</code></pre>
+<pre class="r"><code>cat(&quot;Residual deviance:&quot;, round(glm_fit$deviance, 1),
+    &quot;on&quot;, glm_fit$df.residual, &quot;df\n&quot;)</code></pre>
+<pre><code>## Residual deviance: 241.6 on 190 df</code></pre>
+<pre class="r"><code>cat(&quot;McFadden pseudo-R:&quot;,
+    round(1 - glm_fit$deviance / glm_fit$null.deviance, 3), &quot;\n&quot;)</code></pre>
+<pre><code>## McFadden pseudo-R: 0.08</code></pre>
+<p>Unlike the usual R^2 in linear regression, McFadden’s pseudo-R^2 does
+not tell you how much of the outcome is “explained” by the model.
+Instead, it tells you how much better your model fits the data compared
+to a baseline model with only an intercept. Values around 0.2–0.4 are
+often considered quite good in social science, but it should be
+interpreted cautiously rather than taken as a strict measure of model
+quality.</p>
+<p>Which predictors have ORs substantially different from 1.0? Are the
+confidence intervals narrow (precise estimates) or wide (high
+uncertainty)? How might you improve the model? What would an interaction
+between <code>group</code> and <code>aware_of_2_sp_in_ni</code> mean
+conceptually?</p>
+<hr />
+</div>
+</div>
+<div id="thematic-analysis-of-multi-select-responses" class="section level1">
+<h1>Thematic analysis of multi-select responses</h1>
+<div id="theory-1" class="section level2">
+<h2>Theory</h2>
+<p>Some questions in the survey were multi-select, i.e., respondents
+could tick all that applied. These cannot be treated as simple binary
+variables as the combination of choices carries meaning.</p>
+<p>In this section we’ll use a qualitative thematic approach. We
+identify the “themes” (choice profiles) present in the data and examine
+which groups favour which themes. This allows us to be fully
+quantitative and use pattern analysis on binary data.</p>
+</div>
+<div id="culling-method-profiles" class="section level2">
+<h2>Culling method profiles</h2>
+<pre class="r"><code>cull_mat &lt;- hare |&gt;
+  dplyr::select(group, all_of(cull_methods)) |&gt;
+  filter(!is.na(shooting) | !is.na(netting) | !is.na(trapping)) |&gt;
+  mutate(across(all_of(cull_methods), ~replace_na(as.integer(.), 0L))) |&gt;
+  mutate(
+    n_methods = shooting + netting + trapping,
+    profile   = case_when(
+      n_methods == 0              ~ &quot;None selected&quot;,
+      shooting &amp; !netting &amp; !trapping ~ &quot;Shooting only&quot;,
+      !shooting &amp; netting &amp; !trapping ~ &quot;Netting only&quot;,
+      !shooting &amp; !netting &amp; trapping ~ &quot;Trapping only&quot;,
+      shooting &amp; netting &amp; !trapping  ~ &quot;Shooting + Netting&quot;,
+      shooting &amp; !netting &amp; trapping  ~ &quot;Shooting + Trapping&quot;,
+      !shooting &amp; netting &amp; trapping  ~ &quot;Netting + Trapping&quot;,
+      TRUE                            ~ &quot;All three&quot;
+    )
+  )
+
+count(cull_mat, group, profile) |&gt; arrange(group, desc(n))</code></pre>
+<pre><code>##     group             profile  n
+## 1     CAI       Shooting only 34
+## 2     CAI           All three 29
+## 3     CAI        Netting only 21
+## 4     CAI  Shooting + Netting  7
+## 5     CAI  Netting + Trapping  5
+## 6     CAI       Trapping only  4
+## 7     CAI Shooting + Trapping  2
+## 8  Public       Shooting only 33
+## 9  Public        Netting only 27
+## 10 Public           All three 13
+## 11 Public  Netting + Trapping 10
+## 12 Public       Trapping only  9
+## 13 Public  Shooting + Netting  2</code></pre>
+<pre class="r"><code>cull_mat |&gt;
+  count(group, profile) |&gt;
+  group_by(group) |&gt;
+  mutate(pct = n / sum(n) * 100) |&gt;
+  ggplot(aes(x = pct, y = reorder(profile, pct), fill = group)) +
+  geom_col(position = position_dodge(0.7), width = 0.65) +
+  geom_text(aes(label = paste0(round(pct), &quot;%&quot;)),
+            position = position_dodge(0.7), hjust = -0.15, size = 3) +
+  scale_fill_manual(values = c(&quot;CAI&quot; = &quot;#2166ac&quot;, &quot;Public&quot; = &quot;#d73027&quot;)) +
+  scale_x_continuous(limits = c(0, 75), labels = percent_format(scale = 1)) +
+  labs(title    = &quot;Preferred culling method combinations&quot;,
+       subtitle = &quot;Multi-select question: tick all that apply&quot;,
+       x = &quot;% respondents&quot;, y = NULL, fill = NULL) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = &quot;top&quot;)</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/thematic-cull-plot-1.png" width="70%" /></p>
+
+</div>
+</div>
+<div id="linking-themes-to-attitudes" class="section level2">
+<h2>Linking themes to attitudes</h2>
+<p>We can use chi-square to quantitatively test whether culling method
+preference differs between groups.</p>
+<pre class="r"><code>profile_tbl &lt;- table(cull_mat$group, cull_mat$profile)
+chisq.test(profile_tbl)</code></pre>
+<pre><code>## Warning in stats::chisq.test(x, y, ...): Chi-squared approximation may be
+## incorrect</code></pre>
+<pre><code>## 
+##  Pearson&#39;s Chi-squared test
+## 
+## data:  profile_tbl
+## X-squared = 14.926, df = 6, p-value = 0.02084</code></pre>
+</div>
+<div id="activity-co-occurrence-the-jaccard-index" class="section level2">
+<h2>Activity co-occurrence: the Jaccard index</h2>
+<p>For the rural activities question, we want to know which activities
+tend to co-occur, i.e., which activities are commonly practised
+together. We use the Jaccard similarity index, which measures the
+overlap between two sets. A Jaccard of 1 means the two activities always
+occur together; 0 means they never do.</p>
+<pre class="r"><code>act_mat &lt;- hare |&gt;
+  dplyr::select(all_of(activity_cols)) |&gt;
+  mutate(across(everything(), ~replace_na(as.integer(.), 0L))) |&gt;
+  as.matrix()
+
+co_occur &lt;- t(act_mat) %*% act_mat   # n(i AND j) for all pairs
+diag(co_occur) &lt;- 0
+
+n_each      &lt;- colSums(act_mat)
+jaccard_mat &lt;- matrix(NA_real_, nrow = ncol(act_mat), ncol = ncol(act_mat),
+                      dimnames = list(activity_cols, activity_cols))
+
+for (i in seq_len(ncol(act_mat))) {
+  for (j in seq_len(ncol(act_mat))) {
+    union_ij          &lt;- n_each[i] + n_each[j] - co_occur[i, j]
+    jaccard_mat[i, j] &lt;- if (union_ij &gt; 0) co_occur[i, j] / union_ij else 0
+  }
+}
+
+round(jaccard_mat, 2)</code></pre>
+<pre><code>##                 hunt game_birds rabbits wildfowl fishing_angling
+## hunt            0.00       0.66    0.54     0.54            0.44
+## game_birds      0.66       0.00    0.56     0.71            0.53
+## rabbits         0.54       0.56    0.00     0.54            0.38
+## wildfowl        0.54       0.71    0.54     0.00            0.53
+## fishing_angling 0.44       0.53    0.38     0.53            0.00</code></pre>
+<pre class="r"><code>g_act &lt;- graph_from_adjacency_matrix(
+  jaccard_mat, mode = &quot;undirected&quot;, weighted = TRUE, diag = FALSE
+)
+
+set.seed(7)
+ggraph(g_act, layout = &quot;circle&quot;) +
+  geom_edge_link(aes(width = weight, alpha = weight), colour = &quot;#27ae60&quot;) +
+  geom_node_point(size = 14, colour = &quot;#1a7837&quot;, fill = &quot;#a8ddb5&quot;,
+                  shape = 21, stroke = 1.5) +
+  geom_node_text(aes(label = name), size = 3.2, colour = &quot;black&quot;) +
+  scale_edge_width(range = c(0.3, 5), name = &quot;Jaccard&quot;) +
+  scale_edge_alpha(range = c(0.2, 1), guide = &quot;none&quot;) +
+  labs(title    = &quot;Co-occurrence of rural activities&quot;,
+       subtitle = &quot;Edge width proportional to Jaccard similarity&quot;) +
+  theme_graph(base_family = &quot;sans&quot;)</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/jaccard-network-1.png" width="70%" /></p>
+
+</div>
+</div>
+<div id="respondent-typology" class="section level2">
+<h2>Respondent typology</h2>
+<p>Finally, we create a simple classification by combining two measures:
+awareness (how much a respondent knows) and support (how strongly they
+support active management). This is similar to stakeholder mapping,
+where people are grouped based on their knowledge and attitudes to help
+guide conservation decisions.</p>
+<pre class="r"><code>hare &lt;- hare |&gt;
+  mutate(
+    awareness_index = as.integer(seen_hares) +
+                      as.integer(aware_of_2_sp_in_ni) +
+                      as.integer(is_threat_of_l_europaeus_important),
+
+    support_index   = as.integer(support_management_of_l_europaeus) +
+                      as.integer(lethal_culling) +
+                      as.integer(support_management_via_petition) +
+                      as.integer(support_cull_with_direct_involvement) +
+                      as.integer(allow_cull_on_land) +
+                      as.integer(support_gov_t_cull_decision),
+
+    activity_breadth = as.integer(hunt) + as.integer(game_birds) +
+                       as.integer(rabbits) + as.integer(wildfowl) +
+                       as.integer(fishing_angling),
+
+    typology = case_when(
+      support_index &gt;= 4 &amp; awareness_index &gt;= 2 ~ &quot;Informed advocate&quot;,
+      support_index &gt;= 4 &amp; awareness_index &lt;  2 ~ &quot;Pragmatic advocate&quot;,
+      support_index &lt;  2 &amp; awareness_index &gt;= 2 ~ &quot;Aware but opposed&quot;,
+      support_index &lt;  1 &amp; awareness_index &lt;  1 ~ &quot;Disengaged&quot;,
+      TRUE                                      ~ &quot;Ambivalent&quot;
+    ),
+    typology = factor(typology,
+                      levels = c(&quot;Informed advocate&quot;, &quot;Pragmatic advocate&quot;,
+                                 &quot;Ambivalent&quot;, &quot;Aware but opposed&quot;, &quot;Disengaged&quot;))
+  )
+
+count(hare, group, typology) |&gt; arrange(group, typology)</code></pre>
+<pre><code>##    group           typology   n
+## 1    CAI  Informed advocate  27
+## 2    CAI Pragmatic advocate   6
+## 3    CAI         Ambivalent  83
+## 4    CAI  Aware but opposed  23
+## 5 Public  Informed advocate  32
+## 6 Public Pragmatic advocate   8
+## 7 Public         Ambivalent 130
+## 8 Public  Aware but opposed  31
+## 9 Public         Disengaged   1</code></pre>
+<p>It’s important to note that the thresholds used to define these
+categories are based on subjective judgement rather than fixed rules.
+This means that different reasonable cut-offs could change how
+individuals are grouped, so the typology should be interpreted as a
+useful simplification rather than a precise classification. Where
+possible, these thresholds should be checked against empirical evidence
+or validated with expert judgement to ensure they are meaningful and
+robust.</p>
+<pre class="r"><code>hare |&gt;
+  filter(!is.na(typology)) |&gt;
+  count(group, typology) |&gt;
+  group_by(group) |&gt;
+  mutate(pct = n / sum(n) * 100) |&gt;
+  ggplot(aes(x = pct, y = fct_rev(typology), fill = group)) +
+  geom_col(position = position_dodge(0.7), width = 0.65) +
+  geom_text(aes(label = paste0(round(pct), &quot;%&quot;)),
+            position = position_dodge(0.7), hjust = -0.1, size = 3.2) +
+  scale_fill_manual(values = c(&quot;CAI&quot; = &quot;#2166ac&quot;, &quot;Public&quot; = &quot;#d73027&quot;)) +
+  scale_x_continuous(limits = c(0, 75), labels = percent_format(scale = 1)) +
+  labs(
+    title    = &quot;Respondent typology by group&quot;,
+    subtitle = &quot;Based on awareness index (0–4) and support index (0–6)&quot;,
+    x = &quot;% respondents&quot;, y = NULL, fill = NULL
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = &quot;top&quot;)</code></pre>
+<div class="figure">
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/typology-plot-1.png" width="70%" /></p>
+
+</div>
+<p>How would you use these typologies in conservation practice? The
+“informed advocate” already knows and supports so do you need to spend
+resources on them? The “pragmatic advocate” supports but doesn’t really
+know why; are they a potential liability if the evidence changes? The
+“aware but opposed” understand the issue and still say no. What would it
+take to change their mind, and should you try?</p>
+<hr />
+</div>
+</div>
+<div id="latent-class-analysis-lca" class="section level1">
+<h1>Latent Class Analysis (LCA)</h1>
+<p>Imagine you have given 341 people a survey with 11 yes/no questions.
+You now have 341 rows of 1s and 0s. LCA asks whether, beneath all the
+variation, are there a small number of distinct types of respondent and
+if so, how many, and what defines each type?</p>
+<p>A latent variable is one you cannot observe directly, one that is
+hidden in the data. In this case, the latent variable is respondent type
+- the underlying attitude profile that caused a particular person to
+answer the way they did. LCA tries to recover that hidden structure from
+the pattern of observed responses.</p>
+<p>Previously we created a typology by applying rules designed by us.
+That is perfectly reasonable, but the thresholds and dimensions are our
+choices. LCA makes no such assumptions. Instead, it finds the grouping
+that best explains the observed pattern of responses statistically
+without requiring us to decide in advance what the groups should look
+like or how many there should be. The two approaches should broadly
+agree if your hand-coded typology is capturing something real but where
+they diverge is informative.</p>
+<p>LCA assumes that each respondent belongs to one of K unobserved
+classes. Within each class, responses to individual questions are
+assumed to be independent of each other (local independence assumption).
+This might run counter to your own understanding of the data. You might
+expect, for example, “supports lethal culling” and “supports a
+government cull” to be correlated. But LCA suggests that they are only
+correlated because they are both influenced by the same underlying class
+membership. Once you know which class someone belongs to, knowing their
+answer to one question tells you nothing extra about their answer to
+another. The class explains the correlation.</p>
+<p>The model estimates:</p>
+<ul>
+<li>Class proportions. I.e., what fraction of the population belongs to
+each class. If K = 3, you might get classes of 45%, 35%, and 20%.</li>
+<li>Item response probabilities. I.e., for each class and each question,
+the probability that a member of that class answers “Yes”. A class with
+P(lethal culling = Yes) = 0.92 is very different from one with P(lethal
+culling = Yes) = 0.18.</li>
+</ul>
+<pre class="r"><code># poLCA requires indicators coded as positive integers starting at 1.
+# Our binary columns are TRUE/FALSE — add 1L to make them 1/2.
+
+lca_vars &lt;- c(
+  &quot;seen_l_europaeus&quot;, &quot;aware_of_2_sp_in_ni&quot;,
+  &quot;is_threat_of_l_europaeus_important&quot;, &quot;consider_hares_pests&quot;,
+  &quot;support_management_of_l_europaeus&quot;, &quot;habitat_management_for_l_t_hibernicus&quot;,
+  &quot;lethal_culling&quot;, &quot;support_management_via_petition&quot;,
+  &quot;support_cull_with_direct_involvement&quot;, &quot;allow_cull_on_land&quot;,
+  &quot;support_gov_t_cull_decision&quot;
+)
+
+lca_df &lt;- hare |&gt;
+  dplyr::select(all_of(lca_vars)) |&gt;
+  mutate(across(everything(), ~ as.integer(.) + 1L)) |&gt;  # FALSE→1, TRUE→2
+  drop_na()
+
+# poLCA needs a formula listing all indicators
+lca_formula &lt;- as.formula(
+  paste(&quot;cbind(&quot;, paste(lca_vars, collapse = &quot;,&quot;), &quot;) ~ 1&quot;)
+)
+
+# Choose the number of classes 
+# Fit models with 2–5 classes and compare AIC / BIC.
+# BIC tends to favour more parsimonious solutions; AIC can overfit slightly.
+
+fit_lca &lt;- function(k) {
+  poLCA(lca_formula, data = lca_df, nclass = k,
+        maxiter = 3000, tol = 1e-6,
+        verbose = FALSE, nrep = 10)   # nrep: 10 random starts, keeps best
+}
+
+set.seed(42)
+models &lt;- map(2:5, fit_lca)
+
+# Model fit table
+fit_table &lt;- tibble(
+  K      = 2:5,
+  logLik = map_dbl(models, ~ .x$llik),
+  AIC    = map_dbl(models, ~ .x$aic),
+  BIC    = map_dbl(models, ~ .x$bic),
+  df     = map_int(models, ~ .x$resid.df)
+)
+print(fit_table)</code></pre>
+<pre><code>## # A tibble: 4 × 5
+##       K logLik   AIC   BIC    df
+##   &lt;int&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;
+## 1     2  -839. 1724. 1794.   127
+## 2     3  -812. 1694. 1800.   115
+## 3     4  -789. 1672. 1813.   103
+## 4     5  -772. 1662. 1840.    91</code></pre>
+<pre class="r"><code># Scree-style plot of BIC
+ggplot(fit_table, aes(x = K, y = BIC)) +
+  geom_line(linewidth = 1, colour = &quot;#2166ac&quot;) +
+  geom_point(size = 3,   colour = &quot;#2166ac&quot;) +
+  geom_line(aes(y = AIC), linewidth = 1, colour = &quot;#d73027&quot;, linetype = &quot;dashed&quot;) +
+  geom_point(aes(y = AIC), size = 3, colour = &quot;#d73027&quot;) +
+  labs(title    = &quot;LCA model selection&quot;,
+       subtitle = &quot;Lower BIC (blue)/ AIC(red) = better fit; look for the elbow&quot;,
+       x = &quot;Number of latent classes (K)&quot;, y = &quot;Information criterion&quot;) +
+  theme_minimal(base_size = 12)</code></pre>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_2-1.png" width="70%" /></p>
+
+<pre class="r"><code># Select and label the best model
+best_model &lt;- models[[2]]   # models[[1]] = K=2, models[[2]] = K=3, etc.
+K &lt;- length(unique(best_model$predclass))
+cat(&quot;Using K =&quot;, K, &quot;classes\n&quot;)</code></pre>
+<pre><code>## Using K = 3 classes</code></pre>
+<p>For this example we manually select K = 3 to illustrate
+interpretation. In practice, K should be chosen empirically based on the
+BIC/AIC and the point at which adding another class produces diminishing
+returns in fit.</p>
+<p>To use the empirically best model instead, replace the line above
+with:</p>
+<pre class="r"><code>best_model &lt;- models[[which.min(map_dbl(models, ~ .x$bic)) ]]
+K &lt;- length(unique(best_model$predclass))
+cat(&quot;Best K by BIC:&quot;, K, &quot;\n&quot;)</code></pre>
+<pre class="r"><code># Extract item response probabilities
+# probs[[item]][class, response] — we want response = 2 (TRUE)
+probs_df &lt;- imap_dfr(best_model$probs, function(mat, item) {
+  tibble(
+    item  = item,
+    class = paste0(&quot;Class &quot;, seq_len(nrow(mat))),
+    prob  = mat[, 2]          # probability of YES (response = 2)
+  )
+})
+
+# Readable item labels
+item_labels &lt;- c(
+  seen_l_europaeus                      = &quot;Seen European hare&quot;,
+  aware_of_2_sp_in_ni                   = &quot;Aware of 2 species&quot;,
+  is_threat_of_l_europaeus_important    = &quot;Threat important&quot;,
+  consider_hares_pests                  = &quot;Hares are pests&quot;,
+  support_management_of_l_europaeus     = &quot;Support management&quot;,
+  habitat_management_for_l_t_hibernicus = &quot;Habitat management&quot;,
+  lethal_culling                        = &quot;Lethal culling&quot;,
+  support_management_via_petition       = &quot;Sign petition&quot;,
+  support_cull_with_direct_involvement  = &quot;Direct involvement&quot;,
+  allow_cull_on_land                    = &quot;Allow cull on land&quot;,
+  support_gov_t_cull_decision           = &quot;Support govt cull&quot;
+)
+
+probs_df &lt;- probs_df |&gt;
+  mutate(item = factor(item_labels[item], levels = rev(item_labels)))
+
+# ── Step 4: item probability plot ────────────────────────────────────────────
+ggplot(probs_df, aes(x = prob, y = item, colour = class)) +
+  geom_point(size = 3.5, alpha = 0.9) +
+  geom_line(aes(group = class), linewidth = 0.8, alpha = 0.6,
+            orientation = &quot;y&quot;) +
+  geom_vline(xintercept = 0.5, linetype = &quot;dashed&quot;, colour = &quot;grey50&quot;) +
+  scale_x_continuous(labels = percent_format(), limits = c(0, 1)) +
+  scale_colour_brewer(palette = &quot;Set1&quot;) +
+  labs(title    = &quot;LCA item response probabilities by class&quot;,
+       subtitle = &quot;Each point = P(Yes) for that item in that class · dashed = 50%&quot;,
+       x = &quot;Probability of Yes response&quot;, y = NULL, colour = NULL) +
+  facet_wrap(~ class, nrow = 1) +
+  theme_minimal(base_size = 12) +
+  theme(legend.position = &quot;none&quot;,
+        panel.spacing    = unit(1.2, &quot;lines&quot;))</code></pre>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_4-1.png" width="70%" /></p>
+
+<p>This is the most important output. Each panel is one latent class.
+Each point is one survey question. The x-axis shows P(Yes) for that
+question within that class. What we are looking for:</p>
+<ul>
+<li>The dashed line at 50% is a natural reference: above it means the
+class is more likely than not to say Yes; below means more likely to say
+No</li>
+<li>Classes that separate cleanly on the management questions represent
+genuinely different attitude profiles.</li>
+<li>A class with high awareness but low management support is the “Aware
+but opposed” group found without any prior assumptions. If this matches
+our hand-coded typology, that is a form of validation</li>
+<li>Questions where all classes overlap near 0.5 are not driving the
+class structure. They are not discriminating between types and you could
+consider removing them in a revised model.</li>
+</ul>
+<p>Once the model is fitted, each respondent gets a posterior
+probability of belonging to each class. We can then cross-tabulate class
+membership against external variables such as group (CAI vs Public),
+zone, or cull support that were not used in the LCA itself. This is how
+we validate the classes. If Class 1 turns out to be 89% CAI members,
+that is not a finding we forced on the data, it is something the
+analysis revealed.</p>
+<pre class="r"><code># Posterior probabilities
+K &lt;- length(unique(best_model$predclass))   
+
+hare_lca &lt;- hare |&gt;
+  drop_na(all_of(lca_vars)) |&gt;
+  mutate(
+    pred_class = factor(best_model$predclass,
+                        labels = paste0(&quot;Class &quot;, 1:K)),
+    entropy    = -rowSums(best_model$posterior *
+                            log(best_model$posterior + 1e-10))
+  )
+
+# Table helper
+# Produces a tidy row/column % table for any grouping variable
+cross_tab &lt;- function(var, label) {
+  hare_lca |&gt;
+    filter(!is.na(.data[[var]])) |&gt;
+    count(pred_class, .data[[var]]) |&gt;
+    group_by(pred_class) |&gt;
+    mutate(row_pct = round(n / sum(n) * 100, 1)) |&gt;
+    ungroup() |&gt;
+    rename(category = 2) |&gt;
+    mutate(variable = label)
+}
+
+# Class sizes and assignment certainty
+tibble(
+  class        = paste0(&quot;Class &quot;, 1:K),
+  n            = tabulate(best_model$predclass),
+  pct          = round(tabulate(best_model$predclass) /
+                         nrow(hare_lca) * 100, 1),
+  mean_post    = round(map_dbl(1:K, ~
+                   mean(best_model$posterior[best_model$predclass == .x, .x])),
+                   3),
+  mean_entropy = round(map_dbl(1:K, ~
+                   mean(hare_lca$entropy[best_model$predclass == .x])),
+                   3)
+)|&gt; print()</code></pre>
+<pre><code>## # A tibble: 3 × 5
+##   class       n   pct mean_post mean_entropy
+##   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+## 1 Class 1    49  32.7     0.988        0.032
+## 2 Class 2    19  12.7     0.905        0.241
+## 3 Class 3    82  54.7     0.989        0.029</code></pre>
+<pre class="r"><code># mean_post close to 1.0 = respondents clearly belong to that class
+# mean_entropy close to 0 = low ambiguity in assignment</code></pre>
+<p>Mean posterior probability is how we report assignment quality. A
+value of 0.91 means that, on average, respondents assigned to that class
+had a 91% posterior probability of belonging to it — high certainty.
+Values below 0.70 suggest the class boundaries are fuzzy and K may be
+too large.</p>
+<pre class="r"><code># Class × respondent group
+table(hare_lca$pred_class, hare_lca$group) |&gt;
+  prop.table(margin = 1) |&gt;
+  round(2) |&gt;
+  print()</code></pre>
+<pre><code>##          
+##            CAI Public
+##   Class 1 0.43   0.57
+##   Class 2 0.11   0.89
+##   Class 3 0.34   0.66</code></pre>
+<pre class="r"><code># Class × government cull support
+table(hare_lca$pred_class, hare_lca$support_gov_t_cull_decision) |&gt;
+  prop.table(margin = 1) |&gt;
+  round(2) |&gt;
+  print()</code></pre>
+<pre><code>##          
+##           FALSE TRUE
+##   Class 1  0.02 0.98
+##   Class 2  0.00 1.00
+##   Class 3  0.96 0.04</code></pre>
+<pre class="r"><code># Class × conservation concern
+table(hare_lca$pred_class, hare_lca$conservation_concern) |&gt;
+  prop.table(margin = 1) |&gt;
+  round(2) |&gt;
+  print()</code></pre>
+<pre><code>##          
+##           Not concerned Concerned
+##   Class 1          0.10      0.90
+##   Class 2          0.44      0.56
+##   Class 3          0.20      0.80</code></pre>
+<pre class="r"><code># Class × typology (validates against hand-coded types)
+table(hare_lca$pred_class, hare_lca$typology) |&gt;
+  prop.table(margin = 1) |&gt;
+  round(2) |&gt;
+  print()</code></pre>
+<pre><code>##          
+##           Informed advocate Pragmatic advocate Ambivalent Aware but opposed
+##   Class 1              0.71               0.12       0.16              0.00
+##   Class 2              0.16               0.32       0.53              0.00
+##   Class 3              0.00               0.00       0.35              0.65
+##          
+##           Disengaged
+##   Class 1       0.00
+##   Class 2       0.00
+##   Class 3       0.00</code></pre>
+<pre class="r"><code># Are class differences statistically significant
+# Chi-square tests: class × external variables ===\n&quot;)
+ext_vars &lt;- c(&quot;group&quot;, &quot;zone&quot;, &quot;conservation_concern&quot;,
+              &quot;support_gov_t_cull_decision&quot;)
+
+map_dfr(ext_vars, function(v) {
+  tbl  &lt;- table(hare_lca$pred_class, hare_lca[[v]])
+  test &lt;- chisq.test(tbl)
+  tibble(
+    variable  = v,
+    chi_sq    = round(test$statistic, 2),
+    df        = test$parameter,
+    p_value   = round(test$p.value, 4),
+    sig       = case_when(test$p.value &lt; 0.001 ~ &quot;***&quot;,
+                          test$p.value &lt; 0.01  ~ &quot;**&quot;,
+                          test$p.value &lt; 0.05  ~ &quot;*&quot;,
+                          TRUE                  ~ &quot;ns&quot;)
+  )
+}) |&gt; print()</code></pre>
+<pre><code>## # A tibble: 4 × 5
+##   variable                    chi_sq    df p_value sig  
+##   &lt;chr&gt;                        &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;
+## 1 group                         6.38     2  0.0412 *    
+## 2 zone                          1.68     4  0.795  ns   
+## 3 conservation_concern          8.13     2  0.0172 *    
+## 4 support_gov_t_cull_decision 134.       2  0      ***</code></pre>
+<pre class="r"><code># Visualise all cross-tabulations in one panel plot
+plot_cross &lt;- function(var, label, data = hare_lca) {
+  data |&gt;
+    filter(!is.na(.data[[var]])) |&gt;
+    mutate(category = as.character(.data[[var]])) |&gt;
+    count(pred_class, category) |&gt;
+    group_by(pred_class) |&gt;
+    mutate(pct = n / sum(n) * 100) |&gt;
+    ggplot(aes(x = pct, y = pred_class, fill = category)) +
+    geom_col(width = 0.6) +
+    scale_x_continuous(labels = percent_format(scale = 1)) +
+    scale_fill_brewer(palette = &quot;Set2&quot;) +
+    labs(title = label, x = NULL, y = NULL, fill = NULL) +
+    theme_minimal(base_size = 11) +
+    theme(legend.position = &quot;bottom&quot;,
+          legend.text      = element_text(size = 8),
+          plot.title       = element_text(size = 11, face = &quot;bold&quot;))
+}
+
+p1 &lt;- plot_cross(&quot;group&quot;,                        &quot;Respondent group&quot;)
+p2 &lt;- plot_cross(&quot;zone&quot;,                         &quot;Geographic zone&quot;)
+p3 &lt;- plot_cross(&quot;conservation_concern&quot;,         &quot;Conservation concern&quot;)
+p4 &lt;- plot_cross(&quot;support_gov_t_cull_decision&quot;,  &quot;Supports government cull&quot;)
+
+(p1 + p2) / (p3 + p4) +
+  plot_annotation(
+    title    = &quot;Latent class composition: external variable cross-tabulations&quot;,
+    subtitle = &quot;Variables not used in the LCA — patterns here are data-driven, not assumed&quot;,
+    theme    = theme(plot.title    = element_text(size = 13, face = &quot;bold&quot;),
+                     plot.subtitle = element_text(size = 10, colour = &quot;grey40&quot;))
+  )</code></pre>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_9-1.png" width="70%" /></p>
+
+<p>From these metrics and the plot we get a ‘portrait’ of each
+class.</p>
+<ul>
+<li>Class 1 is split is relatively even (43% CAI, 57% Public), so this
+class is not defined by organisational membership. What defines it is
+attitude: 98% support the government cull, and 90% are concerned about
+conservation. The typology table confirms this — 71% fall into our
+hand-coded “Informed advocate” category. These are people who know about
+the issue, care about it, and back action. They are distributed across
+both groups, which suggests that genuine ecological concern, rather than
+field sports culture, is the driver.</li>
+<li>Class 2 is overwhelmingly Public respondents (89%) and every single
+one of them supports the government cull (100% TRUE), yet they are the
+least conservationally engaged (44%), and 53% fall into our “Ambivalent”
+typology category with another 32% as “Pragmatic advocates.” This is the
+group that supports culling but perhaps not for conservation reasons.
+This is an important finding as it means a sizeable share of public
+support for culls is rather like a shallow lake: wide enough to look
+impressive on the map, but only ankle-deep once you step into it.</li>
+<li>Class 3 is 96% opposed to the government cull. It is mostly Public
+respondents (66%) and 65% map onto our “Aware but opposed” typology,
+with the remaining 35% ambivalent. Crucially, 80% are still concerned
+about conservation, so this is not indifference. These are people who
+care about wildlife but do not support this particular management
+intervention. They are not the disengaged public; they are the sceptical
+public. Persuading them would require engaging with their specific
+objections to lethal control, not simply raising awareness of the
+problem.</li>
+</ul>
+<p>Bear in mind that <strong>class labels are arbitrary</strong>. Class
+1 in one run might be Class 3 in another. The profiles are stable; the
+numbers are not. Always describe classes by their characteristics, not
+their numbers.</p>
+<hr />
+</div>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
+<ul>
+<li>Descriptive statistics established that the CAI and Public samples
+have quite different activity profiles and conservation awareness
+levels, setting up the need for group-level comparisons.</li>
+<li>Chi-square tests and Fisher’s exact test revealed statistically
+significant group differences on most management variables, which
+survived Bonferroni correction.</li>
+<li>Phi coefficients and the association network showed that management
+support variables cluster tightly together, and that awareness variables
+are somewhat distinct, suggesting that “knowing” and “supporting” are
+not the same thing.</li>
+<li>Logistic regression identified which predictors independently
+predict support for a government cull, controlling for all other factors
+in the model.</li>
+<li>Thematic coding showed that shooting alone is the most common
+single-method prefered for lethal control, but the combination of
+methods differs between groups.</li>
+<li>LCA showed that while support for a cull is numerically strong, any
+management communication strategy that treats all supporters as
+equivalent, or all opponents as simply uninformed, is misreading the
+data and may be doomed to fail.</li>
+</ul>
+<hr />
+<p><em>Tutorial based on data from Caravaggi A, Montgomery WI, Reid N
+(2017), Biology &amp; Environment 117B:53–63, <a href="https://doi.org/10.3318/bioe.2017.08" class="uri">https://doi.org/10.3318/bioe.2017.08</a>. Dataset: <a href="https://zenodo.org/records/891251" class="uri">https://zenodo.org/records/891251</a> (CC BY 4.0).</em></p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://arcaravaggi.github.io/tags/social-science/">Social Science</a></li>
+      <li><a href="https://arcaravaggi.github.io/tags/r/">R</a></li>
+      <li><a href="https://arcaravaggi.github.io/tags/questionnaire/">Questionnaire</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

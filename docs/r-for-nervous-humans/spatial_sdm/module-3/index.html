@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 3: Coordinates and projections | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+Jump to a module…
+1. What is
+spatial data?
+2. Opening and
+exploring spatial data
+3. Coordinates
+and projections
+4. Points,
+polygons, and rasters
+5. Are patterns
+real?
+6. Working with
+environmental data
+7. Preparing
+occurrence data for modelling
+8. Exploring
+species-environment relationships
+9. Building a
+species distribution model
+10. Assessing
+and predicting your SDM
+11. MaxEnt —
+maximum entropy modelling
+12. Random
+forest and ensemble models 
+
+Coordinates and projections
+For this module, you’ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/">
+  <meta property="og:title" content="Module 3: Coordinates and projections">
+  <meta property="og:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Coordinates and projectionsFor this module, you’ll need the following packages:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 3: Coordinates and projections">
+  <meta name="twitter:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Coordinates and projectionsFor this module, you’ll need the following packages:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Module 3: Coordinates and projections",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 3: Coordinates and projections
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content">
+
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening and
+exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3. Coordinates
+and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are patterns
+real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working with
+environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building a
+species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10. Assessing
+and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt —
+maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select></p>
+<div id="coordinates-and-projections" class="section level1">
+<h1>Coordinates and projections</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>rgbif</code></li>
+<li><code>rnaturalearth</code></li>
+<li><code>rnaturalearthdata</code></li>
+</ul>
+<p>At some point, you will plot spatial data and notice that something
+looks wrong. Layers don’t line up, points appear in the ocean, or your
+map looks oddly stretched. Nine times out of ten, the culprit is
+<strong>coordinate systems</strong>. This module explains what they are,
+why they matter, and how to fix the problems they cause.</p>
+</div>
+<div id="the-fundamental-problem-earth-is-not-flat" class="section level1">
+<h1>The fundamental problem: Earth is not flat</h1>
+<p>This sounds obvious, but it has real consequences. The Earth is
+roughly spherical (technically an oblate spheroid), slightly squashed at
+the poles. Your screen is resolutely flat. Representing a curved surface
+in two dimensions always requires compromise, and that compromise is
+formalised through two related concepts:</p>
+<p><strong>Coordinate Reference Systems (CRS)</strong> define how
+locations on Earth are described. They are mathematical models of
+Earth’s shape and the framework for specifying positions on it.</p>
+<p><strong>Projections</strong> define how those 3D coordinates are
+flattened onto a 2D map. Every projection preserves some properties
+(shape, area, distance, direction) and distorts others. The Mercator
+projection — the one that makes Greenland look roughly the same size as
+Africa — preserves shape locally but massively distorts area at high
+latitudes. Equal-area projections do the opposite. There is no perfect
+projection, only appropriate ones for different purposes (Snyder
+1987).</p>
+<p>In ecology, this matters most when you’re measuring distances or
+areas, combining datasets from different sources, or doing anything
+where spatial accuracy affects the result. A distance calculated in
+degrees of latitude/longitude is not the same as one calculated in
+metres, and treating them as equivalent is a common source of silent
+error.</p>
+</div>
+<div id="latitude-longitude-and-wgs84" class="section level1">
+<h1>Latitude, longitude, and WGS84</h1>
+<p>Most GBIF data and most GPS receivers use <strong>latitude and
+longitude</strong> in the <strong>WGS84</strong> coordinate system.
+WGS84 (World Geodetic System 1984) is the global standard used in
+satellite navigation and geodesy. In R, you’ll often see it referred to
+by its EPSG code: <code>4326</code>. EPSG codes are standardised numeric
+identifiers for coordinate reference systems; a full searchable list is
+at <a href="https://epsg.io/">epsg.io</a>.</p>
+<p>Let’s check the CRS of our howler monkey data from Module 2:</p>
+<pre class="r"><code>st_crs(howler_sf)</code></pre>
+<pre><code>## Coordinate Reference System:
+##   User input: EPSG:4326 
+##   wkt:
+## GEOGCRS[&quot;WGS 84&quot;,
+##     ENSEMBLE[&quot;World Geodetic System 1984 ensemble&quot;,
+##         MEMBER[&quot;World Geodetic System 1984 (Transit)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G730)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G873)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G1150)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G1674)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G1762)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G2139)&quot;],
+##         MEMBER[&quot;World Geodetic System 1984 (G2296)&quot;],
+##         ELLIPSOID[&quot;WGS 84&quot;,6378137,298.257223563,
+##             LENGTHUNIT[&quot;metre&quot;,1]],
+##         ENSEMBLEACCURACY[2.0]],
+##     PRIMEM[&quot;Greenwich&quot;,0,
+##         ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+##     CS[ellipsoidal,2],
+##         AXIS[&quot;geodetic latitude (Lat)&quot;,north,
+##             ORDER[1],
+##             ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+##         AXIS[&quot;geodetic longitude (Lon)&quot;,east,
+##             ORDER[2],
+##             ANGLEUNIT[&quot;degree&quot;,0.0174532925199433]],
+##     USAGE[
+##         SCOPE[&quot;Horizontal component of 3D system.&quot;],
+##         AREA[&quot;World.&quot;],
+##         BBOX[-90,-180,90,180]],
+##     ID[&quot;EPSG&quot;,4326]]</code></pre>
+<p>You should see WGS84 in the output. If a dataset has no CRS listed or
+returns <code>NA</code> that’s a warning sign. You’ll need to establish
+what system the coordinates are actually in before doing anything
+spatial.</p>
+</div>
+<div id="why-mismatched-crs-causes-problems" class="section level1">
+<h1>Why mismatched CRS causes problems</h1>
+<p>When you combine two datasets with different coordinate systems, R
+does not automatically know they should line up. It treats the
+coordinate numbers as directly comparable even when they refer to
+completely different spatial frameworks. The result can look absurd.</p>
+<p>Let’s demonstrate. We’ll take our howler monkey data (WGS84, in
+decimal degrees) and a Costa Rica polygon that we’ve deliberately
+reprojected into a projected coordinate system using metres, the Costa
+Rica Topo Map projection (EPSG:5367). Because one dataset uses degrees
+and the other uses metres, the numbers are completely different in scale
+and meaning.</p>
+<pre class="r"><code>library(rnaturalearth)
+library(rnaturalearthdata)
+
+world &lt;- ne_countries(scale = &quot;medium&quot;, 
+                      returnclass = &quot;sf&quot;)
+cr    &lt;- world[world$name == &quot;Costa Rica&quot;, ]
+
+# Reproject Costa Rica into a metre-based projected system
+cr_proj &lt;- st_transform(cr, 5367)
+
+# Now try to plot both layers together
+plot(st_geometry(cr_proj), 
+     main = &quot;A CRS mismatch in action&quot;)
+plot(st_geometry(howler_sf), 
+     add = TRUE, col = &quot;red&quot;, 
+     pch = 19, 
+     cex = 0.5)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_1.png" width="70%" /></p>
+<pre class="r"><code># Compare coordinate ranges
+st_bbox(howler_sf)</code></pre>
+<pre><code>##       xmin       ymin       xmax       ymax 
+## -94.506286  -3.743768 -77.368218  18.371243</code></pre>
+<pre class="r"><code>st_bbox(cr_proj)</code></pre>
+<pre><code>##      xmin      ymin      xmax      ymax 
+##  291391.7  892546.0  657688.2 1237763.0</code></pre>
+<pre class="r"><code>hist(st_coordinates(howler_sf)[,1],
+     main = &quot;Howler longitude (degrees)&quot;,
+     xlab = &quot;Longitude&quot;)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_2.png" width="70%" /></p>
+<pre class="r"><code>hist(st_coordinates(cr_proj)[,1],
+     main = &quot;Costa Rica CRS (metres)&quot;,
+     xlab = &quot;Projected X coordinate&quot;)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_3.png" width="70%" /></p>
+<p>The howler points appear nowhere near Costa Rica. This is not a data
+error - it is a coordinate system mismatch. The polygon coordinates are
+in metres (EPSG:5367); the point coordinates are in degrees (EPSG:4326).
+R plots both on the same axis without complaint, because it doesn’t know
+they’re incompatible.</p>
+<p>Whenever layers fail to align, this is the first thing to check:</p>
+<pre class="r"><code>st_crs(cr_proj)$epsg</code></pre>
+<pre><code>## [1] 5367</code></pre>
+<pre class="r"><code>st_crs(howler_sf)$epsg</code></pre>
+<pre><code>## [1] 4326</code></pre>
+</div>
+<div id="fixing-it-reprojection" class="section level1">
+<h1>Fixing it: reprojection</h1>
+<p>The solution is <code>st_transform()</code>. You pick a target CRS
+and reproject one layer to match. Since we’ll mostly work in WGS84 (it’s
+what GBIF uses, and it’s what most global environmental datasets use)
+the simplest fix is to transform the polygon back:</p>
+<pre class="r"><code>cr_wgs84 &lt;- st_transform(cr_proj, 4326)
+
+plot(st_geometry(cr_wgs84), 
+     main = &quot;After reprojection — layers now align&quot;)
+plot(st_geometry(howler_sf), 
+     add = TRUE, 
+     col = &quot;red&quot;, 
+     pch = 19, cex = 0.6)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_4.png" width="70%" /></p>
+<p>The layers now align. You can also see that some howler records fall
+outside Costa Rica because we downloaded the full global dataset in
+Module 2, not just Costa Rica records. We’ll fix that in Module 4.</p>
+</div>
+<div id="which-projection-should-i-use" class="section level1">
+<h1>Which projection should I use?</h1>
+<p>For large-scale analyses (continental or global),
+<strong>WGS84</strong> (EPSG:4326) is usually appropriate and keeps
+everything consistent with source data. For regional analyses where
+accurate distances or areas are needed, such as spatial thinning, home
+range estimation, or connectivity modelling, a projected system in
+metres is more appropriate.</p>
+<p>For Central America and Costa Rica specifically, sensible options
+include <strong>EPSG:5367</strong> (Costa Rica Topo Map, national
+standard), or <strong>EPSG:32616</strong> (UTM Zone 16N, metres, widely
+used in ecological research in the region).</p>
+<p>The key rule is simple: <strong>all layers in an analysis must use
+the same CRS</strong>. Check every time you read in new data, and
+transform early rather than late. Future you will be grateful.</p>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Snyder, J.P. (1987). <em>Map Projections: A Working Manual</em>. US
+Geological Survey Professional Paper 1395. US Government Printing
+Office, Washington DC.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-2/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a>
+<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> Next → </a></p>
+</div>
+</div>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

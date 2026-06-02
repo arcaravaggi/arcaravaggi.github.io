@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 12: Random forest and ensemble models | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+Jump to a module…
+1. What is
+spatial data?
+2. Opening
+and exploring spatial data
+3.
+Coordinates and projections
+4. Points,
+polygons, and rasters
+5. Are
+patterns real?
+6. Working
+with environmental data
+7. Preparing
+occurrence data for modelling
+8. Exploring
+species-environment relationships
+9. Building
+a species distribution model
+10.
+Assessing and predicting your SDM
+11. MaxEnt
+— maximum entropy modelling
+12. Random
+forest and ensemble models 
+
+Random forest and ensemble models
+For this module, you’ll need the following packages:">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/">
+  <meta property="og:title" content="Module 12: Random forest and ensemble models">
+  <meta property="og:description" content="Jump to a module…1. What isspatial data?2. Openingand exploring spatial data3.Coordinates and projections4. Points,polygons, and rasters5. Arepatterns real?6. Workingwith environmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Buildinga species distribution model10.Assessing and predicting your SDM11. MaxEnt— maximum entropy modelling12. Randomforest and ensemble models Random forest and ensemble modelsFor this module, you’ll need the following packages:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 12: Random forest and ensemble models">
+  <meta name="twitter:description" content="Jump to a module…1. What isspatial data?2. Openingand exploring spatial data3.Coordinates and projections4. Points,polygons, and rasters5. Arepatterns real?6. Workingwith environmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Buildinga species distribution model10.Assessing and predicting your SDM11. MaxEnt— maximum entropy modelling12. Randomforest and ensemble models Random forest and ensemble modelsFor this module, you’ll need the following packages:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Module 12: Random forest and ensemble models",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/"
+    }
+  ]
+}
+</script>
+</head>
+<body class="list" id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 12: Random forest and ensemble models
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content">
+
+<!-- Dropdown -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value>Jump to a module…</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-1/">1. What is
+spatial data?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-2/">2. Opening
+and exploring spatial data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-3/">3.
+Coordinates and projections</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-4/">4. Points,
+polygons, and rasters</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-5/">5. Are
+patterns real?</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-6/">6. Working
+with environmental data</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-7/">7. Preparing
+occurrence data for modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-8/">8. Exploring
+species-environment relationships</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-9/">9. Building
+a species distribution model</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-10/">10.
+Assessing and predicting your SDM</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-11/">11. MaxEnt
+— maximum entropy modelling</option>
+<option value="/r-for-nervous-humans/spatial_sdm/module-12/">12. Random
+forest and ensemble models</option> </select></p>
+<div id="random-forest-and-ensemble-models" class="section level1">
+<h1>Random forest and ensemble models</h1>
+<p>For this module, you’ll need the following packages:</p>
+<ul>
+<li><code>sf</code></li>
+<li><code>terra</code></li>
+<li><code>geodata</code></li>
+<li><code>randomForest</code></li>
+<li><code>PresenceAbsence</code></li>
+<li><code>AUC</code></li>
+<li><code>RColorBrewer</code></li>
+</ul>
+<p>Over the last three modules we’ve built and evaluated a GLM and a
+MaxEnt model for the mantled howler monkey. Both have strengths and
+weaknesses. The GLM is transparent and statistically rigorous but
+requires you to specify the functional form of every relationship.
+MaxEnt handles complex response shapes automatically but is a
+presence-background method with its own set of assumptions and a
+tendency to overfit if not carefully tuned.</p>
+<p>In this module we add a third algorithm, <em>random forest</em>, and
+then do something more important than any individual model: we combine
+all three into an ensemble.</p>
+</div>
+<div id="why-random-forest" class="section level1">
+<h1>Why random forest?</h1>
+<p>Random forest is a machine learning algorithm that builds a large
+number of decision trees, each trained on a random subset of the data
+and a random subset of the predictor variables, then averages their
+predictions (Breiman 2001). The randomness is the point: individual
+trees are noisy but their average is stable. We’re basically applying
+the wisdom of crowds apporach to statistical models.</p>
+<p>For species distribution modelling, random forest has several
+benefits. It handles nonlinear responses and interactions between
+predictors automatically, without us having to specify them. It doesn’t
+assume any particular distribution of the response variable. It produces
+a measure of variable importance as a by-product. And it generally
+performs well in comparative benchmarks across species and regions.</p>
+<p>A random forest with 500 trees is not something you can read or
+explain the way you can explain a GLM coefficient, however. It’s a black
+box that produces predictions, not an ecological story. This is a
+genuine trade-off, and which side you prioritise depends on your
+goals.</p>
+</div>
+<div id="why-ensemble-models" class="section level1">
+<h1>Why ensemble models?</h1>
+<p>No single SDM algorithm is consistently the best across species,
+regions, and datasets. Different algorithms make different assumptions
+and fail in different ways. When we have multiple model predictions, the
+most robust approach is usually to combine them and average over model
+uncertainty rather than just using one algorithm.</p>
+<p>This is the rationale behind ensemble modelling. Ensemble models
+consistently outperform individual algorithms in predictive accuracy
+benchmarks, and they give a natural measure of model uncertainty. Where
+all algorithms agree, confidence is high; where they disagree
+substantially, uncertainty is high (Araújo &amp; New 2007). Conservation
+decisions made on the basis of SDMs are more defensible when they
+account for this uncertainty.</p>
+</div>
+<div id="load-your-data" class="section level1">
+<h1>Load your data</h1>
+<pre class="r"><code>load(&#39;data/region.RData&#39;)
+load(&#39;data/module7_occdata.RData&#39;)
+load(&#39;data/module10_sdm.RData&#39;)
+load(&#39;data/module11_maxent.RData&#39;)
+env_stack &lt;- terra::rast(&#39;data/env_stack.tif&#39;)
+bio_fut   &lt;- terra::rast(&#39;data/bio_fut.tif&#39;)
+
+# Load GLM and MaxEnt current and future predictions
+pred_curr_glm    &lt;- terra::rast(&#39;data/pred_current.tif&#39;)
+pred_curr_maxent &lt;- terra::rast(&#39;data/pred_maxent_curr.tif&#39;)
+pred_fut_glm     &lt;- terra::rast(&#39;data/pred_future.tif&#39;)
+pred_fut_maxent  &lt;- terra::rast(&#39;data/pred_maxent_fut.tif&#39;)</code></pre>
+<p>We’ll use the same training data and selected predictor variables as
+the previous two modules.</p>
+<pre class="r"><code># Subset to selected predictors plus the response column
+pred_sel &lt;- c(&quot;bio10&quot;, &quot;bio18&quot;, &quot;bio15&quot;, &quot;bio02&quot;, &quot;bio13&quot;, &quot;bio19&quot;)
+rf_data &lt;- howler_sdm[, c(&#39;occ&#39;, pred_sel)]
+
+# Random forest requires the response to be a factor for classification
+rf_data$occ &lt;- as.factor(rf_data$occ)
+
+table(rf_data$occ)</code></pre>
+<pre><code>## 
+##   0   1 
+## 605 120</code></pre>
+</div>
+<div id="fitting-the-random-forest" class="section level1">
+<h1>Fitting the random forest</h1>
+<p><code>randomForest()</code> is the workhorse function. Key
+arguments:</p>
+<ul>
+<li><code>ntree</code>: number of trees to grow. More is generally
+better up to a point; 500–1000 is typical. We’ll use to reduce
+computational workload.</li>
+<li><code>mtry</code>: number of variables randomly sampled at each
+split. The default for classification is
+<code>sqrt(number of predictors)</code>, which is usually
+reasonable.</li>
+<li><code>importance = TRUE</code>: calculate variable importance
+scores.</li>
+</ul>
+<pre class="r"><code>library(randomForest)
+
+set.seed(42)
+
+m_rf &lt;- randomForest(
+  occ ~ .,
+  data       = rf_data,
+  ntree      = 100,
+  mtry       = floor(sqrt(length(pred_sel))),
+  importance = TRUE
+)
+
+m_rf</code></pre>
+<pre><code>## 
+## Call:
+##  randomForest(formula = occ ~ ., data = rf_data, ntree = 100,      mtry = floor(sqrt(length(pred_sel))), importance = TRUE) 
+##                Type of random forest: classification
+##                      Number of trees: 100
+## No. of variables tried at each split: 2
+## 
+##         OOB estimate of  error rate: 19.31%
+## Confusion matrix:
+##     0  1 class.error
+## 0 584 21  0.03471074
+## 1 119  1  0.99166667</code></pre>
+<p>The <em>OOB error rate</em> (out-of-bag) in the output is an honest
+estimate of model error, computed on the training records that were left
+out of each individual tree (around 35%) by the bootstrap sampling
+process. It’s roughly equivalent to cross-validated error.</p>
+<p>The confusion matrix in the output shows classification performance
+on the training data at a 0.5 threshold. Notice that random forest may
+classify more background points as “present” than absent. This is
+influenced by the class imbalance (5× more background than presence) and
+is worth keeping in mind when interpreting the map.</p>
+</div>
+<div id="variable-importance" class="section level1">
+<h1>Variable importance</h1>
+<pre class="r"><code># Variable importance — two measures
+importance(m_rf)</code></pre>
+<pre><code>##              0          1 MeanDecreaseAccuracy MeanDecreaseGini
+## bio10 7.678041 -11.254327             5.027019         14.69888
+## bio18 7.431942  -9.818728             5.158520         12.31269
+## bio15 7.072641  -8.567283             5.450444         12.89220
+## bio02 5.348918 -10.069887             2.486253         13.11980
+## bio13 7.621559  -8.354982             5.210630         11.55371
+## bio19 8.422823  -8.956459             6.705005         11.73012</code></pre>
+<pre class="r"><code># Visualise
+varImpPlot(m_rf, main = &quot;Random forest variable importance&quot;,
+           col = &quot;tomato&quot;, pch = 19)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_1.png" width="70%" /></p>
+<p>Two importance measures are shown:</p>
+<ul>
+<li><strong>MeanDecreaseAccuracy</strong>: how much model accuracy drops
+when each variable’s values are randomly permuted. Higher = more
+important. This is analogous to MaxEnt’s permutation importance.</li>
+<li><strong>MeanDecreaseGini</strong>: how much each variable reduces
+impurity in the trees. A secondary measure, less interpretable but
+sometimes useful.</li>
+</ul>
+<p>Compare the importance ranking to those from the GLM (Module 9) and
+MaxEnt (Module 11). All three algorithms should broadly agree on which
+variables matter most. If they don’t, that’s worth investigating.</p>
+</div>
+<div id="cross-validation" class="section level1">
+<h1>Cross-validation</h1>
+<p>Unlike MaxEnt, random forest doesn’t automatically produce spatially
+cross-validated predictions. We’ll use the same 5-fold cross-validation
+loop from Module 10 to keep evaluation consistent across all three
+algorithms.</p>
+<pre class="r"><code>set.seed(123)
+k        &lt;- 5
+folds    &lt;- sample(rep(1:k, length.out = nrow(rf_data)))
+preds_rf &lt;- numeric(nrow(rf_data))
+
+for (i in 1:k) {
+  train_rf &lt;- rf_data[folds != i, ]
+  test_rf  &lt;- rf_data[folds == i, ]
+
+  m_cv_rf  &lt;- randomForest(
+    occ ~ .,
+    data  = train_rf,
+    ntree = 500,
+    mtry  = floor(sqrt(length(pred_sel)))
+  )
+
+  # predict() returns a matrix of class probabilities for classification RF
+  preds_rf[folds == i] &lt;- predict(m_cv_rf, newdata = test_rf, type = &#39;prob&#39;)[, &#39;1&#39;]
+}</code></pre>
+</div>
+<div id="evaluating-the-random-forest" class="section level1">
+<h1>Evaluating the random forest</h1>
+<pre class="r"><code>library(AUC)
+library(PresenceAbsence)
+
+thresh_dat_rf &lt;- data.frame(
+  ID   = seq_len(nrow(howler_sdm)),
+  obs  = howler_sdm$occ,
+  pred = preds_rf
+)
+
+roc_rf &lt;- AUC::roc(preds_rf, as.factor(howler_sdm$occ))
+auc_rf &lt;- AUC::auc(roc_rf)
+cat(&quot;Random forest AUC:&quot;, auc_rf, &quot;\n&quot;)</code></pre>
+<pre><code>## Random forest AUC: 0.3418113</code></pre>
+<pre class="r"><code>thresh_rf &lt;- PresenceAbsence::optimal.thresholds(DATA = thresh_dat_rf)</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat_rf): req.sens
+## defaults to 0.85</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat_rf): req.spec
+## defaults to 0.85</code></pre>
+<pre><code>## Warning in PresenceAbsence::optimal.thresholds(DATA = thresh_dat_rf): costs
+## assumed to be equal</code></pre>
+<pre class="r"><code>cmx_rf    &lt;- PresenceAbsence::cmx(DATA = thresh_dat_rf, threshold = thresh_rf[3, 2])
+sens_rf   &lt;- PresenceAbsence::sensitivity(cmx_rf, st.dev = FALSE)
+spec_rf   &lt;- PresenceAbsence::specificity(cmx_rf, st.dev = FALSE)
+tss_rf    &lt;- sens_rf + spec_rf - 1
+cat(&quot;Random forest TSS:&quot;, tss_rf, &quot;\n&quot;)</code></pre>
+<pre><code>## Random forest TSS: 0</code></pre>
+</div>
+<div id="predictions-across-the-landscape" class="section level1">
+<h1>Predictions across the landscape</h1>
+<pre class="r"><code># Build a data frame from the raster: one row per pixel
+env_df    &lt;- data.frame(crds(env_stack[[pred_sel]]), as.data.frame(env_stack[[pred_sel]]))
+env_df_rf &lt;- env_df[, pred_sel]   # random forest only needs the predictors, not coordinates
+
+# Predict — type = &#39;prob&#39; gives class probabilities
+rf_probs &lt;- predict(m_rf, newdata = env_df_rf, type = &#39;prob&#39;)
+
+env_df$pred_rf &lt;- rf_probs[, &#39;1&#39;]   # probability of presence (class &#39;1&#39;)
+
+pred_curr_rf &lt;- terra::rast(env_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_rf&#39;)],
+                            type = &#39;xyz&#39;, crs = crs(env_stack))
+
+plot(pred_curr_rf,
+     main = &quot;Random forest — predicted occurrence (current)&quot;,
+     col  = rev(terrain.colors(100)))
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_2.png" width="70%" /></p>
+<p>Now future climate:</p>
+<pre class="r"><code>fut_df    &lt;- data.frame(crds(bio_fut[[pred_sel]]), as.data.frame(bio_fut[[pred_sel]]))
+fut_rf    &lt;- predict(m_rf, newdata = fut_df[, pred_sel], type = &#39;prob&#39;)
+fut_df$pred_rf &lt;- fut_rf[, &#39;1&#39;]
+
+pred_fut_rf &lt;- terra::rast(fut_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_rf&#39;)],
+                           type = &#39;xyz&#39;, crs = crs(env_stack))</code></pre>
+</div>
+<div id="building-the-ensemble" class="section level1">
+<h1>Building the ensemble</h1>
+<p>Now to bring it all together. We combine the current-climate
+predictions from all three algorithms (GLM, MaxEnt, and random forest)
+into a single ensemble map. We’ll use a simple unweighted mean. This
+means that each algorithm gets equal weight, i.e., are equally valid or
+important. More sophisticated approaches weight algorithms by their
+cross-validated performance (Thuiller et al. 2009), but the simple mean
+is a reasonable starting point.</p>
+<pre class="r"><code># Stack the three current predictions — they must share the same extent and resolution
+# Resample if necessary to align grids
+pred_maxent_resamp &lt;- terra::resample(pred_curr_maxent, pred_curr_glm, method = &#39;bilinear&#39;)
+pred_rf_resamp     &lt;- terra::resample(pred_curr_rf,     pred_curr_glm, method = &#39;bilinear&#39;)
+
+pred_stack_curr &lt;- c(pred_curr_glm, pred_maxent_resamp, pred_rf_resamp)
+names(pred_stack_curr) &lt;- c(&#39;GLM&#39;, &#39;MaxEnt&#39;, &#39;RF&#39;)
+
+# Ensemble mean
+pred_ensemble_curr &lt;- mean(pred_stack_curr, na.rm = TRUE)
+
+# Ensemble uncertainty: standard deviation across algorithms
+pred_ensemble_sd &lt;- terra::app(pred_stack_curr, sd)
+
+# Plot mean and uncertainty side by side
+par(mfrow = c(1, 2))
+plot(pred_ensemble_curr,
+     main = &quot;Ensemble mean — current climate&quot;,
+     col  = rev(terrain.colors(100)), zlim = c(0, 1))
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)
+
+plot(pred_ensemble_sd,
+     main = &quot;Ensemble uncertainty (SD)&quot;,
+     col  = colorRampPalette(c(&quot;white&quot;, &quot;steelblue&quot;, &quot;navy&quot;))(100))
+plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_3.png" /></p>
+<pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
+<p>The uncertainty map is arguably as important as the mean. Where the
+standard deviation is high, the three algorithms are disagreeing, i.e.,
+they’re responding to different environmental signals or fitting
+different response shapes. These are exactly the areas where you should
+be most cautious about using the SDM for conservation decisions.</p>
+<p>Where is uncertainty highest? Is it in areas of predicted high
+suitability, low suitability, or somewhere in between?</p>
+</div>
+<div id="ensemble-under-future-climate" class="section level1">
+<h1>Ensemble under future climate</h1>
+<pre class="r"><code>pred_maxent_fut_resamp &lt;- terra::resample(pred_fut_maxent, pred_fut_glm, method = &#39;bilinear&#39;)
+pred_rf_fut_resamp     &lt;- terra::resample(pred_fut_rf,     pred_fut_glm, method = &#39;bilinear&#39;)
+
+pred_stack_fut &lt;- c(pred_fut_glm, pred_maxent_fut_resamp, pred_rf_fut_resamp)
+names(pred_stack_fut) &lt;- c(&#39;GLM&#39;, &#39;MaxEnt&#39;, &#39;RF&#39;)
+
+pred_ensemble_fut &lt;- mean(pred_stack_fut, na.rm = TRUE)
+pred_ensemble_fut_sd &lt;- terra::app(pred_stack_fut, sd)
+
+# Four-panel summary
+par(mfrow = c(2, 2))
+plot(pred_ensemble_curr,    main = &quot;Current — ensemble mean&quot;,   zlim = c(0, 1), col = rev(terrain.colors(100)))
+plot(pred_ensemble_sd,      main = &quot;Current — uncertainty&quot;,     col = colorRampPalette(c(&quot;white&quot;,&quot;steelblue&quot;,&quot;navy&quot;))(100))
+plot(pred_ensemble_fut,     main = &quot;Future — ensemble mean&quot;,    zlim = c(0, 1), col = rev(terrain.colors(100)))
+plot(pred_ensemble_fut_sd,  main = &quot;Future — uncertainty&quot;,      col = colorRampPalette(c(&quot;white&quot;,&quot;steelblue&quot;,&quot;navy&quot;))(100))</code></pre>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_4.png" /></p>
+<pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
+</div>
+<div id="a-performance-comparison-across-all-three-algorithms" class="section level1">
+<h1>A performance comparison across all three algorithms</h1>
+<p>Let’s put the performance metrics side by side so the full picture is
+clear.</p>
+<pre class="r"><code>comparison &lt;- data.frame(
+  Algorithm = c(&quot;GLM&quot;, &quot;MaxEnt&quot;, &quot;Random Forest&quot;),
+  AUC       = c(perf_summary$AUC, auc_mx, auc_rf),
+  TSS       = c(perf_summary$TSS, tss_mx, tss_rf),
+  D2_or_OOB = c(perf_summary$D2, NA, 1 - m_rf$err.rate[100, &#39;OOB&#39;])
+)
+
+comparison</code></pre>
+<pre><code>##       Algorithm       AUC       TSS  D2_or_OOB
+## 1           GLM 0.5626377 0.1668733 0.02256085
+## 2        MaxEnt 0.6030234 0.1670110         NA
+## 3 Random Forest 0.3418113 0.0000000 0.80689655</code></pre>
+<p>No single algorithm “wins” across all metrics in every study. If
+random forest has the highest AUC but the GLM response curves make more
+biological sense, that’s worth noting. AUC measures discrimination, not
+ecological realism. If MaxEnt and random forest broadly agree on the
+distribution but the GLM disagrees, that’s worth investigating too.</p>
+<p>The ensemble sidesteps the question of which algorithm is “best” by
+incorporating all three, producing a more robust prediction than any
+single model while making the uncertainty explicit.</p>
+</div>
+<div id="save-your-work" class="section level1">
+<h1>Save your work</h1>
+<pre class="r"><code>terra::writeRaster(pred_curr_rf,       &#39;data/pred_rf_curr.tif&#39;,       overwrite = TRUE)
+terra::writeRaster(pred_fut_rf,        &#39;data/pred_rf_fut.tif&#39;,        overwrite = TRUE)
+terra::writeRaster(pred_ensemble_curr, &#39;data/pred_ensemble_curr.tif&#39;, overwrite = TRUE)
+terra::writeRaster(pred_ensemble_fut,  &#39;data/pred_ensemble_fut.tif&#39;,  overwrite = TRUE)
+terra::writeRaster(pred_ensemble_sd,   &#39;data/pred_ensemble_sd.tif&#39;,   overwrite = TRUE)
+
+save(m_rf, auc_rf, tss_rf, thresh_rf, comparison,
+     file = &#39;data/module12_rf.RData&#39;)</code></pre>
+</div>
+<div id="exercise" class="section level1">
+<h1>Exercise</h1>
+<ol style="list-style-type: decimal">
+<li><p>Build a weighted ensembleusing AUC as the weight for each
+algorithm. Multiply each prediction raster by its AUC, sum them, and
+divide by the sum of AUCs. How does the weighted ensemble map differ
+from the unweighted one? Where do the differences concentrate?</p>
+<pre class="r"><code># Hint
+w &lt;- c(perf_summary$AUC, auc_mx, auc_rf)
+pred_weighted &lt;- (pred_stack_curr[[1]] * w[1] +
+                  pred_stack_curr[[2]] * w[2] +
+                  pred_stack_curr[[3]] * w[3]) / sum(w)</code></pre></li>
+<li><p>Produce a range change map by subtracting the current ensemble
+mean from the future ensemble mean. Cells with positive values are
+predicted gains; negative values are predicted losses. Where are the
+predicted losses for howler monkeys in Costa Rica under this climate
+scenario?</p>
+<pre class="r"><code>range_change &lt;- pred_ensemble_fut - pred_ensemble_curr
+plot(range_change,
+     col  = colorRampPalette(c(&quot;tomato&quot;, &quot;white&quot;, &quot;steelblue&quot;))(100),
+     main = &quot;Predicted range change (future - current)&quot;)</code></pre></li>
+<li><p>Look at the uncertainty map for the future predictions. Has
+uncertainty increased or decreased compared to the current climate map?
+What would increasing uncertainty under future climate imply for using
+these models in conservation planning?</p></li>
+</ol>
+</div>
+<div id="next-steps" class="section level1">
+<h1>Next steps</h1>
+<p>You may be looking at the plots and metrics and wondering about the
+accuracy and utility of these models. That’s a very common situation in
+SDMs wherein the algorithm is fine, but the ecological signal is
+incomplete. If key drivers like human pressure or habitat degradation
+aren’t in the predictors then even the best model will struggle.</p>
+<p>Here are some next-step exercises that will might produce a
+noticeable improvement:</p>
+<ol style="list-style-type: decimal">
+<li>Add human impact / accessibility layers. A big omission in many SDMs
+is that species are often limited by humans more than climate. You could
+therefore look to add potentially important metrics like</li>
+</ol>
+<ul>
+<li>Core habitat constraints (e.g., forest cover, tree canopy
+density)</li>
+<li>Disturbance / human pressure (e.g., distance to roads, human
+footprint index, artificial light at night)</li>
+<li>Fragmentation metrics (e.g., patch size, connectivity index)</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>Correct for sampling bias in presence data. Occurrence data are
+rarely evenly sampled in space, as we’ve discussed. Create a bias
+surface (e.g., kernel density of all records or sampling effort proxies)
+and use it to direct background sampling in MaxEnt, or weighted sampling
+in RF / GLM.</li>
+<li>Incorporate bias into your ensemble. Right now, all models are
+treated as equally good—even if they’re not.Try weighting models by AUC,
+TSS, or some other metric ad compare with the unweighted ensemble.</li>
+</ol>
+</div>
+<div id="references" class="section level1">
+<h1>References</h1>
+<p>Araújo, M.B. &amp; New, M. (2007). Ensemble forecasting of species
+distributions. <em>Trends in Ecology and Evolution</em>, 22, 42–47.</p>
+<p>Breiman, L. (2001). Random forests. <em>Machine Learning</em>, 45,
+5–32.</p>
+<p>Thuiller, W., Lafourcade, B., Engler, R. &amp; Araújo, M.B. (2009).
+BIOMOD — a platform for ensemble forecasting of species distributions.
+<em>Ecography</em>, 32, 369–373.</p>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
+            background-color: var(--theme-accent);
+            color: var(--theme-fg);
+            text-decoration: none;
+            border-radius: 6px;"> ← Previous </a></p>
+</div>
+</div>
+
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
