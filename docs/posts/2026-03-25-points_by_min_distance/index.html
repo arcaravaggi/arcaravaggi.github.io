@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto" data-theme="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Generate Random Sampling Points by Minimum Distance | </title>
 <meta name="keywords" content="ecology, R, analysis">
 <meta name="description" content="Generate Random Sampling Points by Minimum
@@ -51,16 +51,16 @@ constraint applied later is accurate and interpretable. You can of
 course use our own shapefile if you don’t want to manually create a
 bounding polygon.">
 <meta name="author" content="Anthony Caravaggi">
-<link rel="canonical" href="https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/">
-<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.1d4346839295915e219dee6c6b7d8512a8a4a8e692c435a57effb2398a6e371e.css" integrity="sha256-HUNGg5KVkV4hne5sa32FEqikqOaSxDWlfv&#43;yOYpuNx4=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<link rel="canonical" href="http://localhost:1313/posts/2026-03-25-points_by_min_distance/">
+<link crossorigin="anonymous" href="http://localhost:1313/assets/css/stylesheet.1d4346839295915e219dee6c6b7d8512a8a4a8e692c435a57effb2398a6e371e.css" integrity="sha256-HUNGg5KVkV4hne5sa32FEqikqOaSxDWlfv&#43;yOYpuNx4=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/posts/2026-03-25-points_by_min_distance/">
 <noscript>
     <style>
         #theme-toggle,
@@ -106,79 +106,6 @@ bounding polygon.">
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><meta property="og:url" content="https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/">
-  <meta property="og:title" content="Generate Random Sampling Points by Minimum Distance">
-  <meta property="og:description" content="Generate Random Sampling Points by MinimumDistanceAnthony Caravaggi2026-03-25OverviewThis document demonstrates how to generate random sampling pointswithin a polygon while enforcing a minimum distance between points usinga Simple Sequential Inhibition (SSI) process.
-Librarieslibrary(sf)library(spatstat.geom)library(spatstat.random)library(dplyr)library(ggplot2)library(maptiles)library(ggspatial)library(units)We load:
-sf for modern spatial data handlingspatstat modules for generating spatial pointpatternsggplot2 for plottingmaptiles and ggspatial for modern basemapsand map annotationsunits to safely handle distance units(e.g. metres)First, create a bounding polygon using longitude and latitudecoordinates in the WGS84 coordinate system. While this format isconvenient for defining locations, it is not suitable for measuringdistances because the units are in degrees rather than metres. Toaddress this, the polygon is reprojected into the British National Gridcoordinate system (EPSG:27700), which uses metres as its unit. Thistransformation is essential for ensuring that the minimum distanceconstraint applied later is accurate and interpretable. You can ofcourse use our own shapefile if you don’t want to manually create abounding polygon.">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="posts">
-    <meta property="article:published_time" content="2026-03-25T00:00:00+00:00">
-    <meta property="article:modified_time" content="2026-03-25T00:00:00+00:00">
-    <meta property="article:tag" content="Ecology">
-    <meta property="article:tag" content="R">
-    <meta property="article:tag" content="Analysis">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Generate Random Sampling Points by Minimum Distance">
-  <meta name="twitter:description" content="Generate Random Sampling Points by MinimumDistanceAnthony Caravaggi2026-03-25OverviewThis document demonstrates how to generate random sampling pointswithin a polygon while enforcing a minimum distance between points usinga Simple Sequential Inhibition (SSI) process.
-Librarieslibrary(sf)library(spatstat.geom)library(spatstat.random)library(dplyr)library(ggplot2)library(maptiles)library(ggspatial)library(units)We load:
-sf for modern spatial data handlingspatstat modules for generating spatial pointpatternsggplot2 for plottingmaptiles and ggspatial for modern basemapsand map annotationsunits to safely handle distance units(e.g. metres)First, create a bounding polygon using longitude and latitudecoordinates in the WGS84 coordinate system. While this format isconvenient for defining locations, it is not suitable for measuringdistances because the units are in degrees rather than metres. Toaddress this, the polygon is reprojected into the British National Gridcoordinate system (EPSG:27700), which uses metres as its unit. Thistransformation is essential for ensuring that the minimum distanceconstraint applied later is accurate and interpretable. You can ofcourse use our own shapefile if you don’t want to manually create abounding polygon.">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "Posts",
-      "item": "https://arcaravaggi.github.io/posts/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Generate Random Sampling Points by Minimum Distance",
-      "item": "https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/"
-    }
-  ]
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BlogPosting",
-  "headline": "Generate Random Sampling Points by Minimum Distance",
-  "name": "Generate Random Sampling Points by Minimum Distance",
-  "description": "Generate Random Sampling Points by Minimum\rDistance\rAnthony Caravaggi\r2026-03-25\rOverview\rThis document demonstrates how to generate random sampling points\rwithin a polygon while enforcing a minimum distance between points using\ra Simple Sequential Inhibition (SSI) process.\nLibraries\rlibrary(sf)\rlibrary(spatstat.geom)\rlibrary(spatstat.random)\rlibrary(dplyr)\rlibrary(ggplot2)\rlibrary(maptiles)\rlibrary(ggspatial)\rlibrary(units)\rWe load:\nsf for modern spatial data handling\rspatstat modules for generating spatial point\rpatterns\rggplot2 for plotting\rmaptiles and ggspatial for modern basemaps\rand map annotations\runits to safely handle distance units\r(e.g. metres)\rFirst, create a bounding polygon using longitude and latitude\rcoordinates in the WGS84 coordinate system. While this format is\rconvenient for defining locations, it is not suitable for measuring\rdistances because the units are in degrees rather than metres. To\raddress this, the polygon is reprojected into the British National Grid\rcoordinate system (EPSG:27700), which uses metres as its unit. This\rtransformation is essential for ensuring that the minimum distance\rconstraint applied later is accurate and interpretable. You can of\rcourse use our own shapefile if you don’t want to manually create a\rbounding polygon.\n",
-  "keywords": [
-    "ecology", "R", "analysis"
-  ],
-  "articleBody": "\rGenerate Random Sampling Points by Minimum\rDistance\rAnthony Caravaggi\r2026-03-25\rOverview\rThis document demonstrates how to generate random sampling points\rwithin a polygon while enforcing a minimum distance between points using\ra Simple Sequential Inhibition (SSI) process.\nLibraries\rlibrary(sf)\rlibrary(spatstat.geom)\rlibrary(spatstat.random)\rlibrary(dplyr)\rlibrary(ggplot2)\rlibrary(maptiles)\rlibrary(ggspatial)\rlibrary(units)\rWe load:\nsf for modern spatial data handling\rspatstat modules for generating spatial point\rpatterns\rggplot2 for plotting\rmaptiles and ggspatial for modern basemaps\rand map annotations\runits to safely handle distance units\r(e.g. metres)\rFirst, create a bounding polygon using longitude and latitude\rcoordinates in the WGS84 coordinate system. While this format is\rconvenient for defining locations, it is not suitable for measuring\rdistances because the units are in degrees rather than metres. To\raddress this, the polygon is reprojected into the British National Grid\rcoordinate system (EPSG:27700), which uses metres as its unit. This\rtransformation is essential for ensuring that the minimum distance\rconstraint applied later is accurate and interpretable. You can of\rcourse use our own shapefile if you don’t want to manually create a\rbounding polygon.\nspatstat uses its own internal representation of space\rcalled an “observation window” (owin). We convert the sf\rpolygon into owin format so it can be used as the boundary within which\rpoints will be generated. Without this conversion, the simulation\rfunctions in spatstat would not recognise the study\rarea.\nx \u003c- c(-3.541238, -3.547341, -3.561397, -3.572132, -3.572495, -3.551687,\r-3.566528, -3.599789, -3.592162, -3.604156, -3.629145, -3.618190,\r-3.585571, -3.572779, -3.525398, -3.504483, -3.525454, -3.541238)\ry \u003c- c(51.68106, 51.69050, 51.7003, 51.69617, 51.68800, 51.67405,\r51.64949, 51.65832, 51.67560, 51.68177, 51.71373, 51.72463,\r51.73346, 51.73788, 51.71745, 51.69461, 51.67548, 51.68106)\r# Create sf polygon in WGS84\rpoly_wgs \u003c- st_polygon(list(cbind(x, y))) |\u003e st_sfc(crs = 4326)\r# Transform to British National Grid (meters)\rpoly \u003c- st_transform(poly_wgs, 27700)\rwin \u003c- as.owin(poly)\rPoints are generated using the Simple Sequential Inhibition (SSI)\rprocess, which places points randomly but rejects any candidate point\rthat falls within a specified distance of an existing point. In this\rcase, the inhibition distance is set to 250 metres. The result is\rinitially returned as a ppp object (a spatstat point\rpattern), which is then converted into an sf object for\rcompatibility with the rest of the workflow.\nsamp1_ppp \u003c- rSSI(r = 250, n = 10, win = win) # 250 meters\r# Convert to sf\rsamp1 \u003c- st_as_sf(as.data.frame(samp1_ppp), coords = c(\"x\", \"y\"), crs = 27700)\rWe then generate a full matrix of pairwise distances between all\rgenerated points. Inspecting this matrix provides a direct way to verify\rthat the minimum distance constraint has been respected across all\rpoints.\ndist_matrix \u003c- st_distance(samp1)\rdist_matrix\r## Units: [m]\r## 1 2 3 4 5 6 7 8\r## 1 0.000 2135.996 4802.092 5196.1583 5886.0995 2902.544 3236.065 5579.278\r## 2 2135.996 0.000 2686.834 3167.0465 3837.2100 3020.327 1567.009 4052.468\r## 3 4802.092 2686.834 0.000 1781.4970 2072.7938 5059.138 2016.413 2797.764\r## 4 5196.158 3167.047 1781.497 0.0000 695.3981 4397.598 3343.561 4577.688\r## 5 5886.100 3837.210 2072.794 695.3981 0.0000 5030.483 3868.416 4783.126\r## 6 2902.544 3020.327 5059.138 4397.5979 5030.4835 0.000 4579.629 7036.075\r## 7 3236.065 1567.009 2016.413 3343.5610 3868.4157 4579.629 0.000 2494.419\r## 8 5579.278 4052.468 2797.764 4577.6882 4783.1257 7036.075 2494.419 0.000\r## 9 3258.136 2544.627 4093.057 3264.5085 3884.8693 1152.752 3989.559 6329.889\r## 10 3566.796 2330.221 3392.810 2467.5012 3090.4724 1940.410 3587.215 5791.073\r## 9 10\r## 1 3258.1357 3566.7957\r## 2 2544.6266 2330.2210\r## 3 4093.0572 3392.8101\r## 4 3264.5085 2467.5012\r## 5 3884.8693 3090.4724\r## 6 1152.7523 1940.4100\r## 7 3989.5591 3587.2155\r## 8 6329.8888 5791.0727\r## 9 0.0000 797.1189\r## 10 797.1189 0.0000\rTo summarise the spacing between points, the minimum non-zero\rdistance for each point is extracted from the distance matrix. This\rrepresents the distance from each point to its nearest neighbour. The\rresulting values are added back to the spatial dataset as a new\rattribute (min_dist_m), providing a convenient way to assess how close\reach point is to its closest neighbour.\nnearest \u003c- apply(dist_matrix, 1, function(v) min(v[v \u003e 0]))\rsamp1 \u003c- samp1 |\u003e mutate(min_dist_m = as.numeric(set_units(nearest, \"m\")))\rWeb-based map tiles are typically served in geographic coordinates\r(WGS84), so the polygon is temporarily transformed back into that\rcoordinate system for tile retrieval. The maptiles package\ris used to download a clean basemap from the CartoDB Positron provider,\rwhich is well suited for analytical visualisations due to its minimal\rstyling.\nThe final map combines the basemap tiles with the study polygon and\rsampled points. Additional cartographic elements such as a scale bar and\rnorth arrow are added using ggspatial.\n# Transform back to WGS84 for tile download\rpoly_wgs \u003c- st_transform(poly, 4326)\rtiles \u003c- get_tiles(poly_wgs, provider = \"CartoDB.Positron\", zoom = 12)\r# Plot ggplot() +\rlayer_spatial(tiles) +\rgeom_sf(data = poly, fill = \"red\", alpha = 0.3) +\rgeom_sf(data = samp1, color = \"blue\", size = 2) +\rannotation_scale(location = \"bl\") +\rannotation_north_arrow(location = \"tl\", which_north = \"true\") +\rtheme_minimal()\rThis function encapsulates the full workflow into a reusable tool. It\rtakes a polygon, a minimum distance, and a desired number of points as\rinputs, then generates a spatial point dataset that satisfies the\rdistance constraint. It also computes and attaches the nearest neighbour\rdistance for each point.\n# Function to generate random points within a polygon buffered by a minimum distance\r# Attaches a dataframe of distances-between-points\r#\r# d = inherited distance (see rSSI documentation)\r# n = number of points\r# p = polygon\r#\r# E.g.\r# spat \u003c- Rpoints(d = 0.05, n = 50, p = poly1)\rRpoints \u003c- function(d = 250, n = 10, p){\rstopifnot(inherits(p, \"sf\"))\r# Ensure projected CRS (meters)\rif (st_is_longlat(p)) {\rstop(\"Polygon must be projected (e.g., EPSG:27700)\")\r}\rwin \u003c- as.owin(p)\rpts_ppp \u003c- rSSI(r = d, n = n, win = win)\rpts \u003c- st_as_sf(as.data.frame(pts_ppp), coords = c(\"x\", \"y\"), crs = st_crs(p))\rdist_matrix \u003c- st_distance(pts)\rnearest \u003c- apply(dist_matrix, 1, function(v) min(v[v \u003e 0]))\rpts |\u003e mutate(min_dist_m = as.numeric(set_units(nearest, \"m\")))\r}\r# Example usage\rspat \u003c- Rpoints(d = 200, n = 30, p = poly)\rhead(spat)\r",
-  "wordCount" : "982",
-  "inLanguage": "en",
-  "datePublished": "2026-03-25T00:00:00Z",
-  "dateModified": "2026-03-25T00:00:00Z",
-  "author":{
-    "@type": "Person",
-    "name": "Anthony Caravaggi"
-  },
-  "mainEntityOfPage": {
-    "@type": "WebPage",
-    "@id": "https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/"
-  },
-  "publisher": {
-    "@type": "Organization",
-    "name": "",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://arcaravaggi.github.io/favicon.ico"
-    }
-  }
-}
 </script>
 </head>
 <body id="top">
@@ -210,32 +137,32 @@ sf for modern spatial data handlingspatstat modules for generating spatial poin
         </div>
         <ul id="menu" class="menu">
             <li>
-                <a href="https://arcaravaggi.github.io/" title="Home">
+                <a href="http://localhost:1313/" title="Home">
                     <span>Home</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                <a href="http://localhost:1313/r-for-nervous-humans/" title="R for Nervous Humans">
                     <span>R for Nervous Humans</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                <a href="http://localhost:1313/publications/" title="Publications">
                     <span>Publications</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                <a href="http://localhost:1313/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                <a href="http://localhost:1313/posts/" title="Blog">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                <a href="http://localhost:1313/contact/" title="Contact">
                     <span>Contact</span>
                 </a>
             </li>
@@ -396,7 +323,7 @@ ggplot() +
   annotation_scale(location = &quot;bl&quot;) +
   annotation_north_arrow(location = &quot;tl&quot;, which_north = &quot;true&quot;) +
   theme_minimal()</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/points_by_min_distance-1.png" width="70%" /></p>
+<p><img src="http://localhost:1313/img/points_by_min_distance-1.png" width="70%" /></p>
 <p>This function encapsulates the full workflow into a reusable tool. It
 takes a polygon, a minimum distance, and a desired number of points as
 inputs, then generates a spatial point dataset that satisfies the
@@ -443,16 +370,16 @@ head(spat)</code></pre>
 
   <footer class="post-footer">
     <ul class="post-tags">
-      <li><a href="https://arcaravaggi.github.io/tags/ecology/">Ecology</a></li>
-      <li><a href="https://arcaravaggi.github.io/tags/r/">R</a></li>
-      <li><a href="https://arcaravaggi.github.io/tags/analysis/">Analysis</a></li>
+      <li><a href="http://localhost:1313/tags/ecology/">Ecology</a></li>
+      <li><a href="http://localhost:1313/tags/r/">R</a></li>
+      <li><a href="http://localhost:1313/tags/analysis/">Analysis</a></li>
     </ul>
   </footer>
 </article>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+        <span>&copy; 2026 <a href="http://localhost:1313/"></a></span> · 
 
     
     

@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>R on </title>
-    <link>https://arcaravaggi.github.io/tags/r/</link>
+    <link>http://localhost:1313/tags/r/</link>
     <description>Recent content in R on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 29 May 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://arcaravaggi.github.io/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/r/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Analysing Respondent Attitudes from Surveys in R</title>
-      <link>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</link>
+      <link>http://localhost:1313/posts/2026-05-29-survey_analysis/</link>
       <pubDate>Fri, 29 May 2026 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/</guid>
+      <guid>http://localhost:1313/posts/2026-05-29-survey_analysis/</guid>
       <description>&lt;p&gt;Wildlife management decisions are rarely settled by ecological data
 alone. They live or die in the messy human world of competing values.
 Understanding what people think and why is as much a scientific skill as
@@ -30,9 +30,9 @@ residents and a genuine conservation priority.&lt;/p&gt;</description>
     </item>
     <item>
       <title>Generate Random Sampling Points by Minimum Distance</title>
-      <link>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</link>
+      <link>http://localhost:1313/posts/2026-03-25-points_by_min_distance/</link>
       <pubDate>Wed, 25 Mar 2026 00:00:00 +0000</pubDate>
-      <guid>https://arcaravaggi.github.io/posts/2026-03-25-points_by_min_distance/</guid>
+      <guid>http://localhost:1313/posts/2026-03-25-points_by_min_distance/</guid>
       <description>&lt;h1 class=&#34;title toc-ignore&#34;&gt;Generate Random Sampling Points by Minimum
 Distance&lt;/h1&gt;
 &lt;h4 class=&#34;author&#34;&gt;Anthony Caravaggi&lt;/h4&gt;

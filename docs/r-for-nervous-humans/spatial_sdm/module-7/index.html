@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en" dir="auto" data-theme="auto">
 
-<head><meta charset="utf-8">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, nofollow">
 <title>Module 7: Preparing occurrence data for modelling | </title>
 <meta name="keywords" content="">
 <meta name="description" content="
@@ -38,17 +38,17 @@ forest and ensemble models
 Preparing occurrence data for modelling
 For this module, you’ll need the following packages:">
 <meta name="author" content="">
-<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/">
-<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.1d4346839295915e219dee6c6b7d8512a8a4a8e692c435a57effb2398a6e371e.css" integrity="sha256-HUNGg5KVkV4hne5sa32FEqikqOaSxDWlfv&#43;yOYpuNx4=" rel="preload stylesheet" as="style">
-<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<link rel="canonical" href="http://localhost:1313/r-for-nervous-humans/spatial_sdm/module-7/">
+<link crossorigin="anonymous" href="http://localhost:1313/assets/css/stylesheet.1d4346839295915e219dee6c6b7d8512a8a4a8e692c435a57effb2398a6e371e.css" integrity="sha256-HUNGg5KVkV4hne5sa32FEqikqOaSxDWlfv&#43;yOYpuNx4=" rel="preload stylesheet" as="style">
+<link rel="icon" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="apple-touch-icon" href="http://localhost:1313/apple-touch-icon.png">
+<link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/index.xml" title="rss">
-<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/">
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/r-for-nervous-humans/spatial_sdm/module-7/index.xml" title="rss">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/r-for-nervous-humans/spatial_sdm/module-7/">
 <noscript>
     <style>
         #theme-toggle,
@@ -94,36 +94,6 @@ For this module, you’ll need the following packages:">
         document.querySelector("html").dataset.theme = 'light';
     }
 
-</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/">
-  <meta property="og:title" content="Module 7: Preparing occurrence data for modelling">
-  <meta property="og:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Preparing occurrence data for modellingFor this module, you’ll need the following packages:">
-  <meta property="og:locale" content="en_us">
-  <meta property="og:type" content="website">
-
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Module 7: Preparing occurrence data for modelling">
-  <meta name="twitter:description" content="Jump to a module…1. What isspatial data?2. Opening andexploring spatial data3. Coordinatesand projections4. Points,polygons, and rasters5. Are patternsreal?6. Working withenvironmental data7. Preparingoccurrence data for modelling8. Exploringspecies-environment relationships9. Building aspecies distribution model10. Assessingand predicting your SDM11. MaxEnt —maximum entropy modelling12. Randomforest and ensemble models Preparing occurrence data for modellingFor this module, you’ll need the following packages:">
-
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    {
-      "@type": "ListItem",
-      "position":  1 ,
-      "name": "R for Nervous Humans",
-      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
-    }, 
-    {
-      "@type": "ListItem",
-      "position":  2 ,
-      "name": "Module 7: Preparing occurrence data for modelling",
-      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/"
-    }
-  ]
-}
 </script>
 </head>
 <body class="list" id="top">
@@ -155,32 +125,32 @@ For this module, you’ll need the following packages:">
         </div>
         <ul id="menu" class="menu">
             <li>
-                <a href="https://arcaravaggi.github.io/" title="Home">
+                <a href="http://localhost:1313/" title="Home">
                     <span>Home</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                <a href="http://localhost:1313/r-for-nervous-humans/" title="R for Nervous Humans">
                     <span>R for Nervous Humans</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                <a href="http://localhost:1313/publications/" title="Publications">
                     <span>Publications</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                <a href="http://localhost:1313/projects/" title="Projects">
                     <span>Projects</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                <a href="http://localhost:1313/posts/" title="Blog">
                     <span>Blog</span>
                 </a>
             </li>
             <li>
-                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                <a href="http://localhost:1313/contact/" title="Contact">
                     <span>Contact</span>
                 </a>
             </li>
@@ -385,7 +355,7 @@ plot(st_geometry(howler_sf), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex
 
 plot(st_geometry(region), main = paste(&quot;After thinning\n(n =&quot;, nrow(howler_thinned), &quot;)&quot;))
 plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.4)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m7_1.png" width="70%" /></p>
+<p><img src="http://localhost:1313/img/spatial_sdm/m7_1.png" width="70%" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 <p>The thinned dataset should look less bunched. We’ve traded record
 volume for spatial representativeness, and because the raster resolution
@@ -416,7 +386,7 @@ plot(st_geometry(bg_sf), add = TRUE, col = adjustcolor(&quot;grey50&quot;, 0.4),
 plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.5)
 legend(&quot;bottomleft&quot;, legend = c(&quot;Presence&quot;, &quot;Background&quot;),
        col = c(&quot;tomato&quot;, &quot;grey50&quot;), pch = 19, bty = &quot;n&quot;)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m7_2.png" width="70%" /></p>
+<p><img src="http://localhost:1313/img/spatial_sdm/m7_2.png" width="70%" /></p>
 <p>The 5× ratio is a reasonable starting point; some studies use 10× or
 more. The key is that background points sample broadly from available
 environmental space, not just areas near presences (Phillips et
@@ -511,12 +481,12 @@ Leathwick, J. &amp; Ferrier, S. (2009). Sample selection bias and
 presence-only distribution models: implications for background and
 pseudo-absence data. <em>Ecological Applications</em>, 19, 181–197.</p>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
+<p><a href="http://localhost:1313/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
             border-radius: 6px;"> ← Previous </a>
-<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-8/" style="padding: 0.6rem 1.2rem;
+<a href="http://localhost:1313/r-for-nervous-humans/spatial_sdm/module-8/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
@@ -535,7 +505,7 @@ pseudo-absence data. <em>Ecological Applications</em>, 19, 181–197.</p>
     </main>
     
 <footer class="footer">
-        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+        <span>&copy; 2026 <a href="http://localhost:1313/"></a></span> · 
 
     
     
