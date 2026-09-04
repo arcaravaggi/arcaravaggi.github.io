@@ -39,7 +39,7 @@ Coordinates and projections
 For this module, you’ll need the following packages:">
 <meta name="author" content="">
 <link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-3/">
-<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -349,7 +349,7 @@ plot(st_geometry(howler_sf),
      add = TRUE, col = &quot;red&quot;, 
      pch = 19, 
      cex = 0.5)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_1.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m3_1.png" width="70%" /></p>
 <pre class="r"><code># Compare coordinate ranges
 st_bbox(howler_sf)</code></pre>
 <pre><code>##       xmin       ymin       xmax       ymax 
@@ -360,11 +360,11 @@ st_bbox(howler_sf)</code></pre>
 <pre class="r"><code>hist(st_coordinates(howler_sf)[,1],
      main = &quot;Howler longitude (degrees)&quot;,
      xlab = &quot;Longitude&quot;)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_2.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m3_2.png" width="70%" /></p>
 <pre class="r"><code>hist(st_coordinates(cr_proj)[,1],
      main = &quot;Costa Rica CRS (metres)&quot;,
      xlab = &quot;Projected X coordinate&quot;)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_3.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m3_3.png" width="70%" /></p>
 <p>The howler points appear nowhere near Costa Rica. This is not a data
 error - it is a coordinate system mismatch. The polygon coordinates are
 in metres (EPSG:5367); the point coordinates are in degrees (EPSG:4326).
@@ -390,7 +390,7 @@ plot(st_geometry(howler_sf),
      add = TRUE, 
      col = &quot;red&quot;, 
      pch = 19, cex = 0.6)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m3_4.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m3_4.png" width="70%" /></p>
 <p>The layers now align. You can also see that some howler records fall
 outside Costa Rica because we downloaded the full global dataset in
 Module 2, not just Costa Rica records. We’ll fix that in Module 4.</p>
@@ -417,12 +417,12 @@ transform early rather than late. Future you will be grateful.</p>
 Geological Survey Professional Paper 1395. US Government Printing
 Office, Washington DC.</p>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-2/" style="padding: 0.6rem 1.2rem;
+<p><a href="/r-for-nervous-humans/spatial_sdm/module-2/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
             border-radius: 6px;"> ← Previous </a>
-<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-4/" style="padding: 0.6rem 1.2rem;
+<a href="/r-for-nervous-humans/spatial_sdm/module-4/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;

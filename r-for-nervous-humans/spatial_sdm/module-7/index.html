@@ -39,7 +39,7 @@ Preparing occurrence data for modelling
 For this module, you’ll need the following packages:">
 <meta name="author" content="">
 <link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-7/">
-<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -389,7 +389,7 @@ plot(st_geometry(howler_sf), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex
 
 plot(st_geometry(region), main = paste(&quot;After thinning\n(n =&quot;, nrow(howler_thinned), &quot;)&quot;))
 plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.4)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m7_1.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m7_1.png" width="70%" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 <p>The thinned dataset should look less bunched. We’ve traded record
 volume for spatial representativeness, and because the raster resolution
@@ -420,7 +420,7 @@ plot(st_geometry(bg_sf), add = TRUE, col = adjustcolor(&quot;grey50&quot;, 0.4),
 plot(st_geometry(howler_thinned), add = TRUE, col = &quot;tomato&quot;, pch = 19, cex = 0.5)
 legend(&quot;bottomleft&quot;, legend = c(&quot;Presence&quot;, &quot;Background&quot;),
        col = c(&quot;tomato&quot;, &quot;grey50&quot;), pch = 19, bty = &quot;n&quot;)</code></pre>
-<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m7_2.png" width="70%" /></p>
+<p><img src="/img/spatial_sdm/m7_2.png" width="70%" /></p>
 <p>The 5× ratio is a reasonable starting point; some studies use 10× or
 more. The key is that background points sample broadly from available
 environmental space, not just areas near presences (Phillips et
@@ -515,12 +515,12 @@ Leathwick, J. &amp; Ferrier, S. (2009). Sample selection bias and
 presence-only distribution models: implications for background and
 pseudo-absence data. <em>Ecological Applications</em>, 19, 181–197.</p>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
+<p><a href="/r-for-nervous-humans/spatial_sdm/module-6/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
             border-radius: 6px;"> ← Previous </a>
-<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-8/" style="padding: 0.6rem 1.2rem;
+<a href="/r-for-nervous-humans/spatial_sdm/module-8/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;

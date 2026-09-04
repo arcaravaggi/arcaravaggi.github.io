@@ -24,7 +24,7 @@ Welcome to Module 2
 Now that you know how to run R and store values in variables, it’s time to look at real data. We’ll use the Palmer Penguins dataset, a simple but rich dataset of penguin measurements.">
 <meta name="author" content="">
 <link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-2/module-2/">
-<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.css" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -369,14 +369,14 @@ hist(bill_length,
      xlab = &quot;Bill Length (mm)&quot;, 
      col = &quot;skyblue&quot;, 
      border = &quot;white&quot;)</code></pre>
-<p><img src="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-2/module-2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p><img src="/r-for-nervous-humans/stats_intro/module-2/module-2_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
 <p>Note: Putting <code>?</code> or <code>??</code> before a function name will search your installed packages for any help documentation on that particular function. You can use <code>?hist</code> to see more options for histograms, for example. Help files include descriptions of all arguments used in the function, as well as examples of the function in use.</p>
 <p>We can also see how bill length varies by species:</p>
 <pre class="r"><code>boxplot(penguins$bill_length_mm ~ penguins$species, 
         main = &quot;Bill Length by Species&quot;, 
         ylab = &quot;Bill Length (mm)&quot;, 
         col = c(&quot;lightpink&quot;,&quot;lightgreen&quot;,&quot;lightblue&quot;))</code></pre>
-<p><img src="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-2/module-2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p><img src="/r-for-nervous-humans/stats_intro/module-2/module-2_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
 <p>Each box represents the distribution of bill length data for one species. Look for differences in median, spread, and outliers. Remember that this is a simple visualisation; it is <em>not</em> a test for significant differences. Those will come, later.</p>
 <hr />
 </div>
@@ -388,7 +388,7 @@ hist(bill_length,
 <li>Visualisations help you see patterns before analysing</li>
 </ul>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="https://arcaravaggi.github.io/r_for_nervous_humans/intro_stats/module-1/" 
+<p><a href="/r_for_nervous_humans/intro_stats/module-1/" 
      style="padding: 0.6rem 1.2rem; 
             background-color: var(--theme-accent); 
             color: var(--theme-fg); 
@@ -396,7 +396,7 @@ hist(bill_length,
             border-radius: 6px;">
 ← Previous
 </a></p>
-<p><a href="https://arcaravaggi.github.io/r_for_nervous_humans/intro_stats/module-3/" 
+<p><a href="/r_for_nervous_humans/intro_stats/module-3/" 
      style="padding: 0.6rem 1.2rem; 
             background-color: var(--theme-accent); 
             color: var(--theme-fg); 
