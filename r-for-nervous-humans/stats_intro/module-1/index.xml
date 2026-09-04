@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title></title>
+    <link>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-1/</link>
+    <description>Recent content on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-1/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Module 1: Getting Started</title>
+      <link>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-1/module-1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-1/module-1/</guid>
+      <description>&lt;!-- Dropdown for modules --&gt;
+&lt;p&gt;&lt;select id=&#34;module-select&#34; class=&#34;course-dropdown&#34; onchange=&#34;if (this.value) window.location.href=this.value;&#34;&gt;
+&lt;option value=&#34;&#34;&gt;Jump to a module…&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-2/&#34;&gt;Data &amp;amp; Penguins&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-3/&#34;&gt;Visualisation&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-4/&#34;&gt;Descriptive Statistics&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-5/&#34;&gt;Are These Groups Different?&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-6/&#34;&gt;Working with Categories&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-7/&#34;&gt;When Data Gets Weird&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-8/&#34;&gt;Relationships Between Variables&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/stats_intro//module-9/&#34;&gt;Linear Regression&lt;/option&gt;
+&lt;/select&gt;&lt;/p&gt;
+&lt;div id=&#34;welcome-to-module-1&#34; class=&#34;section level3&#34;&gt;
+&lt;h3&gt;Welcome to Module 1&lt;/h3&gt;
+&lt;p&gt;Ah, R. Some people see it and panic slightly, like a squirrel in a room full of rocking chairs. Fear not. Here, we take things one small step at a time.By the end of this module, you will be able to:&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

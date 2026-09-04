@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title></title>
+    <link>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-4/</link>
+    <description>Recent content on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-4/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Module 4 — Descriptive Statistics</title>
+      <link>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-4/module-4/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-4/module-4/</guid>
+      <description>&lt;!-- Dropdown --&gt;
+&lt;p&gt;&lt;select id=&#34;module-select&#34; class=&#34;course-dropdown&#34; onchange=&#34;if (this.value) window.location.href=this.value;&#34;&gt;
+&lt;option value=&#34;&#34;&gt;Jump to a module…&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/&#34;&gt;Welcome&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-1/&#34;&gt;1. Getting Started&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-2/&#34;&gt;2. Data &amp;amp; Penguins&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-3/&#34;&gt;3. Visualisation&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-5/&#34;&gt;5. Are These Groups Different?&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-6/&#34;&gt;6. Working with Categories&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-7/&#34;&gt;7. When Data Gets Weird&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-8/&#34;&gt;8. Relationships Between Variables&lt;/option&gt;
+&lt;option value=&#34;/r_for_nervous_humans/intro_stats/module-9/&#34;&gt;9. Linear Regression&lt;/option&gt;
+&lt;/select&gt;&lt;/p&gt;
+&lt;div id=&#34;welcome-to-module-4&#34; class=&#34;section level2&#34;&gt;
+&lt;h2&gt;Welcome to module 4&lt;/h2&gt;
+&lt;p&gt;Now that we can look at penguin data and visualise them, it’s time to &lt;em&gt;summarise&lt;/em&gt; our data numerically.&lt;br /&gt;
+Descriptive statistics help us answer questions like:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;What’s a “typical” value?&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;How much do values vary (differ)?&lt;br /&gt;
+&lt;/li&gt;
+&lt;li&gt;How confident are we about the average value of our sample? Does it accurately reflect the population?&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Think of this as learning the language of the data before asking bigger questions.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

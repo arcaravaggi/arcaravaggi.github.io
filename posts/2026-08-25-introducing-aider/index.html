@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>aideR: Using AI Anyway, But Doing It Properly | </title>
+<meta name="keywords" content="r, rstudio, ai, teaching">
+<meta name="description" content="There is a particular cry of despair reserved for the moment your R
+console turns red and says something annoyingly cryptic and full of
+symbols. You did not ask for this and yet here you are, at half past
+midnight, trying to decipher ideographs the way ancient priests once
+read the entrails of a goat, hoping the gods will explain themselves.
+Good news: there is now a small robot whose entire purpose is to read
+the entrails for you. It’s called aideR, it lives in your RStudio
+toolbar, and this post covers what it does, how to install it, and two
+bugs that should be kept in mind when using it.">
+<meta name="author" content="Anthony Caravaggi">
+<link rel="canonical" href="https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/">
+  <meta property="og:title" content="aideR: Using AI Anyway, But Doing It Properly">
+  <meta property="og:description" content="There is a particular cry of despair reserved for the moment your R console turns red and says something annoyingly cryptic and full of symbols. You did not ask for this and yet here you are, at half past midnight, trying to decipher ideographs the way ancient priests once read the entrails of a goat, hoping the gods will explain themselves.
+Good news: there is now a small robot whose entire purpose is to read the entrails for you. It’s called aideR, it lives in your RStudio toolbar, and this post covers what it does, how to install it, and two bugs that should be kept in mind when using it.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-08-25T00:00:00+00:00">
+    <meta property="article:modified_time" content="2026-08-25T00:00:00+00:00">
+    <meta property="article:tag" content="R">
+    <meta property="article:tag" content="Rstudio">
+    <meta property="article:tag" content="Ai">
+    <meta property="article:tag" content="Teaching">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="aideR: Using AI Anyway, But Doing It Properly">
+  <meta name="twitter:description" content="There is a particular cry of despair reserved for the moment your R console turns red and says something annoyingly cryptic and full of symbols. You did not ask for this and yet here you are, at half past midnight, trying to decipher ideographs the way ancient priests once read the entrails of a goat, hoping the gods will explain themselves.
+Good news: there is now a small robot whose entire purpose is to read the entrails for you. It’s called aideR, it lives in your RStudio toolbar, and this post covers what it does, how to install it, and two bugs that should be kept in mind when using it.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://arcaravaggi.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "aideR: Using AI Anyway, But Doing It Properly",
+      "item": "https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "aideR: Using AI Anyway, But Doing It Properly",
+  "name": "aideR: Using AI Anyway, But Doing It Properly",
+  "description": "There is a particular cry of despair reserved for the moment your R console turns red and says something annoyingly cryptic and full of symbols. You did not ask for this and yet here you are, at half past midnight, trying to decipher ideographs the way ancient priests once read the entrails of a goat, hoping the gods will explain themselves.\nGood news: there is now a small robot whose entire purpose is to read the entrails for you. It’s called aideR, it lives in your RStudio toolbar, and this post covers what it does, how to install it, and two bugs that should be kept in mind when using it.\n",
+  "keywords": [
+    "r", "rstudio", "ai", "teaching"
+  ],
+  "articleBody": "There is a particular cry of despair reserved for the moment your R console turns red and says something annoyingly cryptic and full of symbols. You did not ask for this and yet here you are, at half past midnight, trying to decipher ideographs the way ancient priests once read the entrails of a goat, hoping the gods will explain themselves.\nGood news: there is now a small robot whose entire purpose is to read the entrails for you. It’s called aideR, it lives in your RStudio toolbar, and this post covers what it does, how to install it, and two bugs that should be kept in mind when using it.\nWhat is it, actually? aideR is an RStudio Addin that:\nLooks at whatever code you’ve selected in the editor Quietly gathers a bit of context along with it Sends all of that off to Google’s Gemini API with a task you pick from a menu Delivers the answer straight back into your console No copy-pasting your traceback into a browser tab. No re-explaining, for the fortieth time this term, what a data.frame is. It just knows, because you handed it the receipts.\nWhy this exists A large chunk of teaching R statistics isn’t “here is the ANOVA function”. It’s “why has your ANOVA function just erupted in a language that suggests that R is doing this on purpose, possibly out of spite” Office hours are finite but error messages are not. aideR exists to narrow that gap a little.\nThat said, it’s worth being blunt about something since I’ve watched it happen several times. I’ve had students hand in work where the AI got the stats flat wrong and they had no way of knowing, because they’d never learned enough R or enough statistics to spot it. A tool that explains things well enough is also a tool convincing enough to be believed when it’s wrong. aideR is built to explain the code you’ve selected, not to replace the years of actually learning why a Type II error matters or when a mixed model is the wrong choice. You still need enough R in your own head to recognise when it’s talking nonsense, the same way you’d need to actually know French before you could catch a bad translation. If the only thing you ever do is ask, you’ll never build the skills to identify when the answer is wrong.\nA quick word on the ethics of this, because someone will ask I am not going to stand here and tell you that whether or not students should use AI is a settled question, because it isn’t. Anyone who tells you otherwise is generally trying to sell you something. There are real arguments worth taking seriously. Leaning on AI for explanations can quietly hollow out the productive struggle where actual learning lives. It can erode the skill of debugging your own thinking. It complicates what originality and authorship even mean once you hand in the assignment. And that’s just for starters.\nI take all of that seriously. I also teach actual students in the actual year 2026, and of course they’re already using AI. Somewhere, someone is pasting error messages into whatever chat window happens to be open in another tab, with roughly the guidance and oversight of a toddler operating a forklift. Pretending otherwise doesn’t protect anyone’s learning, it just guarantees the only guidance they get is vibes and whatever the tool feels like improvising that day, with no one in the room who actually understands statistics to steer it.\nSo my position, as someone who has to stand up in front of a lecture theatre and mean it, is that if this is happening regardless (and it is, with the quiet inevitability of a Monday) then I’d rather it happen properly. That’s the entire idea behind aideR. It’s scoped narrowly to explaining code you’ve already selected and debugging errors you’ve already summoned, because that’s the moment a good explanation accelerates learning instead of replacing it. I’m trying to make sure that when students do reach for AI, that they’re reaching for something that shows its working and helps them develop.\nAnd yes, about the Google of it all The irony of a man who has spent aconsiderable amount of effort de-Googling his life - that’s me, by the way - turning around and building a teaching tool that phones home to the Gemini API on every single call is not lost on me. I have made my peace with it, in the manner of someone who has made peace with a disreputable relative. That is, reluctantly and with conditions attached.\nThe honest reasoning is that Gemini’s free tier is, as of writing as as far as I could discern, the most generous, most reliable, no-card-required option going, and “most generous and reliable” matters a lot when the people relying on it are students who have never set an environment variable in their lives and do not need a rate-limit error added to the pile of things going wrong at 11pm before a deadline. Principle is important. So is not making students debug a 429 on top of everything else.\nBut let’s be clear - this is exactly the sort of arrangement you should feel suspicious of. Not because anything sinister is afoot, but because “free” is a transaction, not a gift, and the terms are the terms whether or not anyone reads them or not. This means that anything sent through the free tier may be used by Google to improve its models and may be read by an actual human reviewer at some point. So keep the sensitive stuff off the free tier. Happily, call_gemini() also takes a model argument rather than being welded to one company’s API, so if you’d rather route it through Groq or OpenRouter instead (both with their own perfectly respectable free tiers, and rather fewer feelings about your search history) that’s a small function edit away, not a rewrite. Convenience got us here first. It doesn’t have to keep us here.\nInstalling aideR # install.packages(\"remotes\") remotes::install_github(\"arcaravaggi/aideR\") First-time setup: getting your own free API key Note the operative phrase: your own. aideR runs on Google’s Gemini API, which has a free tier but that quota is per key, which means if an entire class points itself at one shared key, you will exhaust the daily allowance somewhere around the third student’s first “please explain this for loop,” and the rest of the cohort will be left staring at a 429 error like a queue at a bakery that’s just sold its last cinnamon bun.\nSo, everyone gets their own:\nlibrary(aideR) setup_gemini_key() This pops open Google AI Studio, walks you through generating a key, and quietly tucks it away in your .Renviron.\nActually using the thing Select some code that’s confusing you then either:\nOpen Tools \u003e Addins \u003e Browse Addins, find “aideR Menu”, and click it like a civilised person, or Bind it to a keyboard shortcut once (see below) and never open that menu again as long as you live You’ll get a small menu, politely waiting for instructions:\nSelect AI Task:\r1: Explain (Beginner - no R experience)\r2: Explain (Intermediate - code \u0026 stat reasoning)\r3: Explain (Researcher - assumptions \u0026 limitations)\r4: Why is this failing?\r5: Fix this code\r6: Add inline comments\r7: What assumptions does this make?\rPick one, wait a couple of seconds, and the explanation lands straight in your console.\nSetting a keyboard shortcut (do this now, not later) RStudio, quite sensibly, does not let any package silently claim a keyboard shortcut the instant it’s installed. So this bit is manual, and it’s a one-time job:\nTools \u003e Addins \u003e Browse Addins… Click Keyboard Shortcuts (top right) Search “aideR Menu” Click the shortcut field, press your combo of choice Apply After this, it’s select-code-then-mash-shortcut for the rest of your natural working life. Or the next couple of hours at least. Do it now; future-you will thank you. But then future-you will forget that this blog post exists, so do you really owe them anything? They’re just coasting on your hard work.\nTwo cautionary tales, in the grand tradition of cautionary tales The case of the selection that wasn’t there Early testing produced a baffling bug report: “I definitely selected code, and it still said ‘No codeselected!’”\nThe culprit, it turns out, was a very RStudio-specific bit of mischief. There are two different ways to ask RStudio “what document currently holds your attention”:\ngetActiveDocumentContext() — whichever pane currently has focus, no questions asked, no loyalty to your intentions getSourceEditorContext() — the source file itself, regardless of where your cursor has wandered off to If you select code in the editor, then click into the Console to actually type run_aider(), focus shifts to the Console the instant you click. By the time the addin runs, RStudio reports the Console as the “active document,” which, having no selection of its own, dutifully reports none, and your perfectly good highlighted code gets ignored entirely, like the instructions on a necessarily specific assessment brief.\nThe solution? Well, it should by all intents and purposes be part of the package. But I’d suggest mapping that shortcut and not clicking anything else once you’ve selected your code. If it doesn’t work then, it’s your fault. You could also log it as an issue on the repo too, I guess.\nThe vanishing model name If you went digging through the package history (I cannot imagine why you would, nor how you would find it because I did all this locally with no version history) you’d find call_gemini() quietly swapping its default model string not once but twice in a single afternoon. Each swap returned a 404 error and its own small, private existential crisis.\nThis isn’t a bug in aideR so much as an occupational hazard of building on top of a fast-moving API. Google retires model names with a regularity that borders on a personality trait. So aideR now ships with:\nlist_gemini_models() Run this the moment call_gemini() 404s on you and it will tell you exactly which model names your key currently has access to. You can then either edit the code yourself or log an issue for me to look into. Thank you in advance for that.\nThe whole toolkit Function What it does run_aider() The context-aware assistant, menu-driven setup_gemini_key() One-time guided API key setup call_gemini(prompt) Raw access (send any prompt, get text back) list_gemini_models() See what model names currently work, before they inevitably change again It might just work… Install it, run setup_gemini_key(), select something baffling, and hit your new shortcut. If Google renames the model again next week (likely) list_gemini_models() has you covered.\nBug reports, feature requests, and “why did it explain my t-test using an extended pirate metaphor” reports are all welcome via GitHub Issues.\nUpdate: For restricted networks and overly zealous IT departments Not every computer plays nicely with remotes::install_github(). If you are working on a locked-down institutional machine, operating behind a corporate firewall with the trust settings of a toddler guarding a half-eaten biscuit, or simply disconnected from the internet, here is how to get around the most common hurdles.\nOption 1: Installing from a local zip file If your network refuses to fetch packages directly from GitHub, you can manually download the repository as a .zip file, save it locally, and tell R to build it from your drive:\ninstall.packages(\"C:/path/to/yourpackage-main.zip\", type = \"source\") This bypasses remote fetching entirely by pointing R directly to the archive on your local file system.\nOption 2: Bypassing installation entirely If your institution’s IT permissions are set up to prevent you from writing anything into R’s system library (a setting presumably designed by someone who regards user autonomy as a serious security risk) you can skip the installation step altogether using devtools or pkgload:\ndevtools::load_all(\"C:/path/to/yourpackage-main\") # Alternatively pkgload::load_all(\"C:/path/to/yourpackage-main\") Unzip the repository folder somewhere on your machine, point either of those functions at the folder path, and R will load all the package’s functions directly into memory for your active session. You will need to run this command each time you start RStudio, but it completely sidesteps administrator restriction errors.\n",
+  "wordCount" : "2031",
+  "inLanguage": "en",
+  "datePublished": "2026-08-25T00:00:00Z",
+  "dateModified": "2026-08-25T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Anthony Caravaggi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://arcaravaggi.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      aideR: Using AI Anyway, But Doing It Properly
+    </h1>
+    <div class="post-meta"><span title='2026-08-25 00:00:00 +0000 UTC'>August 25, 2026</span>&nbsp;·&nbsp;<span>Anthony Caravaggi</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>There is a particular cry of despair reserved for the moment your R
+console turns red and says something annoyingly cryptic and full of
+symbols. You did not ask for this and yet here you are, at half past
+midnight, trying to decipher ideographs the way ancient priests once
+read the entrails of a goat, hoping the gods will explain themselves.</p>
+<p>Good news: there is now a small robot whose entire purpose is to read
+the entrails for you. It’s called <strong>aideR</strong>, it lives in your RStudio
+toolbar, and this post covers what it does, how to install it, and two
+bugs that should be kept in mind when using it.</p>
+<h2 id="what-is-it-actually">What is it, actually?<a hidden class="anchor" aria-hidden="true" href="#what-is-it-actually">#</a></h2>
+<p>aideR is an RStudio Addin that:</p>
+<ol>
+<li>Looks at whatever code you’ve selected in the editor</li>
+<li>Quietly gathers a bit of context along with it</li>
+<li>Sends all of that off to Google’s Gemini API with a task you pick
+from a menu</li>
+<li>Delivers the answer straight back into your console</li>
+</ol>
+<p>No copy-pasting your traceback into a browser tab. No re-explaining, for
+the fortieth time this term, what a <code>data.frame</code> is. It just <em>knows</em>,
+because you handed it the receipts.</p>
+<h2 id="why-this-exists">Why this exists<a hidden class="anchor" aria-hidden="true" href="#why-this-exists">#</a></h2>
+<p>A large chunk of teaching R statistics isn’t “here is the ANOVA
+function”. It’s “why has your ANOVA function just erupted in a language
+that suggests that R is doing this on purpose, possibly out of spite”
+Office hours are finite but error messages are not. aideR exists to
+narrow that gap a little.</p>
+<p>That said, it’s worth being blunt about something since I’ve watched it
+happen several times. I’ve had students hand in work where the AI got
+the stats flat wrong and they had no way of knowing, because they’d
+never learned enough R or enough statistics to spot it. A tool that
+explains things well enough is also a tool convincing enough to be
+believed when it’s wrong. aideR is built to explain the code you’ve
+selected, not to replace the years of actually learning why a Type II
+error matters or when a mixed model is the wrong choice. You still need
+enough R in your own head to recognise when it’s talking nonsense, the
+same way you’d need to actually know French before you could catch a bad
+translation. If the only thing you ever do is ask, you’ll never build
+the skills to identify when the answer is wrong.</p>
+<h2 id="a-quick-word-on-the-ethics-of-this-because-someone-will-ask">A quick word on the ethics of this, because someone will ask<a hidden class="anchor" aria-hidden="true" href="#a-quick-word-on-the-ethics-of-this-because-someone-will-ask">#</a></h2>
+<p>I am not going to stand here and tell you that whether or not students
+should use AI is a settled question, because it isn’t. Anyone who tells
+you otherwise is generally trying to sell you something. There are real
+arguments worth taking seriously. Leaning on AI for explanations can
+quietly hollow out the productive struggle where actual learning lives.
+It can erode the skill of debugging your own thinking. It complicates
+what originality and authorship even mean once you hand in the
+assignment. And that’s just for starters.</p>
+<p>I take all of that seriously. I also teach actual students in the actual
+year 2026, and of course they’re already using AI. Somewhere, someone is
+pasting error messages into whatever chat window happens to be open in
+another tab, with roughly the guidance and oversight of a toddler
+operating a forklift. Pretending otherwise doesn’t protect anyone’s
+learning, it just guarantees the only guidance they get is vibes and
+whatever the tool feels like improvising that day, with no one in the
+room who actually understands statistics to steer it.</p>
+<p>So my position, as someone who has to stand up in front of a lecture
+theatre and mean it, is that if this is happening regardless (and it is,
+with the quiet inevitability of a Monday) then I’d rather it happen
+properly. That’s the entire idea behind aideR. It’s scoped narrowly to
+explaining code you’ve already selected and debugging errors you’ve
+already summoned, because that’s the moment a good explanation
+accelerates learning instead of replacing it. I’m trying to make sure
+that when students do reach for AI, that they’re reaching for something
+that shows its working and helps them develop.</p>
+<h3 id="and-yes-about-the-google-of-it-all">And yes, about the Google of it all<a hidden class="anchor" aria-hidden="true" href="#and-yes-about-the-google-of-it-all">#</a></h3>
+<p>The irony of a man who has spent aconsiderable amount of effort
+de-Googling his life - that’s me, by the way - turning around and
+building a teaching tool that phones home to the Gemini API on every
+single call is not lost on me. I have made my peace with it, in the
+manner of someone who has made peace with a disreputable relative. That
+is, reluctantly and with conditions attached.</p>
+<p>The honest reasoning is that Gemini’s free tier is, as of writing as as
+far as I could discern, the most generous, most reliable,
+no-card-required option going, and “most generous and reliable” matters
+a lot when the people relying on it are students who have never set an
+environment variable in their lives and do not need a rate-limit error
+added to the pile of things going wrong at 11pm before a deadline.
+Principle is important. So is not making students debug a 429 on top of
+everything else.</p>
+<p>But let’s be clear - this is exactly the sort of arrangement you should
+feel suspicious of. Not because anything sinister is afoot, but because
+“free” is a transaction, not a gift, and the terms are the terms whether
+or not anyone reads them or not. This means that anything sent through
+the free tier may be used by Google to improve its models and may be
+read by an actual human reviewer at some point. So keep the sensitive
+stuff off the free tier. Happily, <code>call_gemini()</code> also takes a <code>model</code>
+argument rather than being welded to one company’s API, so if you’d
+rather route it through Groq or OpenRouter instead (both with their own
+perfectly respectable free tiers, and rather fewer feelings about your
+search history) that’s a small function edit away, not a rewrite.
+Convenience got us here first. It doesn’t have to keep us here.</p>
+<h2 id="installing-aider">Installing aideR<a hidden class="anchor" aria-hidden="true" href="#installing-aider">#</a></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#75715e"># install.packages(&#34;remotes&#34;)</span>
+</span></span><span style="display:flex;"><span>remotes<span style="color:#f92672">::</span><span style="color:#a6e22e">install_github</span>(<span style="color:#e6db74">&#34;arcaravaggi/aideR&#34;</span>)
+</span></span></code></pre></div><h2 id="first-time-setup-getting-your-own-free-api-key">First-time setup: getting your own free API key<a hidden class="anchor" aria-hidden="true" href="#first-time-setup-getting-your-own-free-api-key">#</a></h2>
+<p>Note the operative phrase: <em>your own</em>. aideR runs on Google’s Gemini
+API, which has a free tier but that quota is per key, which means if an
+entire class points itself at one shared key, you will exhaust the daily
+allowance somewhere around the third student’s first “please explain
+this <code>for</code> loop,” and the rest of the cohort will be left staring at a
+429 error like a queue at a bakery that’s just sold its last cinnamon
+bun.</p>
+<p>So, everyone gets their own:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">library</span>(aideR)
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">setup_gemini_key</span>()
+</span></span></code></pre></div><p>This pops open Google AI Studio, walks you through generating a key, and
+quietly tucks it away in your <code>.Renviron</code>.</p>
+<h2 id="actually-using-the-thing">Actually using the thing<a hidden class="anchor" aria-hidden="true" href="#actually-using-the-thing">#</a></h2>
+<p>Select some code that’s confusing you then either:</p>
+<ul>
+<li>Open <strong>Tools &gt; Addins &gt; Browse Addins</strong>, find <strong>“aideR Menu”</strong>, and
+click it like a civilised person, or</li>
+<li>Bind it to a keyboard shortcut once (see below) and never open that
+menu again as long as you live</li>
+</ul>
+<p>You’ll get a small menu, politely waiting for instructions:</p>
+<pre><code>Select AI Task:
+
+1: Explain (Beginner - no R experience)
+2: Explain (Intermediate - code &amp; stat reasoning)
+3: Explain (Researcher - assumptions &amp; limitations)
+4: Why is this failing?
+5: Fix this code
+6: Add inline comments
+7: What assumptions does this make?
+</code></pre>
+<p>Pick one, wait a couple of seconds, and the explanation lands straight
+in your console.</p>
+<h3 id="setting-a-keyboard-shortcut-do-this-now-not-later">Setting a keyboard shortcut (do this now, not later)<a hidden class="anchor" aria-hidden="true" href="#setting-a-keyboard-shortcut-do-this-now-not-later">#</a></h3>
+<p>RStudio, quite sensibly, does not let any package silently claim a
+keyboard shortcut the instant it’s installed. So this bit is manual, and
+it’s a one-time job:</p>
+<ol>
+<li><strong>Tools &gt; Addins &gt; Browse Addins…</strong></li>
+<li>Click <strong>Keyboard Shortcuts</strong> (top right)</li>
+<li>Search <strong>“aideR Menu”</strong></li>
+<li>Click the shortcut field, press your combo of choice</li>
+<li><strong>Apply</strong></li>
+</ol>
+<p>After this, it’s select-code-then-mash-shortcut for the rest of your
+natural working life. Or the next couple of hours at least. Do it now;
+future-you will thank you. But then future-you will forget that this
+blog post exists, so do you really owe them anything? They’re just
+coasting on your hard work.</p>
+<h2 id="two-cautionary-tales-in-the-grand-tradition-of-cautionary-tales">Two cautionary tales, in the grand tradition of cautionary tales<a hidden class="anchor" aria-hidden="true" href="#two-cautionary-tales-in-the-grand-tradition-of-cautionary-tales">#</a></h2>
+<h3 id="the-case-of-the-selection-that-wasnt-there">The case of the selection that wasn’t there<a hidden class="anchor" aria-hidden="true" href="#the-case-of-the-selection-that-wasnt-there">#</a></h3>
+<p>Early testing produced a baffling bug report: “I definitely selected
+code, and it still said ‘No codeselected!’”</p>
+<p>The culprit, it turns out, was a very RStudio-specific bit of mischief.
+There are two different ways to ask RStudio “what document currently
+holds your attention”:</p>
+<ul>
+<li><code>getActiveDocumentContext()</code> — whichever pane currently has <em>focus</em>,
+no questions asked, no loyalty to your intentions</li>
+<li><code>getSourceEditorContext()</code> — the source file itself, regardless of
+where your cursor has wandered off to</li>
+</ul>
+<p>If you select code in the editor, then click into the Console to
+actually <em>type</em> <code>run_aider()</code>, focus shifts to the Console the instant
+you click. By the time the addin runs, RStudio reports the Console as
+the “active document,” which, having no selection of its own, dutifully
+reports none, and your perfectly good highlighted code gets ignored
+entirely, like the instructions on a necessarily specific assessment
+brief.</p>
+<p>The solution? Well, it should by all intents and purposes be part of the
+package. But I’d suggest mapping that shortcut and not clicking anything
+else once you’ve selected your code. If it doesn’t work then, it’s your
+fault. You could also log it as an issue on the repo too, I guess.</p>
+<h3 id="the-vanishing-model-name">The vanishing model name<a hidden class="anchor" aria-hidden="true" href="#the-vanishing-model-name">#</a></h3>
+<p>If you went digging through the package history (I cannot imagine why
+you would, nor how you would find it because I did all this locally with
+no version history) you’d find <code>call_gemini()</code> quietly swapping its
+default model string not once but twice in a single afternoon. Each swap
+returned a 404 error and its own small, private existential crisis.</p>
+<p>This isn’t a bug in aideR so much as an occupational hazard of building
+on top of a fast-moving API. Google retires model names with a
+regularity that borders on a personality trait. So aideR now ships with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">list_gemini_models</span>()
+</span></span></code></pre></div><p>Run this the moment <code>call_gemini()</code> 404s on you and it will tell you
+exactly which model names your key currently has access to. You can then
+either edit the code yourself or log an issue for me to look into. Thank
+you in advance for that.</p>
+<h2 id="the-whole-toolkit">The whole toolkit<a hidden class="anchor" aria-hidden="true" href="#the-whole-toolkit">#</a></h2>
+<table>
+  <thead>
+      <tr>
+          <th>Function</th>
+          <th>What it does</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>run_aider()</code></td>
+          <td>The context-aware assistant, menu-driven</td>
+      </tr>
+      <tr>
+          <td><code>setup_gemini_key()</code></td>
+          <td>One-time guided API key setup</td>
+      </tr>
+      <tr>
+          <td><code>call_gemini(prompt)</code></td>
+          <td>Raw access (send any prompt, get text back)</td>
+      </tr>
+      <tr>
+          <td><code>list_gemini_models()</code></td>
+          <td>See what model names currently work, before they inevitably change again</td>
+      </tr>
+  </tbody>
+</table>
+<h2 id="it-might-just-work">It might just work…<a hidden class="anchor" aria-hidden="true" href="#it-might-just-work">#</a></h2>
+<p>Install it, run <code>setup_gemini_key()</code>, select something baffling, and hit
+your new shortcut. If Google renames the model again next week (likely)
+<code>list_gemini_models()</code> has you covered.</p>
+<p>Bug reports, feature requests, and “why did it explain my t-test using
+an extended pirate metaphor” reports are all welcome via GitHub Issues.</p>
+<h1 id="update-for-restricted-networks-and-overly-zealous-it-departments">Update: For restricted networks and overly zealous IT departments<a hidden class="anchor" aria-hidden="true" href="#update-for-restricted-networks-and-overly-zealous-it-departments">#</a></h1>
+<p>Not every computer plays nicely with <code>remotes::install_github()</code>. If you
+are working on a locked-down institutional machine, operating behind a
+corporate firewall with the trust settings of a toddler guarding a
+half-eaten biscuit, or simply disconnected from the internet, here is
+how to get around the most common hurdles.</p>
+<h2 id="option-1-installing-from-a-local-zip-file">Option 1: Installing from a local zip file<a hidden class="anchor" aria-hidden="true" href="#option-1-installing-from-a-local-zip-file">#</a></h2>
+<p>If your network refuses to fetch packages directly from GitHub, you can
+manually download the repository as a .zip file, save it locally, and
+tell R to build it from your drive:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span><span style="color:#a6e22e">install.packages</span>(<span style="color:#e6db74">&#34;C:/path/to/yourpackage-main.zip&#34;</span>, type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;source&#34;</span>)
+</span></span></code></pre></div><p>This bypasses remote fetching entirely by pointing R directly to the
+archive on your local file system.</p>
+<h2 id="option-2-bypassing-installation-entirely">Option 2: Bypassing installation entirely<a hidden class="anchor" aria-hidden="true" href="#option-2-bypassing-installation-entirely">#</a></h2>
+<p>If your institution’s IT permissions are set up to prevent you from
+writing anything into R’s system library (a setting presumably designed
+by someone who regards user autonomy as a serious security risk) you can
+skip the installation step altogether using <code>devtools</code> or <code>pkgload</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-r" data-lang="r"><span style="display:flex;"><span>devtools<span style="color:#f92672">::</span><span style="color:#a6e22e">load_all</span>(<span style="color:#e6db74">&#34;C:/path/to/yourpackage-main&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Alternatively</span>
+</span></span><span style="display:flex;"><span>pkgload<span style="color:#f92672">::</span><span style="color:#a6e22e">load_all</span>(<span style="color:#e6db74">&#34;C:/path/to/yourpackage-main&#34;</span>)
+</span></span></code></pre></div><p>Unzip the repository folder somewhere on your machine, point either of
+those functions at the folder path, and R will load all the package’s
+functions directly into memory for your active session. You will need to
+run this command each time you start RStudio, but it completely
+sidesteps administrator restriction errors.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://arcaravaggi.github.io/tags/r/">R</a></li>
+      <li><a href="https://arcaravaggi.github.io/tags/rstudio/">Rstudio</a></li>
+      <li><a href="https://arcaravaggi.github.io/tags/ai/">Ai</a></li>
+      <li><a href="https://arcaravaggi.github.io/tags/teaching/">Teaching</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

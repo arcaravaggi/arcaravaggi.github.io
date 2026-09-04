@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Module 3 — Visualisation | </title>
+<meta name="keywords" content="">
+<meta name="description" content="
+
+Jump to a module…
+Welcome
+1. Getting Started
+2. Data &amp; Penguins
+4. Descriptive Statistics
+5. Are These Groups Different?
+6. Working with Categories
+7. When Data Gets Weird
+8. Relationships Between Variables
+9. Linear Regression
+
+
+Welcome to Module 3
+So far, we’ve looked at data. Now we’re going to start seeing it.
+Numbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:">
+<meta name="author" content="">
+<link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/module-3/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://arcaravaggi.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://arcaravaggi.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/module-3/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+        @media (prefers-color-scheme: light) {
+            .list::-webkit-scrollbar-thumb {
+                border-color: var(--code-bg);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/module-3/">
+  <meta property="og:title" content="Module 3 — Visualisation">
+  <meta property="og:description" content="Jump to a module…Welcome1. Getting Started2. Data &amp; Penguins4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to Module 3So far, we’ve looked at data. Now we’re going to start seeing it.
+Numbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="r-for-nervous-humans">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Module 3 — Visualisation">
+  <meta name="twitter:description" content="Jump to a module…Welcome1. Getting Started2. Data &amp; Penguins4. Descriptive Statistics5. Are These Groups Different?6. Working with Categories7. When Data Gets Weird8. Relationships Between Variables9. Linear RegressionWelcome to Module 3So far, we’ve looked at data. Now we’re going to start seeing it.
+Numbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "R for Nervous Humans",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "Module 3 — Visualisation",
+      "item": "https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/module-3/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Module 3 — Visualisation",
+  "name": "Module 3 — Visualisation",
+  "description": "\rJump to a module…\rWelcome\r1. Getting Started\r2. Data \u0026amp; Penguins\r4. Descriptive Statistics\r5. Are These Groups Different?\r6. Working with Categories\r7. When Data Gets Weird\r8. Relationships Between Variables\r9. Linear Regression\rWelcome to Module 3\rSo far, we’ve looked at data. Now we’re going to start seeing it.\nNumbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:\n",
+  "keywords": [
+    
+  ],
+  "articleBody": "\rJump to a module…\rWelcome\r1. Getting Started\r2. Data \u0026 Penguins\r4. Descriptive Statistics\r5. Are These Groups Different?\r6. Working with Categories\r7. When Data Gets Weird\r8. Relationships Between Variables\r9. Linear Regression\rWelcome to Module 3\rSo far, we’ve looked at data. Now we’re going to start seeing it.\nNumbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:\nBefore we calculate anything complicated, it’s usually worth asking:\nAre values spread out or tightly grouped?\nAre groups different?\nDo two variables move together?\rPlotting data helps you answer questions like these.\nBy the end of this module, you will be able to:\nCreate scatterplots, histograms, and boxplots\nUnderstand what each type of plot shows\nBegin spotting patterns in data\rHistograms, or, ‘what does this variable look like?’\rA histogram shows how values are distributed.\nhist(penguins$bill_length_mm,\rmain = \"Distribution of Bill Length\",\rxlab = \"Bill Length (mm)\",\rcol = \"skyblue\",\rborder = \"white\")\rWhat to look for:\r* Where are most values?\r* Is the distribution symmetrical or skewed (i.e., larger on one side than the other)?\r* Are there any unusual values?\nBoxplots — comparing groups\rBoxplots are useful when you want to compare groups.\nboxplot(bill_length_mm ~ species,\rdata = penguins,\rmain = \"Bill Length by Species\",\rylab = \"Bill Length (mm)\",\rcol = c(\"lightpink\",\"lightgreen\",\"lightblue\"))\rEach box represents one group (here, a species of penguin). Things to look for:\nThe middle line (median): where is the centre of each group?\rThe height of the box: how spread out are the values?\rAny points outside the lines: potential outliers\rAt this stage, don’t worry about whether differences are “significant”. Just ask whether groups look different.\nScatterplots — relationships between variables\rScatterplots show the relationship between two variables. Each point is one observation (one penguin, in this case).\nHere, we’re asking: “As one variable changes, what happens to the other?”\nplot(penguins$flipper_length_mm,\rpenguins$body_mass_g,\rmain = \"Flipper Length vs Body Mass\",\rxlab = \"Flipper Length (mm)\",\rylab = \"Body Mass (g)\",\rpch = 19,\rcol = \"steelblue\")\rLook for:\r* An upward trend → as one increases, so does the other\r* A downward trend → one increases while the other decreases\r* No clear pattern → the variables might not be related\nYou’re not calculating anything yet — just noticing patterns.\nAdding colour (optional but useful)\rSometimes patterns aren’t obvious until you add a bit more information. species is already a factor (a categorical variable), which is great for analysis. When we produce basic plot, however, R needs numbers to map to colours, not category names (this changes with more advanced plotting packages but more on that, later). We convert the factor into numbers using as.numeric(), which lets R assign a different colour to each group:\ncols \u003c- as.numeric(penguins$species)\rplot(penguins$flipper_length_mm,\rpenguins$body_mass_g,\rcol = cols,\rpch = 19,\rxlab = \"Flipper Length (mm)\",\rylab = \"Body Mass (g)\",\rmain = \"Flipper Length vs Body Mass (by Species)\")\rNow the plot tells a richer story. Instead of one cloud of points, you may start to see clusters. Intelligent use of colour can reveal patterns in the data.\nWhy this matters\rPlots are not just for presentation — they’re an important part of thinking about data. Plots help you:\nUnderstand your data before analysing it\nSpot patterns and relationships\nCatch problems early (like outliers or strange values)\rBefore doing any statistical test, it’s good practice to Look at your data before you test it.\nLessons learned\rHistograms show distributions\rBoxplots compare groups\rScatterplots show relationships\r*Visualisation helps you understand data before analysing it\r← Previous\rNext →\r",
+  "wordCount" : "636",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://arcaravaggi.github.io/r-for-nervous-humans/stats_intro/module-3/module-3/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://arcaravaggi.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://arcaravaggi.github.io/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/r-for-nervous-humans/" title="R for Nervous Humans">
+                    <span>R for Nervous Humans</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/publications/" title="Publications">
+                    <span>Publications</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/projects/" title="Projects">
+                    <span>Projects</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/posts/" title="Blog">
+                    <span>Blog</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://arcaravaggi.github.io/contact/" title="Contact">
+                    <span>Contact</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Module 3 — Visualisation
+    </h1>
+    <div class="post-meta">
+
+</div>
+  </header> 
+  <div class="post-content">
+
+
+<!-- Dropdown for modules -->
+<p><select id="module-select" class="course-dropdown" onchange="if (this.value) window.location.href=this.value;">
+<option value="">Jump to a module…</option>
+<option value="/r_for_nervous_humans/intro_stats/">Welcome</option>
+<option value="/r_for_nervous_humans/intro_stats/module-1/">1. Getting Started</option>
+<option value="/r_for_nervous_humans/intro_stats/module-2/">2. Data &amp; Penguins</option>
+<option value="/r_for_nervous_humans/intro_stats/module-4/">4. Descriptive Statistics</option>
+<option value="/r_for_nervous_humans/intro_stats/module-5/">5. Are These Groups Different?</option>
+<option value="/r_for_nervous_humans/intro_stats/module-6/">6. Working with Categories</option>
+<option value="/r_for_nervous_humans/intro_stats/module-7/">7. When Data Gets Weird</option>
+<option value="/r_for_nervous_humans/intro_stats/module-8/">8. Relationships Between Variables</option>
+<option value="/r_for_nervous_humans/intro_stats/module-9/">9. Linear Regression</option>
+</select></p>
+<div id="welcome-to-module-3" class="section level3">
+<h3>Welcome to Module 3</h3>
+<p>So far, we’ve looked <em>at</em> data. Now we’re going to start <em>seeing</em> it.</p>
+<p>Numbers on their own are hard to interpret. A column of 300 values doesn’t naturally tell you a story. But a simple plot often does. Visualisation is often the fastest way to understand what’s going on. Before you start running tests or calculating anything complicated, a good plot can tell you:</p>
+<p>Before we calculate anything complicated, it’s usually worth asking:</p>
+<ul>
+<li>Are values spread out or tightly grouped?<br />
+</li>
+<li>Are groups different?<br />
+</li>
+<li>Do two variables move together?</li>
+</ul>
+<p>Plotting data helps you answer questions like these.</p>
+<p>By the end of this module, you will be able to:</p>
+<ul>
+<li>Create scatterplots, histograms, and boxplots<br />
+</li>
+<li>Understand what each type of plot shows<br />
+</li>
+<li>Begin spotting patterns in data</li>
+</ul>
+<hr />
+</div>
+<div id="histograms-or-what-does-this-variable-look-like" class="section level3">
+<h3>Histograms, or, ‘what does this variable look like?’</h3>
+<p>A histogram shows how values are distributed.</p>
+<pre class="r"><code>hist(penguins$bill_length_mm,
+     main = &quot;Distribution of Bill Length&quot;,
+     xlab = &quot;Bill Length (mm)&quot;,
+     col = &quot;skyblue&quot;,
+     border = &quot;white&quot;)</code></pre>
+<p><img src="/r-for-nervous-humans/stats_intro/module-3/module-3_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>What to look for:
+* Where are most values?
+* Is the distribution symmetrical or skewed (i.e., larger on one side than the other)?
+* Are there any unusual values?</p>
+</div>
+<div id="boxplots-comparing-groups" class="section level3">
+<h3>Boxplots — comparing groups</h3>
+<p>Boxplots are useful when you want to compare groups.</p>
+<pre class="r"><code>boxplot(bill_length_mm ~ species,
+        data = penguins,
+        main = &quot;Bill Length by Species&quot;,
+        ylab = &quot;Bill Length (mm)&quot;,
+        col = c(&quot;lightpink&quot;,&quot;lightgreen&quot;,&quot;lightblue&quot;))</code></pre>
+<p><img src="/r-for-nervous-humans/stats_intro/module-3/module-3_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>Each box represents one group (here, a species of penguin). Things to look for:</p>
+<ul>
+<li>The middle line (median): where is the centre of each group?</li>
+<li>The height of the box: how spread out are the values?</li>
+<li>Any points outside the lines: potential outliers</li>
+</ul>
+<p>At this stage, don’t worry about whether differences are “significant”. Just ask whether groups look different.</p>
+</div>
+<div id="scatterplots-relationships-between-variables" class="section level3">
+<h3>Scatterplots — relationships between variables</h3>
+<p>Scatterplots show the relationship between two variables. Each point is one observation (one penguin, in this case).</p>
+<p>Here, we’re asking: “As one variable changes, what happens to the other?”</p>
+<pre class="r"><code>plot(penguins$flipper_length_mm,
+     penguins$body_mass_g,
+     main = &quot;Flipper Length vs Body Mass&quot;,
+     xlab = &quot;Flipper Length (mm)&quot;,
+     ylab = &quot;Body Mass (g)&quot;,
+     pch = 19,
+     col = &quot;steelblue&quot;)</code></pre>
+<p><img src="/r-for-nervous-humans/stats_intro/module-3/module-3_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Look for:
+* An upward trend → as one increases, so does the other
+* A downward trend → one increases while the other decreases
+* No clear pattern → the variables might not be related</p>
+<p>You’re not calculating anything yet — just noticing patterns.</p>
+<hr />
+</div>
+<div id="adding-colour-optional-but-useful" class="section level3">
+<h3>Adding colour (optional but useful)</h3>
+<p>Sometimes patterns aren’t obvious until you add a bit more information. <code>species</code> is already a factor (a categorical variable), which is great for analysis. When we produce basic plot, however, R needs <strong>numbers to map to colours</strong>, not category names (this changes with more advanced plotting packages but more on that, later). We convert the factor into numbers using <code>as.numeric()</code>, which lets R assign a different colour to each group:</p>
+<pre class="r"><code>cols &lt;- as.numeric(penguins$species)
+
+plot(penguins$flipper_length_mm,
+     penguins$body_mass_g,
+     col = cols,
+     pch = 19,
+     xlab = &quot;Flipper Length (mm)&quot;,
+     ylab = &quot;Body Mass (g)&quot;,
+     main = &quot;Flipper Length vs Body Mass (by Species)&quot;)</code></pre>
+<p><img src="/r-for-nervous-humans/stats_intro/module-3/module-3_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>Now the plot tells a richer story. Instead of one cloud of points, you may start to see clusters. Intelligent use of colour can reveal patterns in the data.</p>
+</div>
+<div id="why-this-matters" class="section level3">
+<h3>Why this matters</h3>
+<p>Plots are not just for presentation — they’re an important part of thinking about data. Plots help you:</p>
+<ul>
+<li>Understand your data before analysing it<br />
+</li>
+<li>Spot patterns and relationships<br />
+</li>
+<li>Catch problems early (like outliers or strange values)</li>
+</ul>
+<p>Before doing any statistical test, it’s good practice to Look at your data <em>before</em> you test it.</p>
+<hr />
+</div>
+<div id="lessons-learned" class="section level3">
+<h3>Lessons learned</h3>
+<ul>
+<li>Histograms show distributions</li>
+<li>Boxplots compare groups</li>
+<li>Scatterplots show relationships
+*Visualisation helps you understand data before analysing it</li>
+</ul>
+<div style="margin-top: 2rem; display: flex; justify-content: space-between;">
+<p><a href="/r_for_nervous_humans/intro_stats/module-2/" 
+     style="padding: 0.6rem 1.2rem; 
+            background-color: var(--theme-accent); 
+            color: var(--theme-fg); 
+            text-decoration: none; 
+            border-radius: 6px;">
+← Previous
+</a></p>
+<p><a href="/r_for_nervous_humans/intro_stats/module-4/" 
+     style="padding: 0.6rem 1.2rem; 
+            background-color: var(--theme-accent); 
+            color: var(--theme-fg); 
+            text-decoration: none; 
+            border-radius: 6px;">
+Next →
+</a></p>
+</div>
+</div>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://arcaravaggi.github.io/"></a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

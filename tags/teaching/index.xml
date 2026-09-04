@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Teaching on </title>
+    <link>https://arcaravaggi.github.io/tags/teaching/</link>
+    <description>Recent content in Teaching on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 25 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://arcaravaggi.github.io/tags/teaching/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>aideR: Using AI Anyway, But Doing It Properly</title>
+      <link>https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/</link>
+      <pubDate>Tue, 25 Aug 2026 00:00:00 +0000</pubDate>
+      <guid>https://arcaravaggi.github.io/posts/2026-08-25-introducing-aider/</guid>
+      <description>&lt;p&gt;There is a particular cry of despair reserved for the moment your R
+console turns red and says something annoyingly cryptic and full of
+symbols. You did not ask for this and yet here you are, at half past
+midnight, trying to decipher ideographs the way ancient priests once
+read the entrails of a goat, hoping the gods will explain themselves.&lt;/p&gt;
+&lt;p&gt;Good news: there is now a small robot whose entire purpose is to read
+the entrails for you. It’s called &lt;strong&gt;aideR&lt;/strong&gt;, it lives in your RStudio
+toolbar, and this post covers what it does, how to install it, and two
+bugs that should be kept in mind when using it.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
