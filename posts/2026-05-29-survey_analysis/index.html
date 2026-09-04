@@ -23,7 +23,7 @@ since before the last Ice Age, making it one of the island’s oldest
 residents and a genuine conservation priority.">
 <meta name="author" content="Anthony Caravaggi">
 <link rel="canonical" href="https://arcaravaggi.github.io/posts/2026-05-29-survey_analysis/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -801,7 +801,7 @@ hare |&gt;
   theme(legend.position = &quot;bottom&quot;,
         legend.text = element_text(size = 9))</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/respondents.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/respondents.png" width="70%" /></p>
 </div>
 </div>
 <div id="conservation-concern-a-mosaic-plot" class="section level2">
@@ -848,7 +848,7 @@ ggplot(plot_df, aes(x = concern, y = group, fill = residual)) +
   theme_minimal(base_size = 13) +
   theme(panel.grid = element_blank())</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/plot-mosaic-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-mosaic-1.png" width="70%" /></p>
 </div>
 <p>The shading uses Pearson residuals — the difference between observed
 and expected cell counts, standardised by the square root of the
@@ -892,7 +892,7 @@ p_bar &lt;- ggplot(plot_df, aes(x = pct, y = fct_rev(name), fill = group)) +
 
 print(p_bar)</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/plot-support-bar-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-support-bar-1.png" width="70%" /></p>
 </div>
 <pre class="r"><code>ggplot(plot_df, aes(x = name, y = group, fill = pct)) +
   geom_tile(colour = &quot;white&quot;, linewidth = 0.8) +
@@ -912,7 +912,7 @@ print(p_bar)</code></pre>
   theme_minimal(base_size = 11) +
   theme(axis.text.x = element_text(angle = 40, hjust = 1, size = 9))</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/plot-support-heatmap-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/plot-support-heatmap-1.png" width="70%" /></p>
 </div>
 <p>The bar chart is better for reading exact values and comparing groups
 side-by-side. The heatmap is better for spotting patterns across many
@@ -1245,7 +1245,7 @@ corrplot(
 title(&quot;Phi coefficients: binary response associations&quot;,
       outer = TRUE, cex.main = 1.1)</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/phi-heatmap-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/phi-heatmap-1.png" width="70%" /></p>
 
 </div>
 </div>
@@ -1267,7 +1267,7 @@ plot(hclust_res,
 rect.hclust(hclust_res, k = 4,
             border = c(&quot;#e41a1c&quot;, &quot;#377eb8&quot;, &quot;#4daf4a&quot;, &quot;#984ea3&quot;))</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/hclust-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/hclust-1.png" width="70%" /></p>
 
 </div>
 <p>Variables that merge at a low height are closely associated.
@@ -1321,7 +1321,7 @@ if (nrow(phi_long) &gt; 0) {
   cat(&quot;No pairs with |phi| &gt; 0.3 in this sample. Try lowering the threshold.\n&quot;)
 }</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/network-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/network-1.png" width="70%" /></p>
 
 </div>
 <p>In a well-designed attitude survey, you often see two major clusters:
@@ -1527,7 +1527,7 @@ glm_tidy |&gt;
 ## generated.</code></pre>
 <pre><code>## `height` was translated to `width`.</code></pre>
 <div class="figure">
-<<p><img src="/img/blog_survey/logistic-plot-1.png" width="70%" /></p>
+<<p><img src="https://arcaravaggi.github.io/img/blog_survey/logistic-plot-1.png" width="70%" /></p>
 
 </div>
 </div>
@@ -1622,7 +1622,7 @@ count(cull_mat, group, profile) |&gt; arrange(group, desc(n))</code></pre>
   theme_minimal(base_size = 12) +
   theme(legend.position = &quot;top&quot;)</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/thematic-cull-plot-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/thematic-cull-plot-1.png" width="70%" /></p>
 
 </div>
 </div>
@@ -1689,7 +1689,7 @@ ggraph(g_act, layout = &quot;circle&quot;) +
        subtitle = &quot;Edge width proportional to Jaccard similarity&quot;) +
   theme_graph(base_family = &quot;sans&quot;)</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/jaccard-network-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/jaccard-network-1.png" width="70%" /></p>
 
 </div>
 </div>
@@ -1767,7 +1767,7 @@ robust.</p>
   theme_minimal(base_size = 12) +
   theme(legend.position = &quot;top&quot;)</code></pre>
 <div class="figure">
-<p><img src="/img/blog_survey/typology-plot-1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/blog_survey/typology-plot-1.png" width="70%" /></p>
 
 </div>
 <p>How would you use these typologies in conservation practice? The
@@ -1878,7 +1878,7 @@ ggplot(fit_table, aes(x = K, y = BIC)) +
        subtitle = &quot;Lower BIC (blue)/ AIC(red) = better fit; look for the elbow&quot;,
        x = &quot;Number of latent classes (K)&quot;, y = &quot;Information criterion&quot;) +
   theme_minimal(base_size = 12)</code></pre>
-<p><p><img src="/img/blog_survey/lca_2-1.png" width="70%" /></p>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_2-1.png" width="70%" /></p>
 
 <pre class="r"><code># Select and label the best model
 best_model &lt;- models[[2]]   # models[[1]] = K=2, models[[2]] = K=3, etc.
@@ -1937,7 +1937,7 @@ ggplot(probs_df, aes(x = prob, y = item, colour = class)) +
   theme_minimal(base_size = 12) +
   theme(legend.position = &quot;none&quot;,
         panel.spacing    = unit(1.2, &quot;lines&quot;))</code></pre>
-<p><p><img src="/img/blog_survey/lca_4-1.png" width="70%" /></p>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_4-1.png" width="70%" /></p>
 
 <p>This is the most important output. Each panel is one latent class.
 Each point is one survey question. The x-axis shows P(Yes) for that
@@ -2115,7 +2115,7 @@ p4 &lt;- plot_cross(&quot;support_gov_t_cull_decision&quot;,  &quot;Supports gov
     theme    = theme(plot.title    = element_text(size = 13, face = &quot;bold&quot;),
                      plot.subtitle = element_text(size = 10, colour = &quot;grey40&quot;))
   )</code></pre>
-<p><p><img src="/img/blog_survey/lca_9-1.png" width="70%" /></p>
+<p><p><img src="https://arcaravaggi.github.io/img/blog_survey/lca_9-1.png" width="70%" /></p>
 
 <p>From these metrics and the plot we get a ‘portrait’ of each
 class.</p>

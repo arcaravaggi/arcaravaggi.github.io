@@ -39,7 +39,7 @@ Random forest and ensemble models
 For this module, you’ll need the following packages:">
 <meta name="author" content="">
 <link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-12/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -384,7 +384,7 @@ importance(m_rf)</code></pre>
 <pre class="r"><code># Visualise
 varImpPlot(m_rf, main = &quot;Random forest variable importance&quot;,
            col = &quot;tomato&quot;, pch = 19)</code></pre>
-<p><img src="/img/spatial_sdm/m12_1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_1.png" width="70%" /></p>
 <p>Two importance measures are shown:</p>
 <ul>
 <li><strong>MeanDecreaseAccuracy</strong>: how much model accuracy drops
@@ -471,7 +471,7 @@ plot(pred_curr_rf,
      main = &quot;Random forest — predicted occurrence (current)&quot;,
      col  = rev(terrain.colors(100)))
 plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
-<p><img src="/img/spatial_sdm/m12_2.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_2.png" width="70%" /></p>
 <p>Now future climate:</p>
 <pre class="r"><code>fut_df    &lt;- data.frame(crds(bio_fut[[pred_sel]]), as.data.frame(bio_fut[[pred_sel]]))
 fut_rf    &lt;- predict(m_rf, newdata = fut_df[, pred_sel], type = &#39;prob&#39;)
@@ -514,7 +514,7 @@ plot(pred_ensemble_sd,
      main = &quot;Ensemble uncertainty (SD)&quot;,
      col  = colorRampPalette(c(&quot;white&quot;, &quot;steelblue&quot;, &quot;navy&quot;))(100))
 plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
-<p><img src="/img/spatial_sdm/m12_3.png" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_3.png" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 <p>The uncertainty map is arguably as important as the mean. Where the
 standard deviation is high, the three algorithms are disagreeing, i.e.,
@@ -541,7 +541,7 @@ plot(pred_ensemble_curr,    main = &quot;Current — ensemble mean&quot;,   zlim
 plot(pred_ensemble_sd,      main = &quot;Current — uncertainty&quot;,     col = colorRampPalette(c(&quot;white&quot;,&quot;steelblue&quot;,&quot;navy&quot;))(100))
 plot(pred_ensemble_fut,     main = &quot;Future — ensemble mean&quot;,    zlim = c(0, 1), col = rev(terrain.colors(100)))
 plot(pred_ensemble_fut_sd,  main = &quot;Future — uncertainty&quot;,      col = colorRampPalette(c(&quot;white&quot;,&quot;steelblue&quot;,&quot;navy&quot;))(100))</code></pre>
-<p><img src="/img/spatial_sdm/m12_4.png" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m12_4.png" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 </div>
 <div id="a-performance-comparison-across-all-three-algorithms" class="section level1">
@@ -649,7 +649,7 @@ distributions. <em>Trends in Ecology and Evolution</em>, 22, 42–47.</p>
 BIOMOD — a platform for ensemble forecasting of species distributions.
 <em>Ecography</em>, 32, 369–373.</p>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;

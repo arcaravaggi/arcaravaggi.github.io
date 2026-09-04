@@ -39,7 +39,7 @@ Assessing and predicting your SDM
 For this module, you’ll need the following packages:">
 <meta name="author" content="">
 <link rel="canonical" href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-10/">
-<link crossorigin="anonymous" href="/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
+<link crossorigin="anonymous" href="https://arcaravaggi.github.io/assets/css/stylesheet.a29c24210eb31d9ce56f669c66a35c9c51b17376b7764e336a49af7dec914cf0.css" integrity="sha256-opwkIQ6zHZzlb2acZqNcnFGxc3a3dk4zakmvfeyRTPA=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://arcaravaggi.github.io/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://arcaravaggi.github.io/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="https://arcaravaggi.github.io/favicon-32x32.png">
@@ -343,7 +343,7 @@ for (pred in my_preds) {
 ## graphical parameter
 ## Warning in axis(side = side, at = at, labels = labels, ...): &quot;alpha&quot; is not a
 ## graphical parameter</code></pre>
-<p><img src="/img/spatial_sdm/m10_1.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_1.png" width="70%" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 <p>The <code>rug()</code> calls add tick marks along the x-axis showing
 where actual presence (bottom, red) and background (top, grey) values
@@ -384,7 +384,7 @@ for (i in 1:k) {
      col = adjustcolor(&quot;steelblue&quot;, alpha.f = 0.4),
      main = &quot;Training vs cross-validated predictions&quot;)
 abline(0, 1, col = &#39;red&#39;, lwd = 2)</code></pre>
-<p><img src="/img/spatial_sdm/m10_2.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_2.png" width="70%" /></p>
 <p>A well-behaved model has points clustered around the 1:1 line. If
 cross-validated predictions are systematically lower or more variable
 than training predictions, the model is sensitive to training
@@ -480,7 +480,7 @@ roc_cv &lt;- AUC::roc(preds_cv, as.factor(howler_sdm$occ))
 plot(roc_cv, col = &quot;steelblue&quot;, lwd = 2,
      main = &quot;ROC curve — howler monkey SDM&quot;)
 abline(0, 1, lty = 2, col = &quot;grey60&quot;)</code></pre>
-<p><img src="/img/spatial_sdm/m10_3.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_3.png" width="70%" /></p>
 <pre class="r"><code>cat(&quot;AUC:&quot;, AUC::auc(roc_cv), &quot;\n&quot;)</code></pre>
 <pre><code>## AUC: 0.5626377</code></pre>
 </div>
@@ -522,7 +522,7 @@ r_pred &lt;- terra::rast(env_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_glm&#39;
 
 plot(r_pred, main = &quot;Howler monkey — predicted occurrence probability&quot;)
 plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
-<p><img src="/img/spatial_sdm/m10_4.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_4.png" width="70%" /></p>
 <p>We can also make a binary presence/absence map using our selected
 threshold:</p>
 <pre class="r"><code>env_df$bin_glm &lt;- ifelse(env_df$pred_glm &gt;= thresh_cv[3, 2], 1, 0)
@@ -533,7 +533,7 @@ r_bin &lt;- terra::rast(env_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;bin_glm&#39;)]
 plot(r_bin, main = &quot;Howler monkey — predicted presence/absence&quot;,
      col = c(&quot;grey90&quot;, &quot;tomato&quot;))
 plot(st_geometry(region), add = TRUE, border = &quot;black&quot;, lwd = 1.2)</code></pre>
-<p><img src="/img/spatial_sdm/m10_5.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_5.png" width="70%" /></p>
 <p>Compare the two maps. Where does the model predict highest occurrence
 probability? Does this align with what you’d expect from the species’
 known distribution in lowland and mid-elevation Costa Rican forest? Are
@@ -582,7 +582,7 @@ r_pred_fut &lt;- terra::rast(fut_df[, c(&#39;x&#39;, &#39;y&#39;, &#39;pred_glm&
 par(mfrow = c(1, 2))
 plot(r_pred,     main = &quot;Current climate&quot;,       zlim = c(0, 1))
 plot(r_pred_fut, main = &quot;Future climate (2041–60)&quot;, zlim = c(0, 1))</code></pre>
-<p><img src="/img/spatial_sdm/m10_6.png" width="70%" /></p>
+<p><img src="https://arcaravaggi.github.io/img/spatial_sdm/m10_6.png" width="70%" /></p>
 <pre class="r"><code>par(mfrow = c(1, 1))</code></pre>
 <p>What has changed? Does the predicted range expand, contract, or shift
 geographically? For a lowland tropical species like <em>Alouatta
@@ -646,12 +646,12 @@ distributions. <em>Ecography</em>, 28, 385–393.</p>
 of ecosystem services along the coast of the Gulf of Mexico.
 <em>Ecological Economics</em>, 82, 23–32.</p>
 <div style="margin-top: 2rem; display: flex; justify-content: space-between;">
-<p><a href="/r-for-nervous-humans/spatial_sdm/module-9/" style="padding: 0.6rem 1.2rem;
+<p><a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-9/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
             border-radius: 6px;"> ← Previous </a>
-<a href="/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
+<a href="https://arcaravaggi.github.io/r-for-nervous-humans/spatial_sdm/module-11/" style="padding: 0.6rem 1.2rem;
             background-color: var(--theme-accent);
             color: var(--theme-fg);
             text-decoration: none;
